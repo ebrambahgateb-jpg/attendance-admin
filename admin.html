@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 
 <head>
@@ -23,10 +22,7 @@ body {
 
     margin: 0;
 
-    font-family:
-        Arial,
-        Tahoma,
-        sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
 
     background: #f3f4f6;
 
@@ -36,7 +32,7 @@ body {
 
 
 /* =========================
-   HEADER
+HEADER
 ========================= */
 
 .header {
@@ -63,9 +59,9 @@ body {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
+
+    align-items: center;
 
 }
 
@@ -77,17 +73,9 @@ body {
 
 }
 
-.header span {
-
-    font-size: 13px;
-
-    opacity: .7;
-
-}
-
 
 /* =========================
-   CONTAINER
+CONTAINER
 ========================= */
 
 .container {
@@ -102,7 +90,7 @@ body {
 
 
 /* =========================
-   NAV
+NAV
 ========================= */
 
 .nav {
@@ -110,7 +98,7 @@ body {
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
     gap: 10px;
 
@@ -148,7 +136,7 @@ body {
 
 
 /* =========================
-   SECTIONS
+SECTIONS
 ========================= */
 
 .section {
@@ -165,7 +153,7 @@ body {
 
 
 /* =========================
-   CARDS
+STATS
 ========================= */
 
 .stats {
@@ -173,7 +161,7 @@ body {
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3,1fr);
 
     gap: 15px;
 
@@ -215,7 +203,7 @@ body {
 
 
 /* =========================
-   CARD
+CARD
 ========================= */
 
 .card {
@@ -238,13 +226,11 @@ body {
 
     margin-top: 0;
 
-    font-size: 20px;
-
 }
 
 
 /* =========================
-   FORM
+FORM
 ========================= */
 
 .form-grid {
@@ -258,8 +244,17 @@ body {
 
 }
 
-input,
-select {
+label {
+
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+}
+
+input {
 
     width: 100%;
 
@@ -272,22 +267,9 @@ select {
 
     font-size: 16px;
 
-    background: white;
-
 }
 
-label {
-
-    display: block;
-
-    font-weight: bold;
-
-    margin-bottom: 7px;
-
-}
-
-
-button.primary {
+.primary {
 
     background: #111827;
 
@@ -295,25 +277,32 @@ button.primary {
 
     border: none;
 
+    padding: 12px 18px;
+
     border-radius: 10px;
-
-    padding: 13px 20px;
-
-    font-size: 16px;
 
     cursor: pointer;
 
-}
+    font-size: 15px;
 
-button.primary:hover {
-
-    opacity: .9;
+    margin-top: 15px;
 
 }
 
 
 /* =========================
-   TABLE
+SEARCH
+========================= */
+
+.search {
+
+    margin-bottom: 15px;
+
+}
+
+
+/* =========================
+TABLE
 ========================= */
 
 .table-container {
@@ -352,70 +341,95 @@ th {
 
 
 /* =========================
-   SEARCH
+ACTION BUTTONS
 ========================= */
 
-.search {
-
-    margin-bottom: 15px;
-
-}
-
-
-/* =========================
-   QR
-========================= */
-
-.qr-box {
-
-    text-align: center;
-
-}
-
-.qr-box canvas,
-.qr-box img {
-
-    margin: auto;
-
-}
-
-.qr-id {
-
-    font-weight: bold;
-
-    margin: 8px 0;
-
-}
-
-.qr-actions {
+.actions {
 
     display: flex;
 
-    gap: 8px;
-
-    justify-content: center;
+    gap: 6px;
 
 }
 
-.qr-actions button {
+.action {
 
     border: none;
 
-    background: #111827;
-
-    color: white;
-
-    padding: 8px 12px;
+    padding: 7px 9px;
 
     border-radius: 8px;
 
     cursor: pointer;
 
+    font-size: 13px;
+
+}
+
+.qr {
+
+    background: #111827;
+
+    color: white;
+
+}
+
+.edit {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+.disable {
+
+    background: #dc2626;
+
+    color: white;
+
+}
+
+.enable {
+
+    background: #16a34a;
+
+    color: white;
+
+}
+
+.regenerate {
+
+    background: #d97706;
+
+    color: white;
+
 }
 
 
 /* =========================
-   MODAL
+STATUS
+========================= */
+
+.status-active {
+
+    color: #15803d;
+
+    font-weight: bold;
+
+}
+
+.status-inactive {
+
+    color: #dc2626;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+MODAL
 ========================= */
 
 .modal {
@@ -455,9 +469,7 @@ th {
 
     width: 100%;
 
-    max-width: 400px;
-
-    text-align: center;
+    max-width: 420px;
 
 }
 
@@ -477,7 +489,26 @@ th {
 
 
 /* =========================
-   MESSAGE
+QR
+========================= */
+
+.qr-container {
+
+    text-align: center;
+
+    margin: 20px 0;
+
+}
+
+#qrCode canvas {
+
+    margin: auto;
+
+}
+
+
+/* =========================
+MESSAGE
 ========================= */
 
 .message {
@@ -514,7 +545,7 @@ th {
 
 
 /* =========================
-   MOBILE
+MOBILE
 ========================= */
 
 @media(max-width:700px) {
@@ -526,9 +557,6 @@ th {
     }
 
     .stats {
-
-        grid-template-columns:
-            1fr 1fr 1fr;
 
         gap: 8px;
 
@@ -546,6 +574,13 @@ th {
 
     }
 
+    .nav {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
     .form-grid {
 
         grid-template-columns:
@@ -553,10 +588,9 @@ th {
 
     }
 
-    .nav {
+    .actions {
 
-        grid-template-columns:
-            repeat(2,1fr);
+        flex-wrap: wrap;
 
     }
 
@@ -570,9 +604,7 @@ th {
 <body>
 
 
-<!-- =========================
-     HEADER
-========================= -->
+<!-- HEADER -->
 
 <div class="header">
 
@@ -583,7 +615,7 @@ th {
 </h1>
 
 <span>
-نظام تسجيل الحضور
+نظام الحضور
 </span>
 
 </div>
@@ -595,9 +627,7 @@ th {
 <div class="container">
 
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+<!-- NAV -->
 
 <div class="nav">
 
@@ -638,7 +668,7 @@ onclick="showSection('attendance',this)">
 
 
 <!-- =========================
-     DASHBOARD
+DASHBOARD
 ========================= -->
 
 <section
@@ -652,7 +682,7 @@ class="section active">
 <div class="stat">
 
 <div class="stat-title">
-عدد الأشخاص
+الأشخاص
 </div>
 
 <div
@@ -669,7 +699,7 @@ class="stat-number">
 <div class="stat">
 
 <div class="stat-title">
-عدد الاجتماعات
+الاجتماعات
 </div>
 
 <div
@@ -686,7 +716,7 @@ class="stat-number">
 <div class="stat">
 
 <div class="stat-title">
-سجلات الحضور
+الحضور
 </div>
 
 <div
@@ -699,30 +729,28 @@ class="stat-number">
 
 </div>
 
-
 </div>
 
 
 <div class="card">
 
 <h2>
-🚀 نظام الحضور
+👋 أهلاً بك
 </h2>
 
 <p>
 من هنا يمكنك إدارة الأشخاص والاجتماعات
-ومتابعة سجل الحضور.
+ومتابعة الحضور.
 </p>
 
 </div>
-
 
 </section>
 
 
 
 <!-- =========================
-     PEOPLE
+PEOPLE
 ========================= -->
 
 <section
@@ -733,7 +761,7 @@ class="section">
 <div class="card">
 
 <h2>
-➕ إضافة شخص جديد
+➕ إضافة شخص
 </h2>
 
 
@@ -786,7 +814,6 @@ class="message">
 
 </div>
 
-
 </div>
 
 
@@ -794,15 +821,15 @@ class="message">
 <div class="card">
 
 <h2>
-👥 الأشخاص
+👥 قائمة الأشخاص
 </h2>
 
 
 <input
-class="search"
 id="peopleSearch"
+class="search"
 type="text"
-placeholder="🔎 ابحث بالاسم أو ID أو الهاتف..."
+placeholder="🔎 بحث..."
 oninput="renderPeople()">
 
 
@@ -820,7 +847,9 @@ oninput="renderPeople()">
 
 <th>الهاتف</th>
 
-<th>QR</th>
+<th>الحالة</th>
+
+<th>الإجراءات</th>
 
 </tr>
 
@@ -835,16 +864,14 @@ id="peopleTable">
 
 </div>
 
-
 </div>
-
 
 </section>
 
 
 
 <!-- =========================
-     MEETINGS
+MEETINGS
 ========================= -->
 
 <section
@@ -871,7 +898,7 @@ class="section">
 <input
 id="meetingName"
 type="text"
-placeholder="مثال: اجتماع الشباب">
+placeholder="اجتماع الشباب">
 
 </div>
 
@@ -887,7 +914,6 @@ id="meetingDate"
 type="date">
 
 </div>
-
 
 </div>
 
@@ -906,7 +932,6 @@ id="meetingMessage"
 class="message">
 
 </div>
-
 
 </div>
 
@@ -929,7 +954,7 @@ class="message">
 
 <th>ID</th>
 
-<th>الاجتماع</th>
+<th>الاسم</th>
 
 <th>التاريخ</th>
 
@@ -946,16 +971,14 @@ id="meetingsTable">
 
 </div>
 
-
 </div>
-
 
 </section>
 
 
 
 <!-- =========================
-     ATTENDANCE
+ATTENDANCE
 ========================= -->
 
 <section
@@ -971,11 +994,11 @@ class="section">
 
 
 <input
-class="search"
 id="attendanceSearch"
+class="search"
 type="text"
-placeholder="🔎 ابحث بالاسم أو الاجتماع أو التاريخ..."
-oninput="renderAttendance()">
+placeholder="🔎 بحث..."
+oninput="renderAttendance">
 
 
 <div class="table-container">
@@ -1009,9 +1032,7 @@ id="attendanceTable">
 
 </div>
 
-
 </div>
-
 
 </section>
 
@@ -1021,7 +1042,78 @@ id="attendanceTable">
 
 
 <!-- =========================
-     QR MODAL
+EDIT MODAL
+========================= -->
+
+<div
+id="editModal"
+class="modal">
+
+
+<div class="modal-content">
+
+<button
+class="close"
+onclick="closeEdit()">
+
+×
+</button>
+
+
+<h2>
+✏️ تعديل بيانات الشخص
+</h2>
+
+
+<input
+type="hidden"
+id="editID">
+
+
+<label>
+الاسم
+</label>
+
+<input
+id="editName"
+type="text">
+
+
+<br><br>
+
+
+<label>
+رقم الهاتف
+</label>
+
+<input
+id="editPhone"
+type="text">
+
+
+<button
+class="primary"
+onclick="saveEdit()">
+
+💾 حفظ التعديلات
+
+</button>
+
+
+<div
+id="editMessage"
+class="message">
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+QR MODAL
 ========================= -->
 
 <div
@@ -1031,7 +1123,6 @@ class="modal">
 
 <div class="modal-content">
 
-
 <button
 class="close"
 onclick="closeQR()">
@@ -1040,24 +1131,19 @@ onclick="closeQR()">
 </button>
 
 
-<h2 id="qrPersonName">
+<h2 id="qrName">
 </h2>
 
 
 <div
-id="qrContainer"
-class="qr-box">
+id="qrCode"
+class="qr-container">
 </div>
 
 
-<div
-id="qrPersonID"
-class="qr-id">
-</div>
-
-
-<p>
-هذا هو QR الخاص بالشخص
+<p
+id="qrValue"
+style="text-align:center;font-weight:bold;">
 </p>
 
 
@@ -1068,7 +1154,6 @@ onclick="downloadQR()">
 ⬇️ تحميل QR
 
 </button>
-
 
 </div>
 
@@ -1102,7 +1187,7 @@ let currentQR = "";
 
 
 // ============================================================
-// JSONP API
+// API JSONP
 // ============================================================
 
 function apiGet(params) {
@@ -1111,20 +1196,24 @@ function apiGet(params) {
         function(resolve,reject) {
 
             const callbackName =
-                "callback_" +
+                "cb_" +
                 Date.now() +
                 "_" +
                 Math.floor(
-                    Math.random()*10000
+                    Math.random()*100000
                 );
 
 
             const script =
-                document.createElement("script");
+                document.createElement(
+                    "script"
+                );
 
 
             const query =
-                new URLSearchParams(params);
+                new URLSearchParams(
+                    params
+                );
 
 
             query.append(
@@ -1154,7 +1243,7 @@ function apiGet(params) {
 
                     reject(
                         new Error(
-                            "API Error"
+                            "فشل الاتصال بالسيرفر"
                         )
                     );
 
@@ -1194,15 +1283,14 @@ function showSection(
 ) {
 
     document
-        .querySelectorAll(".section")
+        .querySelectorAll(
+            ".section"
+        )
         .forEach(
-            function(el) {
-
+            el =>
                 el.classList.remove(
                     "active"
-                );
-
-            }
+                )
         );
 
 
@@ -1212,15 +1300,14 @@ function showSection(
 
 
     document
-        .querySelectorAll(".nav button")
+        .querySelectorAll(
+            ".nav button"
+        )
         .forEach(
-            function(el) {
-
+            el =>
                 el.classList.remove(
                     "active"
-                );
-
-            }
+                )
         );
 
 
@@ -1267,7 +1354,10 @@ async function loadPeople() {
 
         const data =
             await apiGet({
-                action: "people"
+
+                action:
+                    "people"
+
             });
 
 
@@ -1301,7 +1391,7 @@ async function loadPeople() {
         console.error(error);
 
         alert(
-            "حدث خطأ أثناء تحميل الأشخاص"
+            error.message
         );
 
     }
@@ -1317,9 +1407,10 @@ async function loadPeople() {
 function renderPeople() {
 
     const table =
-        document.getElementById(
-            "peopleTable"
-        );
+        document
+            .getElementById(
+                "peopleTable"
+            );
 
 
     const search =
@@ -1336,37 +1427,38 @@ function renderPeople() {
 
     people
         .filter(
-            function(person) {
+            person =>
 
-                return (
+                person.name
+                    .toLowerCase()
+                    .includes(search)
 
-                    person.name
-                        .toLowerCase()
-                        .includes(search)
+                ||
 
-                    ||
+                person.id
+                    .toLowerCase()
+                    .includes(search)
 
-                    person.id
-                        .toLowerCase()
-                        .includes(search)
+                ||
 
-                    ||
+                person.phone
+                    .toLowerCase()
+                    .includes(search)
 
-                    person.phone
-                        .toLowerCase()
-                        .includes(search)
-
-                );
-
-            }
         )
         .forEach(
-            function(person) {
+            person => {
+
 
                 const row =
                     document.createElement(
                         "tr"
                     );
+
+
+                const active =
+                    person.status ===
+                    "active";
 
 
                 row.innerHTML = `
@@ -1385,8 +1477,29 @@ ${person.phone}
 
 <td>
 
+<span class="${
+    active
+    ? "status-active"
+    : "status-inactive"
+}">
+
+${
+    active
+    ? "🟢 مفعل"
+    : "🔴 معطل"
+}
+
+</span>
+
+</td>
+
+<td>
+
+<div class="actions">
+
+
 <button
-class="primary"
+class="action qr"
 onclick="showQR(
 '${escapeJS(person.name)}',
 '${escapeJS(person.qr)}'
@@ -1395,6 +1508,50 @@ onclick="showQR(
 🔲 QR
 
 </button>
+
+
+<button
+class="action edit"
+onclick="openEdit(
+'${escapeJS(person.id)}'
+)">
+
+✏️ تعديل
+
+</button>
+
+
+<button
+class="action ${
+    active
+    ? "disable"
+    : "enable"
+}"
+onclick="togglePerson(
+'${escapeJS(person.id)}'
+)">
+
+${
+    active
+    ? "🔴 تعطيل"
+    : "🟢 تفعيل"
+}
+
+</button>
+
+
+<button
+class="action regenerate"
+onclick="regenerateQR(
+'${escapeJS(person.id)}'
+)">
+
+🔄 QR جديد
+
+</button>
+
+
+</div>
 
 </td>
 
@@ -1411,7 +1568,7 @@ onclick="showQR(
 
 
 // ============================================================
-// Add Person
+// ADD PERSON
 // ============================================================
 
 async function addPerson() {
@@ -1438,7 +1595,7 @@ async function addPerson() {
 
         showMessage(
             "personMessage",
-            "اكتب اسم الشخص",
+            "اكتب الاسم",
             "error"
         );
 
@@ -1477,7 +1634,7 @@ async function addPerson() {
 
             "personMessage",
 
-            "✅ تم إضافة الشخص بنجاح - ID: " +
+            "✅ تم إضافة الشخص - ID: " +
             data.id,
 
             "success"
@@ -1529,6 +1686,322 @@ async function addPerson() {
 
 
 // ============================================================
+// EDIT
+// ============================================================
+
+function openEdit(id) {
+
+    const person =
+        people.find(
+            p =>
+                p.id === id
+        );
+
+
+    if (!person) {
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "editID"
+        )
+        .value =
+        person.id;
+
+
+    document
+        .getElementById(
+            "editName"
+        )
+        .value =
+        person.name;
+
+
+    document
+        .getElementById(
+            "editPhone"
+        )
+        .value =
+        person.phone;
+
+
+    document
+        .getElementById(
+            "editModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+
+function closeEdit() {
+
+    document
+        .getElementById(
+            "editModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+
+async function saveEdit() {
+
+    const id =
+        document
+            .getElementById(
+                "editID"
+            )
+            .value;
+
+
+    const name =
+        document
+            .getElementById(
+                "editName"
+            )
+            .value
+            .trim();
+
+
+    const phone =
+        document
+            .getElementById(
+                "editPhone"
+            )
+            .value
+            .trim();
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "updatePerson",
+
+                id:
+                    id,
+
+                name:
+                    name,
+
+                phone:
+                    phone
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        closeEdit();
+
+
+        await loadPeople();
+
+
+        alert(
+            "✅ تم حفظ التعديلات"
+        );
+
+    }
+
+    catch(error) {
+
+        showMessage(
+
+            "editMessage",
+
+            "❌ " +
+            error.message,
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// ENABLE / DISABLE
+// ============================================================
+
+async function togglePerson(id) {
+
+    const person =
+        people.find(
+            p =>
+                p.id === id
+        );
+
+
+    if (!person) {
+
+        return;
+
+    }
+
+
+    const actionText =
+        person.status === "active"
+            ? "تعطيل"
+            : "تفعيل";
+
+
+    if (
+        !confirm(
+            "هل تريد " +
+            actionText +
+            " الشخص؟"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "togglePerson",
+
+                id:
+                    id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        await loadPeople();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "❌ " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// REGENERATE QR
+// ============================================================
+
+async function regenerateQR(id) {
+
+    const person =
+        people.find(
+            p =>
+                p.id === id
+        );
+
+
+    if (!person) {
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            "⚠️ هل تريد إنشاء QR جديد؟\n\n" +
+            "الـQR القديم لن يعمل بعد ذلك."
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "regenerateQR",
+
+                id:
+                    id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        await loadPeople();
+
+
+        showQR(
+            data.name,
+            data.qr
+        );
+
+
+    }
+
+    catch(error) {
+
+        alert(
+            "❌ " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
 // QR
 // ============================================================
 
@@ -1543,7 +2016,7 @@ function showQR(
 
     document
         .getElementById(
-            "qrPersonName"
+            "qrName"
         )
         .textContent =
         name;
@@ -1551,35 +2024,42 @@ function showQR(
 
     document
         .getElementById(
-            "qrPersonID"
+            "qrValue"
         )
         .textContent =
-        "ID: " + qr;
+        qr;
 
 
     const container =
-        document.getElementById(
-            "qrContainer"
-        );
+        document
+            .getElementById(
+                "qrCode"
+            );
 
 
     container.innerHTML = "";
 
 
     new QRCode(
+
         container,
+
         {
 
-            text: qr,
+            text:
+                qr,
 
-            width: 240,
+            width:
+                240,
 
-            height: 240,
+            height:
+                240,
 
             correctLevel:
                 QRCode.CorrectLevel.H
 
         }
+
     );
 
 
@@ -1587,15 +2067,13 @@ function showQR(
         .getElementById(
             "qrModal"
         )
-        .classList.add("show");
+        .classList.add(
+            "show"
+        );
 
 }
 
 
-
-// ============================================================
-// Close QR
-// ============================================================
 
 function closeQR() {
 
@@ -1611,22 +2089,16 @@ function closeQR() {
 
 
 
-// ============================================================
-// Download QR
-// ============================================================
-
 function downloadQR() {
 
-    const container =
-        document.getElementById(
-            "qrContainer"
-        );
-
-
     const canvas =
-        container.querySelector(
-            "canvas"
-        );
+        document
+            .getElementById(
+                "qrCode"
+            )
+            .querySelector(
+                "canvas"
+            );
 
 
     if (!canvas) {
@@ -1706,33 +2178,26 @@ async function loadMeetings() {
 
         console.error(error);
 
-        alert(
-            "حدث خطأ أثناء تحميل الاجتماعات"
-        );
-
     }
 
 }
 
 
 
-// ============================================================
-// Render Meetings
-// ============================================================
-
 function renderMeetings() {
 
     const table =
-        document.getElementById(
-            "meetingsTable"
-        );
+        document
+            .getElementById(
+                "meetingsTable"
+            );
 
 
     table.innerHTML = "";
 
 
     meetings.forEach(
-        function(meeting) {
+        meeting => {
 
             const row =
                 document.createElement(
@@ -1765,10 +2230,6 @@ ${meeting.date}
 }
 
 
-
-// ============================================================
-// Add Meeting
-// ============================================================
 
 async function addMeeting() {
 
@@ -1836,7 +2297,7 @@ async function addMeeting() {
 
             "meetingMessage",
 
-            "✅ تم إضافة الاجتماع بنجاح - " +
+            "✅ تم إضافة الاجتماع - " +
             data.id,
 
             "success"
@@ -1927,26 +2388,19 @@ async function loadAttendance() {
 
         console.error(error);
 
-        alert(
-            "حدث خطأ أثناء تحميل سجل الحضور"
-        );
-
     }
 
 }
 
 
 
-// ============================================================
-// Render Attendance
-// ============================================================
-
 function renderAttendance() {
 
     const table =
-        document.getElementById(
-            "attendanceTable"
-        );
+        document
+            .getElementById(
+                "attendanceTable"
+            );
 
 
     const search =
@@ -1963,38 +2417,33 @@ function renderAttendance() {
 
     attendance
         .filter(
-            function(item) {
+            item =>
 
-                return (
+                item.id
+                    .toLowerCase()
+                    .includes(search)
 
-                    item.id
-                        .toLowerCase()
-                        .includes(search)
+                ||
 
-                    ||
+                item.name
+                    .toLowerCase()
+                    .includes(search)
 
-                    item.name
-                        .toLowerCase()
-                        .includes(search)
+                ||
 
-                    ||
+                item.meeting
+                    .toLowerCase()
+                    .includes(search)
 
-                    item.meeting
-                        .toLowerCase()
-                        .includes(search)
+                ||
 
-                    ||
+                item.date
+                    .toLowerCase()
+                    .includes(search)
 
-                    item.date
-                        .toLowerCase()
-                        .includes(search)
-
-                );
-
-            }
         )
         .forEach(
-            function(item) {
+            item => {
 
                 const row =
                     document.createElement(
@@ -2037,7 +2486,7 @@ ${item.time}
 
 
 // ============================================================
-// Message
+// MESSAGE
 // ============================================================
 
 function showMessage(
@@ -2063,24 +2512,28 @@ function showMessage(
 
 
 // ============================================================
-// Escape JS
+// ESCAPE
 // ============================================================
 
 function escapeJS(text) {
 
     return String(text)
+
         .replace(
             /\\/g,
             "\\\\"
         )
+
         .replace(
             /'/g,
             "\\'"
         )
+
         .replace(
             /\n/g,
             "\\n"
         )
+
         .replace(
             /\r/g,
             "\\r"
@@ -2091,7 +2544,7 @@ function escapeJS(text) {
 
 
 // ============================================================
-// Initial Load
+// INIT
 // ============================================================
 
 async function init() {
@@ -2112,7 +2565,6 @@ async function init() {
 init();
 
 </script>
-
 
 </body>
 
