@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>لوحة الإدارة - نظام الحضور</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+
+    background: #f3f4f6;
+
+    color: #222;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+
+    background: #111827;
+
+    color: white;
+
+    padding: 18px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+}
+
+.header-content {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+.header h1 {
+
+    margin: 0;
+
+    font-size: 22px;
+
+}
+
+.header span {
+
+    font-size: 13px;
+
+    opacity: .7;
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 20px;
+
+}
+
+
+/* =========================
+   NAV
+========================= */
+
+.nav {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+.nav button {
+
+    border: none;
+
+    background: white;
+
+    padding: 14px 8px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.06);
+
+}
+
+.nav button.active {
+
+    background: #111827;
+
+    color: white;
+
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section {
+
+    display: none;
+
+}
+
+.section.active {
+
+    display: block;
+
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+.stat {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.06);
+
+}
+
+.stat-title {
+
+    color: #666;
+
+    font-size: 14px;
+
+}
+
+.stat-number {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-top: 8px;
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.06);
+
+}
+
+.card h2 {
+
+    margin-top: 0;
+
+    font-size: 20px;
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+}
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    background: white;
+
+}
+
+label {
+
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+}
+
+
+button.primary {
+
+    background: #111827;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 13px 20px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+}
+
+button.primary:hover {
+
+    opacity: .9;
+
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+
+    overflow-x: auto;
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+th,
+td {
+
+    padding: 12px;
+
+    border-bottom:
+        1px solid #eee;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+}
+
+th {
+
+    background: #f8f8f8;
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search {
+
+    margin-bottom: 15px;
+
+}
+
+
+/* =========================
+   QR
+========================= */
+
+.qr-box {
+
+    text-align: center;
+
+}
+
+.qr-box canvas,
+.qr-box img {
+
+    margin: auto;
+
+}
+
+.qr-id {
+
+    font-weight: bold;
+
+    margin: 8px 0;
+
+}
+
+.qr-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    justify-content: center;
+
+}
+
+.qr-actions button {
+
+    border: none;
+
+    background: #111827;
+
+    color: white;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,.65);
+
+    z-index: 500;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+}
+
+.modal.show {
+
+    display: flex;
+
+}
+
+.modal-content {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    width: 100%;
+
+    max-width: 400px;
+
+    text-align: center;
+
+}
+
+.close {
+
+    float: left;
+
+    border: none;
+
+    background: none;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-top: 15px;
+
+    display: none;
+
+}
+
+.message.success {
+
+    display: block;
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+.message.error {
+
+    display: block;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px) {
+
+    .container {
+
+        padding: 12px;
+
+    }
+
+    .stats {
+
+        grid-template-columns:
+            1fr 1fr 1fr;
+
+        gap: 8px;
+
+    }
+
+    .stat {
+
+        padding: 12px;
+
+    }
+
+    .stat-number {
+
+        font-size: 22px;
+
+    }
+
+    .form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .nav {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="header">
+
+<div class="header-content">
+
+<h1>
+⚙️ لوحة الإدارة
+</h1>
+
+<span>
+نظام تسجيل الحضور
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<div class="nav">
+
+<button
+class="active"
+onclick="showSection('dashboard',this)">
+
+📊 الرئيسية
+
+</button>
+
+
+<button
+onclick="showSection('people',this)">
+
+👥 الأشخاص
+
+</button>
+
+
+<button
+onclick="showSection('meetings',this)">
+
+📅 الاجتماعات
+
+</button>
+
+
+<button
+onclick="showSection('attendance',this)">
+
+📋 الحضور
+
+</button>
+
+</div>
+
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<section
+id="dashboard"
+class="section active">
+
+
+<div class="stats">
+
+
+<div class="stat">
+
+<div class="stat-title">
+عدد الأشخاص
+</div>
+
+<div
+id="peopleCount"
+class="stat-number">
+
+...
+
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-title">
+عدد الاجتماعات
+</div>
+
+<div
+id="meetingsCount"
+class="stat-number">
+
+...
+
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-title">
+سجلات الحضور
+</div>
+
+<div
+id="attendanceCount"
+class="stat-number">
+
+...
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="card">
+
+<h2>
+🚀 نظام الحضور
+</h2>
+
+<p>
+من هنا يمكنك إدارة الأشخاص والاجتماعات
+ومتابعة سجل الحضور.
+</p>
+
+</div>
+
+
+</section>
+
+
+
+<!-- =========================
+     PEOPLE
+========================= -->
+
+<section
+id="people"
+class="section">
+
+
+<div class="card">
+
+<h2>
+➕ إضافة شخص جديد
+</h2>
+
+
+<div class="form-grid">
+
+
+<div>
+
+<label>
+الاسم
+</label>
+
+<input
+id="personName"
+type="text"
+placeholder="اسم الشخص">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الهاتف
+</label>
+
+<input
+id="personPhone"
+type="tel"
+placeholder="01000000000">
+
+</div>
+
+
+</div>
+
+
+<button
+class="primary"
+onclick="addPerson()">
+
+إضافة الشخص
+
+</button>
+
+
+<div
+id="personMessage"
+class="message">
+
+</div>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h2>
+👥 الأشخاص
+</h2>
+
+
+<input
+class="search"
+id="peopleSearch"
+type="text"
+placeholder="🔎 ابحث بالاسم أو ID أو الهاتف..."
+oninput="renderPeople()">
+
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>الاسم</th>
+
+<th>الهاتف</th>
+
+<th>QR</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="peopleTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+<!-- =========================
+     MEETINGS
+========================= -->
+
+<section
+id="meetings"
+class="section">
+
+
+<div class="card">
+
+<h2>
+➕ إضافة اجتماع
+</h2>
+
+
+<div class="form-grid">
+
+
+<div>
+
+<label>
+اسم الاجتماع
+</label>
+
+<input
+id="meetingName"
+type="text"
+placeholder="مثال: اجتماع الشباب">
+
+</div>
+
+
+<div>
+
+<label>
+التاريخ
+</label>
+
+<input
+id="meetingDate"
+type="date">
+
+</div>
+
+
+</div>
+
+
+<button
+class="primary"
+onclick="addMeeting()">
+
+إضافة الاجتماع
+
+</button>
+
+
+<div
+id="meetingMessage"
+class="message">
+
+</div>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h2>
+📅 الاجتماعات
+</h2>
+
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>الاجتماع</th>
+
+<th>التاريخ</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="meetingsTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+<!-- =========================
+     ATTENDANCE
+========================= -->
+
+<section
+id="attendance"
+class="section">
+
+
+<div class="card">
+
+<h2>
+📋 سجل الحضور
+</h2>
+
+
+<input
+class="search"
+id="attendanceSearch"
+type="text"
+placeholder="🔎 ابحث بالاسم أو الاجتماع أو التاريخ..."
+oninput="renderAttendance()">
+
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>الاسم</th>
+
+<th>الاجتماع</th>
+
+<th>التاريخ</th>
+
+<th>الوقت</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="attendanceTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+</div>
+
+
+
+<!-- =========================
+     QR MODAL
+========================= -->
+
+<div
+id="qrModal"
+class="modal">
+
+
+<div class="modal-content">
+
+
+<button
+class="close"
+onclick="closeQR()">
+
+×
+</button>
+
+
+<h2 id="qrPersonName">
+</h2>
+
+
+<div
+id="qrContainer"
+class="qr-box">
+</div>
+
+
+<div
+id="qrPersonID"
+class="qr-id">
+</div>
+
+
+<p>
+هذا هو QR الخاص بالشخص
+</p>
+
+
+<button
+class="primary"
+onclick="downloadQR()">
+
+⬇️ تحميل QR
+
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+// ============================================================
+// API
+// ============================================================
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzecOlCAeuzfo5bVadfRxViGbC2j7g8vsNRksvC2jIB6jl0OAkR4ImQqBhtuaK4DneM/exec";
+
+
+// ============================================================
+// DATA
+// ============================================================
+
+let people = [];
+
+let meetings = [];
+
+let attendance = [];
+
+let currentQR = "";
+
+
+
+// ============================================================
+// JSONP API
+// ============================================================
+
+function apiGet(params) {
+
+    return new Promise(
+        function(resolve,reject) {
+
+            const callbackName =
+                "callback_" +
+                Date.now() +
+                "_" +
+                Math.floor(
+                    Math.random()*10000
+                );
+
+
+            const script =
+                document.createElement("script");
+
+
+            const query =
+                new URLSearchParams(params);
+
+
+            query.append(
+                "callback",
+                callbackName
+            );
+
+
+            script.src =
+                API_URL +
+                "?" +
+                query.toString();
+
+
+            window[callbackName] =
+                function(data) {
+
+                    resolve(data);
+
+                    cleanup();
+
+                };
+
+
+            script.onerror =
+                function() {
+
+                    reject(
+                        new Error(
+                            "API Error"
+                        )
+                    );
+
+                    cleanup();
+
+                };
+
+
+            document.body
+                .appendChild(script);
+
+
+            function cleanup() {
+
+                delete window[
+                    callbackName
+                ];
+
+                script.remove();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+// ============================================================
+// Navigation
+// ============================================================
+
+function showSection(
+    section,
+    button
+) {
+
+    document
+        .querySelectorAll(".section")
+        .forEach(
+            function(el) {
+
+                el.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(section)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(
+            function(el) {
+
+                el.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    button.classList.add("active");
+
+
+    if (
+        section === "people"
+    ) {
+
+        loadPeople();
+
+    }
+
+
+    if (
+        section === "meetings"
+    ) {
+
+        loadMeetings();
+
+    }
+
+
+    if (
+        section === "attendance"
+    ) {
+
+        loadAttendance();
+
+    }
+
+}
+
+
+
+// ============================================================
+// PEOPLE
+// ============================================================
+
+async function loadPeople() {
+
+    try {
+
+        const data =
+            await apiGet({
+                action: "people"
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        people =
+            data.people;
+
+
+        renderPeople();
+
+
+        document
+            .getElementById(
+                "peopleCount"
+            )
+            .textContent =
+            people.length;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء تحميل الأشخاص"
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// Render People
+// ============================================================
+
+function renderPeople() {
+
+    const table =
+        document.getElementById(
+            "peopleTable"
+        );
+
+
+    const search =
+        document
+            .getElementById(
+                "peopleSearch"
+            )
+            .value
+            .toLowerCase();
+
+
+    table.innerHTML = "";
+
+
+    people
+        .filter(
+            function(person) {
+
+                return (
+
+                    person.name
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    person.id
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    person.phone
+                        .toLowerCase()
+                        .includes(search)
+
+                );
+
+            }
+        )
+        .forEach(
+            function(person) {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+<td>
+${person.id}
+</td>
+
+<td>
+${person.name}
+</td>
+
+<td>
+${person.phone}
+</td>
+
+<td>
+
+<button
+class="primary"
+onclick="showQR(
+'${escapeJS(person.name)}',
+'${escapeJS(person.qr)}'
+)">
+
+🔲 QR
+
+</button>
+
+</td>
+
+`;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+}
+
+
+
+// ============================================================
+// Add Person
+// ============================================================
+
+async function addPerson() {
+
+    const name =
+        document
+            .getElementById(
+                "personName"
+            )
+            .value
+            .trim();
+
+
+    const phone =
+        document
+            .getElementById(
+                "personPhone"
+            )
+            .value
+            .trim();
+
+
+    if (!name) {
+
+        showMessage(
+            "personMessage",
+            "اكتب اسم الشخص",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "addPerson",
+
+                name:
+                    name,
+
+                phone:
+                    phone
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        showMessage(
+
+            "personMessage",
+
+            "✅ تم إضافة الشخص بنجاح - ID: " +
+            data.id,
+
+            "success"
+
+        );
+
+
+        document
+            .getElementById(
+                "personName"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "personPhone"
+            )
+            .value = "";
+
+
+        await loadPeople();
+
+
+        showQR(
+            data.name,
+            data.qr
+        );
+
+    }
+
+    catch(error) {
+
+        showMessage(
+
+            "personMessage",
+
+            "❌ " +
+            error.message,
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// QR
+// ============================================================
+
+function showQR(
+    name,
+    qr
+) {
+
+    currentQR =
+        qr;
+
+
+    document
+        .getElementById(
+            "qrPersonName"
+        )
+        .textContent =
+        name;
+
+
+    document
+        .getElementById(
+            "qrPersonID"
+        )
+        .textContent =
+        "ID: " + qr;
+
+
+    const container =
+        document.getElementById(
+            "qrContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    new QRCode(
+        container,
+        {
+
+            text: qr,
+
+            width: 240,
+
+            height: 240,
+
+            correctLevel:
+                QRCode.CorrectLevel.H
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "qrModal"
+        )
+        .classList.add("show");
+
+}
+
+
+
+// ============================================================
+// Close QR
+// ============================================================
+
+function closeQR() {
+
+    document
+        .getElementById(
+            "qrModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+
+// ============================================================
+// Download QR
+// ============================================================
+
+function downloadQR() {
+
+    const container =
+        document.getElementById(
+            "qrContainer"
+        );
+
+
+    const canvas =
+        container.querySelector(
+            "canvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.download =
+        "QR-" +
+        currentQR +
+        ".png";
+
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+
+    link.click();
+
+}
+
+
+
+// ============================================================
+// MEETINGS
+// ============================================================
+
+async function loadMeetings() {
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "meetings"
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        meetings =
+            data.meetings;
+
+
+        renderMeetings();
+
+
+        document
+            .getElementById(
+                "meetingsCount"
+            )
+            .textContent =
+            meetings.length;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء تحميل الاجتماعات"
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// Render Meetings
+// ============================================================
+
+function renderMeetings() {
+
+    const table =
+        document.getElementById(
+            "meetingsTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    meetings.forEach(
+        function(meeting) {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+<td>
+${meeting.id}
+</td>
+
+<td>
+${meeting.name}
+</td>
+
+<td>
+${meeting.date}
+</td>
+
+`;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+
+// ============================================================
+// Add Meeting
+// ============================================================
+
+async function addMeeting() {
+
+    const name =
+        document
+            .getElementById(
+                "meetingName"
+            )
+            .value
+            .trim();
+
+
+    const date =
+        document
+            .getElementById(
+                "meetingDate"
+            )
+            .value;
+
+
+    if (!name || !date) {
+
+        showMessage(
+
+            "meetingMessage",
+
+            "اكتب اسم الاجتماع واختر التاريخ",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "addMeeting",
+
+                name:
+                    name,
+
+                date:
+                    date
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        showMessage(
+
+            "meetingMessage",
+
+            "✅ تم إضافة الاجتماع بنجاح - " +
+            data.id,
+
+            "success"
+
+        );
+
+
+        document
+            .getElementById(
+                "meetingName"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "meetingDate"
+            )
+            .value = "";
+
+
+        await loadMeetings();
+
+    }
+
+    catch(error) {
+
+        showMessage(
+
+            "meetingMessage",
+
+            "❌ " +
+            error.message,
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// ATTENDANCE
+// ============================================================
+
+async function loadAttendance() {
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "attendanceList"
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        attendance =
+            data.attendance;
+
+
+        renderAttendance();
+
+
+        document
+            .getElementById(
+                "attendanceCount"
+            )
+            .textContent =
+            attendance.length;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء تحميل سجل الحضور"
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// Render Attendance
+// ============================================================
+
+function renderAttendance() {
+
+    const table =
+        document.getElementById(
+            "attendanceTable"
+        );
+
+
+    const search =
+        document
+            .getElementById(
+                "attendanceSearch"
+            )
+            .value
+            .toLowerCase();
+
+
+    table.innerHTML = "";
+
+
+    attendance
+        .filter(
+            function(item) {
+
+                return (
+
+                    item.id
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    item.name
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    item.meeting
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    item.date
+                        .toLowerCase()
+                        .includes(search)
+
+                );
+
+            }
+        )
+        .forEach(
+            function(item) {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+<td>
+${item.id}
+</td>
+
+<td>
+${item.name}
+</td>
+
+<td>
+${item.meeting}
+</td>
+
+<td>
+${item.date}
+</td>
+
+<td>
+${item.time}
+</td>
+
+`;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+}
+
+
+
+// ============================================================
+// Message
+// ============================================================
+
+function showMessage(
+    id,
+    text,
+    type
+) {
+
+    const element =
+        document.getElementById(id);
+
+
+    element.textContent =
+        text;
+
+
+    element.className =
+        "message " +
+        type;
+
+}
+
+
+
+// ============================================================
+// Escape JS
+// ============================================================
+
+function escapeJS(text) {
+
+    return String(text)
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        )
+        .replace(
+            /\n/g,
+            "\\n"
+        )
+        .replace(
+            /\r/g,
+            "\\r"
+        );
+
+}
+
+
+
+// ============================================================
+// Initial Load
+// ============================================================
+
+async function init() {
+
+    await Promise.all([
+
+        loadPeople(),
+
+        loadMeetings(),
+
+        loadAttendance()
+
+    ]);
+
+}
+
+
+init();
+
+</script>
+
+
+</body>
+
+</html>
