@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
 <head>
@@ -8,48 +9,167 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Attendance Admin</title>
+<title>نظام تسجيل الحضور</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial;
-    text-align: center;
-    background: #f5f5f5;
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #f3f4f6;
+
+    color: #222;
+
+}
+
+.container {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
     padding: 20px;
+
 }
 
 h1 {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 20px;
+
     margin-bottom: 20px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.08);
+
+}
+
+label {
+
+    display: block;
+
+    font-size: 18px;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+
+}
+
+select {
+
+    width: 100%;
+
+    padding: 15px;
+
+    font-size: 18px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    background: white;
+
 }
 
 button {
-    background: #222;
-    color: white;
+
+    width: 100%;
+
+    padding: 16px;
+
     border: none;
-    border-radius: 10px;
-    padding: 15px 30px;
-    font-size: 20px;
-    margin: 10px;
+
+    border-radius: 12px;
+
+    font-size: 19px;
+
+    margin-top: 15px;
+
+    cursor: pointer;
+
+    background: #222;
+
+    color: white;
+
+}
+
+button:disabled {
+
+    background: #aaa;
+
 }
 
 #reader {
+
     width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 15px;
+
     overflow: hidden;
+
+    border-radius: 15px;
+
 }
 
 #result {
-    margin-top: 20px;
-    padding: 20px;
-    background: white;
-    border-radius: 15px;
+
+    text-align: center;
+
     font-size: 20px;
+
+    line-height: 1.7;
+
+}
+
+.success {
+
+    color: #16803c;
+
+}
+
+.error {
+
+    color: #c62828;
+
+}
+
+.warning {
+
+    color: #d97706;
+
+}
+
+.loading {
+
+    color: #555;
+
+}
+
+.hidden {
+
+    display: none;
+
 }
 
 </style>
@@ -59,38 +179,237 @@ button {
 
 <body>
 
-<h1>📷 تسجيل الحضور</h1>
 
-<button onclick="startScanner()">
-تشغيل QR Scanner
-</button>
+<div class="container">
+
+
+<h1>
+📋 تسجيل الحضور
+</h1>
+
+
+<!-- اختيار الاجتماع -->
+
+<div class="card">
+
+<label>
+اختر الاجتماع
+</label>
+
+
+<select id="meeting">
+
+<option value="">
+⏳ جاري تحميل الاجتماعات...
+</option>
+
+</select>
+
+</div>
+
+
+<!-- Scanner -->
+
+<div class="card">
 
 <div id="reader"></div>
 
+
+<button
+id="startButton"
+onclick="startScanner()">
+
+📷 تشغيل الكاميرا
+
+</button>
+
+
+<button
+id="stopButton"
+onclick="stopScanner()"
+disabled>
+
+⛔ إيقاف الكاميرا
+
+</button>
+
+</div>
+
+
+<!-- النتيجة -->
+
+<div class="card">
+
 <div id="result">
-اضغط تشغيل QR Scanner
+
+اختر الاجتماع ثم شغّل الكاميرا
+
+</div>
+
+</div>
+
+
 </div>
 
 
 <script>
 
+
+// ==================================================
+// ضع هنا رابط Apps Script Web App
+// ==================================================
+
+const API_URL =
+"https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRe76dFQya2c8cSqFNmenqbLJxqegZeVyuw5IKMuksGvPHlOivoDSsZmGDiucJZXBTgTe3I4xm1NoppUNPJ9-GsIbPczdUlC-a9rGFOIGMn6ArNS2wiXJc8xoFT9RZ0A9k80L0vdZDXWH8FIv6uTIKW2VSFniBbZqyXFPDIaYoXmDsX-2atsRkwaRSF0-YcsP9QJiOY6lmOjG5jL6vd6Qc2IZaEkt7ExgKsWAH34ZnUc-5Bfxy9h40Qs3H60w_N1juipFWNlzMxd6bP37D7OMW2gj4uZg&lib=M1bYYu6ckSdASulF5ktsfqchS9f0b4REu";
+
+
+// ==================================================
+// Variables
+// ==================================================
+
 let scanner = null;
 
 let scanning = false;
 
+let selectedMeeting = "";
+
+let processing = false;
+
+
+// ==================================================
+// تحميل الاجتماعات
+// ==================================================
+
+async function loadMeetings() {
+
+    const select =
+        document.getElementById("meeting");
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "?action=meetings"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                "Failed to load meetings"
+            );
+
+        }
+
+
+        select.innerHTML =
+            '<option value="">اختر الاجتماع</option>';
+
+
+        data.meetings.forEach(
+            function(meeting) {
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value =
+                    meeting.id;
+
+
+                option.textContent =
+                    meeting.name;
+
+
+                select.appendChild(option);
+
+            }
+        );
+
+
+    }
+
+    catch(error) {
+
+        select.innerHTML =
+            '<option value="">❌ فشل تحميل الاجتماعات</option>';
+
+
+        showResult(
+            "❌ لا يمكن الاتصال بقاعدة البيانات",
+            "error"
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+// ==================================================
+// اختيار الاجتماع
+// ==================================================
+
+document
+.getElementById("meeting")
+.addEventListener(
+    "change",
+    function() {
+
+        selectedMeeting =
+            this.value;
+
+
+        if (selectedMeeting) {
+
+            showResult(
+                "اضغط تشغيل الكاميرا لبدء تسجيل الحضور",
+                "loading"
+            );
+
+        }
+
+    }
+);
+
+
+// ==================================================
+// تشغيل Scanner
+// ==================================================
 
 async function startScanner() {
 
-    if (scanning) {
+
+    if (!selectedMeeting) {
+
+        showResult(
+            "⚠️ اختر الاجتماع أولاً",
+            "warning"
+        );
+
         return;
+
     }
 
-    scanning = true;
 
-    document.getElementById("result").innerHTML =
-        "⏳ جاري تشغيل الكاميرا...";
+    if (scanning) {
 
-    scanner = new Html5Qrcode("reader");
+        return;
+
+    }
+
+
+    processing = false;
+
+    scanner =
+        new Html5Qrcode("reader");
 
 
     try {
@@ -103,46 +422,53 @@ async function startScanner() {
 
             {
                 fps: 10,
+
                 qrbox: {
                     width: 250,
                     height: 250
                 }
+
             },
 
             function(decodedText) {
 
-                console.log(
-                    "QR:",
+                handleQRCode(
                     decodedText
                 );
-
-
-                document.getElementById("result").innerHTML =
-                    "✅ تم قراءة QR<br><br>" +
-                    "ID: " +
-                    decodedText;
-
-
-                scanner.stop();
-
-                scanning = false;
 
             }
 
         );
 
-        document.getElementById("result").innerHTML =
-            "📷 وجّه الكاميرا إلى QR Code";
+
+        scanning = true;
+
+
+        document
+        .getElementById("startButton")
+        .disabled = true;
+
+
+        document
+        .getElementById("stopButton")
+        .disabled = false;
+
+
+        showResult(
+            "📷 وجّه الكاميرا إلى QR Code",
+            "loading"
+        );
+
 
     }
 
     catch(error) {
 
-        scanning = false;
-
-        document.getElementById("result").innerHTML =
-            "❌ خطأ في تشغيل الكاميرا<br><br>" +
-            error;
+        showResult(
+            "❌ لم يتم تشغيل الكاميرا<br><br>" +
+            error,
+            "error"
+        );
 
         console.error(error);
 
@@ -150,7 +476,247 @@ async function startScanner() {
 
 }
 
+
+// ==================================================
+// QR تم قراءته
+// ==================================================
+
+async function handleQRCode(
+    qr
+) {
+
+
+    // منع قراءة نفس QR عدة مرات
+    if (processing) {
+
+        return;
+
+    }
+
+
+    processing = true;
+
+
+    showResult(
+        "⏳ جاري تسجيل الحضور...",
+        "loading"
+    );
+
+
+    try {
+
+        const url =
+            API_URL +
+
+            "?action=attendance" +
+
+            "&qr=" +
+            encodeURIComponent(qr) +
+
+            "&meeting=" +
+            encodeURIComponent(
+                selectedMeeting
+            );
+
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+
+        // ==========================
+        // تسجيل ناجح
+        // ==========================
+
+        if (data.success) {
+
+            showResult(
+
+                "✅ <b>تم تسجيل الحضور</b>" +
+
+                "<br><br>" +
+
+                "👤 " +
+                data.name +
+
+                "<br>" +
+
+                "🆔 ID: " +
+                data.id +
+
+                "<br>" +
+
+                "📅 " +
+                data.date +
+
+                "<br>" +
+
+                "⏰ " +
+                data.time,
+
+                "success"
+
+            );
+
+        }
+
+
+        // ==========================
+        // الشخص مسجل بالفعل
+        // ==========================
+
+        else if (data.duplicate) {
+
+            showResult(
+
+                "⚠️ <b>مسجل بالفعل</b>" +
+
+                "<br><br>" +
+
+                "👤 " +
+                data.name +
+
+                "<br>" +
+
+                "وقت التسجيل: " +
+
+                data.oldTime,
+
+                "warning"
+
+            );
+
+        }
+
+
+        // ==========================
+        // خطأ
+        // ==========================
+
+        else {
+
+            showResult(
+
+                "❌ " +
+                data.message,
+
+                "error"
+
+            );
+
+        }
+
+    }
+
+
+    catch(error) {
+
+        showResult(
+
+            "❌ حدث خطأ أثناء الاتصال بقاعدة البيانات",
+
+            "error"
+
+        );
+
+        console.error(error);
+
+    }
+
+
+    // السماح بالـScan التالي
+
+    setTimeout(
+        function() {
+
+            processing = false;
+
+        },
+        2000
+    );
+
+}
+
+
+// ==================================================
+// إيقاف Scanner
+// ==================================================
+
+async function stopScanner() {
+
+
+    if (
+        scanner &&
+        scanning
+    ) {
+
+        try {
+
+            await scanner.stop();
+
+        }
+
+        catch(error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+
+    scanning = false;
+
+
+    document
+    .getElementById("startButton")
+    .disabled = false;
+
+
+    document
+    .getElementById("stopButton")
+    .disabled = true;
+
+}
+
+
+// ==================================================
+// عرض النتيجة
+// ==================================================
+
+function showResult(
+    message,
+    type
+) {
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+
+    result.innerHTML =
+        "<div class='" +
+        type +
+        "'>" +
+        message +
+        "</div>";
+
+}
+
+
+// ==================================================
+// بدء تحميل الاجتماعات
+// ==================================================
+
+loadMeetings();
+
+
 </script>
+
 
 </body>
 
