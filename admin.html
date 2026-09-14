@@ -199,6 +199,10 @@ th {
     font-size: 13px;
 }
 
+.action:hover {
+    opacity: .85;
+}
+
 .qr {
     background: #111827;
     color: white;
@@ -226,6 +230,12 @@ th {
 
 .photo-btn {
     background: #7c3aed;
+    color: white;
+}
+
+/* زر الحذف */
+.delete {
+    background: #991b1b;
     color: white;
 }
 
@@ -1280,6 +1290,15 @@ onclick="regenerateQR(
 🔄 QR جديد
 </button>
 
+
+<button
+class="action delete"
+onclick="deletePerson(
+'${escapeJS(person.id)}'
+)">
+🗑️ حذف
+</button>
+
 </div>
 
 </td>
@@ -1291,6 +1310,97 @@ onclick="regenerateQR(
 
             }
         );
+
+}
+
+
+// ============================================================
+// DELETE PERSON
+// ============================================================
+
+async function deletePerson(id) {
+
+    const person =
+        people.find(
+            p => p.id === id
+        );
+
+
+    if (!person) {
+
+        alert("الشخص غير موجود");
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+
+            "⚠️ تأكيد حذف الشخص\n\n" +
+
+            "الاسم: " +
+            person.name +
+            "\n" +
+
+            "ID: " +
+            person.id +
+            "\n\n" +
+
+            "سيتم حذف الشخص من قائمة الأشخاص " +
+            "وصورته من Google Drive.\n\n" +
+
+            "سجل الحضور القديم لن يتم حذفه.\n\n" +
+
+            "هل أنت متأكد؟"
+
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "deletePerson",
+
+                id: id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        alert(
+            "✅ تم حذف الشخص: " +
+            data.name
+        );
+
+
+        await loadPeople();
+
+    }
+    catch(error) {
+
+        alert(
+            "❌ فشل حذف الشخص\n\n" +
+            error.message
+        );
+
+    }
 
 }
 
@@ -1630,10 +1740,6 @@ async function uploadPhotoInChunks(id, imageData) {
         );
 
 
-    // ==========================================
-    // بدء رفع الصورة
-    // ==========================================
-
     const start =
         await apiGet({
 
@@ -1662,10 +1768,6 @@ async function uploadPhotoInChunks(id, imageData) {
     const token =
         start.token;
 
-
-    // ==========================================
-    // إرسال أجزاء الصورة
-    // ==========================================
 
     for (
         let i = 0;
@@ -1712,10 +1814,6 @@ async function uploadPhotoInChunks(id, imageData) {
 
     }
 
-
-    // ==========================================
-    // إنهاء الرفع وتجميع الصورة
-    // ==========================================
 
     const finish =
         await apiGet({
