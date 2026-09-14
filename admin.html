@@ -1622,57 +1622,120 @@ function compressImage(file) {
 
 async function uploadPhotoInChunks(id, imageData) {
 
-    const chunkSize = 900;
+  const chunkSize = 900;
 
-    const total =
-        Math.ceil(
-            imageData.length /
-            chunkSize
-        );
-
-
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-        const chunk =
-            imageData.substring(
-                i * chunkSize,
-                Math.min(
-                    (i + 1) * chunkSize,
-                    imageData.length
-                )
-            );
+  const total =
+    Math.ceil(
+      imageData.length / chunkSize
+    );
 
 
-        const result =
-            await apiGet({
+  // ==========================================
+  // بدء الرفع
+  // ==========================================
 
-                action: "uploadPhoto",
+  const start =
+    await apiGet({
+      action: "photoStart",
+      id: id,
+      total: total
+    });
 
-                id: id,
 
-                image: chunk
+  if (!start || !start.success) {
 
-            });
+    throw new Error(
+      start?.message ||
+      "فشل بدء رفع الصورة"
+    );
+
+  }
 
 
-        if (!result.success) {
+  const token =
+    start.token;
 
-            throw new Error(
-                result.message
-            );
 
-        }
+  // ==========================================
+  // إرسال أجزاء الصورة
+  // ==========================================
+
+  for (
+    let i = 0;
+    i < total;
+    i++
+  ) {
+
+    const chunk =
+      imageData.substring(
+        i * chunkSize,
+        (i + 1) * chunkSize
+      );
+
+
+    const result =
+      await apiGet({
+
+        action: "photoChunk",
+
+        token: token,
+
+        index: i,
+
+        /*
+         * encodeURIComponent مهم جدًا
+         * لحماية + / = الموجودة في Base64
+         */
+        chunk:
+          encodeURIComponent(chunk)
+
+      });
+
+
+    if (!result || !result.success) {
+
+      throw new Error(
+
+        result?.message ||
+
+        "فشل رفع الجزء رقم " +
+        (i + 1)
+
+      );
 
     }
 
+  }
 
-    return {
-        success: true
-    };
+
+  // ==========================================
+  // إنهاء الرفع وتجميع الصورة
+  // ==========================================
+
+  const finish =
+    await apiGet({
+
+      action: "photoFinish",
+
+      token: token
+
+    });
+
+
+  if (!finish || !finish.success) {
+
+    throw new Error(
+
+      finish?.message ||
+
+      "فشل تجميع الصورة"
+
+    );
+
+  }
+
+
+  return finish;
 
 }
 
