@@ -19,579 +19,360 @@ content="width=device-width, initial-scale=1.0">
 }
 
 body {
-
     margin: 0;
-
     font-family: Arial, Tahoma, sans-serif;
-
     background: #f3f4f6;
-
     color: #222;
-
 }
 
-
-/* =========================
-HEADER
-========================= */
-
 .header {
-
     background: #111827;
-
     color: white;
-
     padding: 18px;
-
     position: sticky;
-
     top: 0;
-
     z-index: 100;
-
 }
 
 .header-content {
-
     max-width: 1100px;
-
     margin: auto;
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
 }
 
 .header h1 {
-
     margin: 0;
-
     font-size: 22px;
-
 }
-
-
-/* =========================
-CONTAINER
-========================= */
 
 .container {
-
     max-width: 1100px;
-
     margin: auto;
-
     padding: 20px;
-
 }
 
-
-/* =========================
-NAV
-========================= */
-
 .nav {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
+    grid-template-columns: repeat(4,1fr);
     gap: 10px;
-
     margin-bottom: 20px;
-
 }
 
 .nav button {
-
     border: none;
-
     background: white;
-
     padding: 14px 8px;
-
     border-radius: 12px;
-
     cursor: pointer;
-
     font-size: 15px;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.06);
-
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
 .nav button.active {
-
     background: #111827;
-
     color: white;
-
 }
 
-
-/* =========================
-SECTIONS
-========================= */
-
 .section {
-
     display: none;
-
 }
 
 .section.active {
-
     display: block;
-
 }
 
-
-/* =========================
-STATS
-========================= */
-
 .stats {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
+    grid-template-columns: repeat(3,1fr);
     gap: 15px;
-
     margin-bottom: 20px;
-
 }
 
 .stat {
-
     background: white;
-
     padding: 20px;
-
     border-radius: 16px;
-
-    box-shadow:
-        0 3px 10px
-        rgba(0,0,0,.06);
-
+    box-shadow: 0 3px 10px rgba(0,0,0,.06);
 }
 
 .stat-title {
-
     color: #666;
-
     font-size: 14px;
-
 }
 
 .stat-number {
-
     font-size: 30px;
-
     font-weight: bold;
-
     margin-top: 8px;
-
 }
 
-
-/* =========================
-CARD
-========================= */
-
 .card {
-
     background: white;
-
     padding: 20px;
-
     border-radius: 16px;
-
     margin-bottom: 20px;
-
-    box-shadow:
-        0 3px 10px
-        rgba(0,0,0,.06);
-
+    box-shadow: 0 3px 10px rgba(0,0,0,.06);
 }
 
 .card h2 {
-
     margin-top: 0;
-
 }
 
-
-/* =========================
-FORM
-========================= */
-
 .form-grid {
-
     display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
+    grid-template-columns: 1fr 1fr;
     gap: 15px;
-
 }
 
 label {
-
     display: block;
-
     font-weight: bold;
-
     margin-bottom: 7px;
-
 }
 
 input {
-
     width: 100%;
-
     padding: 13px;
-
-    border:
-        1px solid #ddd;
-
+    border: 1px solid #ddd;
     border-radius: 10px;
-
     font-size: 16px;
+}
 
+input[type="file"] {
+    padding: 10px;
+    background: #fafafa;
 }
 
 .primary {
-
     background: #111827;
-
     color: white;
-
     border: none;
-
     padding: 12px 18px;
-
     border-radius: 10px;
-
     cursor: pointer;
-
     font-size: 15px;
-
     margin-top: 15px;
-
 }
 
-
-/* =========================
-SEARCH
-========================= */
+.primary:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
 
 .search {
-
     margin-bottom: 15px;
-
 }
 
-
-/* =========================
-TABLE
-========================= */
-
 .table-container {
-
     overflow-x: auto;
-
 }
 
 table {
-
     width: 100%;
-
     border-collapse: collapse;
-
 }
 
 th,
 td {
-
     padding: 12px;
-
-    border-bottom:
-        1px solid #eee;
-
+    border-bottom: 1px solid #eee;
     text-align: right;
-
     white-space: nowrap;
-
 }
 
 th {
-
     background: #f8f8f8;
-
 }
 
-
-/* =========================
-ACTION BUTTONS
-========================= */
-
 .actions {
-
     display: flex;
-
     gap: 6px;
-
 }
 
 .action {
-
     border: none;
-
     padding: 7px 9px;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     font-size: 13px;
-
 }
 
 .qr {
-
     background: #111827;
-
     color: white;
-
 }
 
 .edit {
-
     background: #2563eb;
-
     color: white;
-
 }
 
 .disable {
-
     background: #dc2626;
-
     color: white;
-
 }
 
 .enable {
-
     background: #16a34a;
-
     color: white;
-
 }
 
 .regenerate {
-
     background: #d97706;
-
     color: white;
-
 }
 
-
-/* =========================
-STATUS
-========================= */
+.photo-btn {
+    background: #7c3aed;
+    color: white;
+}
 
 .status-active {
-
     color: #15803d;
-
     font-weight: bold;
-
 }
 
 .status-inactive {
-
     color: #dc2626;
-
     font-weight: bold;
-
 }
 
+.person-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    background: #eee;
+    vertical-align: middle;
+}
 
-/* =========================
-MODAL
-========================= */
+.no-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e7eb;
+    font-size: 22px;
+}
+
+.photo-preview {
+    display: none;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.photo-preview img {
+    width: 120px;
+    height: 120px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
 
 .modal {
-
     display: none;
-
     position: fixed;
-
     inset: 0;
-
-    background:
-        rgba(0,0,0,.65);
-
+    background: rgba(0,0,0,.65);
     z-index: 500;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 20px;
-
 }
 
 .modal.show {
-
     display: flex;
-
 }
 
 .modal-content {
-
     background: white;
-
     border-radius: 18px;
-
     padding: 25px;
-
     width: 100%;
-
     max-width: 420px;
-
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .close {
-
     float: left;
-
     border: none;
-
     background: none;
-
     font-size: 25px;
-
     cursor: pointer;
-
 }
 
-
-/* =========================
-QR
-========================= */
-
 .qr-container {
-
     text-align: center;
-
     margin: 20px 0;
-
 }
 
 #qrCode canvas {
-
     margin: auto;
-
 }
 
-
-/* =========================
-MESSAGE
-========================= */
-
 .message {
-
     padding: 12px;
-
     border-radius: 10px;
-
     margin-top: 15px;
-
     display: none;
-
 }
 
 .message.success {
-
     display: block;
-
     background: #dcfce7;
-
     color: #166534;
-
 }
 
 .message.error {
-
     display: block;
-
     background: #fee2e2;
-
     color: #991b1b;
-
 }
 
-
-/* =========================
-MOBILE
-========================= */
+.big-photo {
+    width: 100%;
+    max-width: 350px;
+    max-height: 400px;
+    object-fit: contain;
+    display: block;
+    margin: 15px auto;
+    border-radius: 15px;
+}
 
 @media(max-width:700px) {
 
     .container {
-
         padding: 12px;
-
     }
 
     .stats {
-
         gap: 8px;
-
     }
 
     .stat {
-
         padding: 12px;
-
     }
 
     .stat-number {
-
         font-size: 22px;
-
     }
 
     .nav {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
+        grid-template-columns: repeat(2,1fr);
     }
 
     .form-grid {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
     .actions {
-
         flex-wrap: wrap;
-
     }
 
 }
@@ -599,7 +380,6 @@ MOBILE
 </style>
 
 </head>
-
 
 <body>
 
@@ -610,18 +390,13 @@ MOBILE
 
 <div class="header-content">
 
-<h1>
-⚙️ لوحة الإدارة
-</h1>
+<h1>⚙️ لوحة الإدارة</h1>
 
-<span>
-نظام الحضور
-</span>
+<span>نظام الحضور</span>
 
 </div>
 
 </div>
-
 
 
 <div class="container">
@@ -634,50 +409,34 @@ MOBILE
 <button
 class="active"
 onclick="showSection('dashboard',this)">
-
 📊 الرئيسية
-
 </button>
-
 
 <button
 onclick="showSection('people',this)">
-
 👥 الأشخاص
-
 </button>
-
 
 <button
 onclick="showSection('meetings',this)">
-
 📅 الاجتماعات
-
 </button>
-
 
 <button
 onclick="showSection('attendance',this)">
-
 📋 الحضور
-
 </button>
 
 </div>
 
 
-
-<!-- =========================
-DASHBOARD
-========================= -->
+<!-- DASHBOARD -->
 
 <section
 id="dashboard"
 class="section active">
 
-
 <div class="stats">
-
 
 <div class="stat">
 
@@ -688,9 +447,7 @@ class="section active">
 <div
 id="peopleCount"
 class="stat-number">
-
 ...
-
 </div>
 
 </div>
@@ -705,9 +462,7 @@ class="stat-number">
 <div
 id="meetingsCount"
 class="stat-number">
-
 ...
-
 </div>
 
 </div>
@@ -722,9 +477,7 @@ class="stat-number">
 <div
 id="attendanceCount"
 class="stat-number">
-
 ...
-
 </div>
 
 </div>
@@ -734,9 +487,7 @@ class="stat-number">
 
 <div class="card">
 
-<h2>
-👋 أهلاً بك
-</h2>
+<h2>👋 أهلاً بك</h2>
 
 <p>
 من هنا يمكنك إدارة الأشخاص والاجتماعات
@@ -748,10 +499,7 @@ class="stat-number">
 </section>
 
 
-
-<!-- =========================
-PEOPLE
-========================= -->
+<!-- PEOPLE -->
 
 <section
 id="people"
@@ -760,19 +508,13 @@ class="section">
 
 <div class="card">
 
-<h2>
-➕ إضافة شخص
-</h2>
-
+<h2>➕ إضافة شخص</h2>
 
 <div class="form-grid">
 
-
 <div>
 
-<label>
-الاسم
-</label>
+<label>الاسم</label>
 
 <input
 id="personName"
@@ -784,9 +526,7 @@ placeholder="اسم الشخص">
 
 <div>
 
-<label>
-رقم الهاتف
-</label>
+<label>رقم الهاتف</label>
 
 <input
 id="personPhone"
@@ -796,10 +536,34 @@ placeholder="01000000000">
 </div>
 
 
+<div>
+
+<label>📷 صورة الشخص</label>
+
+<input
+id="personPhoto"
+type="file"
+accept="image/*"
+onchange="previewAddPhoto()">
+
+<div
+id="addPhotoPreview"
+class="photo-preview">
+
+<img
+id="addPhotoPreviewImage"
+src=""
+alt="معاينة الصورة">
+
+</div>
+
+</div>
+
 </div>
 
 
 <button
+id="addPersonButton"
 class="primary"
 onclick="addPerson()">
 
@@ -811,19 +575,14 @@ onclick="addPerson()">
 <div
 id="personMessage"
 class="message">
-
 </div>
 
 </div>
-
 
 
 <div class="card">
 
-<h2>
-👥 قائمة الأشخاص
-</h2>
-
+<h2>👥 قائمة الأشخاص</h2>
 
 <input
 id="peopleSearch"
@@ -841,6 +600,8 @@ oninput="renderPeople()">
 
 <tr>
 
+<th>الصورة</th>
+
 <th>ID</th>
 
 <th>الاسم</th>
@@ -857,7 +618,6 @@ oninput="renderPeople()">
 
 <tbody
 id="peopleTable">
-
 </tbody>
 
 </table>
@@ -869,10 +629,7 @@ id="peopleTable">
 </section>
 
 
-
-<!-- =========================
-MEETINGS
-========================= -->
+<!-- MEETINGS -->
 
 <section
 id="meetings"
@@ -881,19 +638,13 @@ class="section">
 
 <div class="card">
 
-<h2>
-➕ إضافة اجتماع
-</h2>
-
+<h2>➕ إضافة اجتماع</h2>
 
 <div class="form-grid">
 
-
 <div>
 
-<label>
-اسم الاجتماع
-</label>
+<label>اسم الاجتماع</label>
 
 <input
 id="meetingName"
@@ -905,9 +656,7 @@ placeholder="اجتماع الشباب">
 
 <div>
 
-<label>
-التاريخ
-</label>
+<label>التاريخ</label>
 
 <input
 id="meetingDate"
@@ -921,28 +670,21 @@ type="date">
 <button
 class="primary"
 onclick="addMeeting()">
-
 إضافة الاجتماع
-
 </button>
 
 
 <div
 id="meetingMessage"
 class="message">
-
 </div>
 
 </div>
-
 
 
 <div class="card">
 
-<h2>
-📅 الاجتماعات
-</h2>
-
+<h2>📅 الاجتماعات</h2>
 
 <div class="table-container">
 
@@ -964,7 +706,6 @@ class="message">
 
 <tbody
 id="meetingsTable">
-
 </tbody>
 
 </table>
@@ -976,29 +717,22 @@ id="meetingsTable">
 </section>
 
 
-
-<!-- =========================
-ATTENDANCE
-========================= -->
+<!-- ATTENDANCE -->
 
 <section
 id="attendance"
 class="section">
 
-
 <div class="card">
 
-<h2>
-📋 سجل الحضور
-</h2>
-
+<h2>📋 سجل الحضور</h2>
 
 <input
 id="attendanceSearch"
 class="search"
 type="text"
 placeholder="🔎 بحث..."
-oninput="renderAttendance">
+oninput="renderAttendance()">
 
 
 <div class="table-container">
@@ -1025,7 +759,6 @@ oninput="renderAttendance">
 
 <tbody
 id="attendanceTable">
-
 </tbody>
 
 </table>
@@ -1036,43 +769,31 @@ id="attendanceTable">
 
 </section>
 
-
 </div>
 
 
-
-<!-- =========================
-EDIT MODAL
-========================= -->
+<!-- EDIT MODAL -->
 
 <div
 id="editModal"
 class="modal">
-
 
 <div class="modal-content">
 
 <button
 class="close"
 onclick="closeEdit()">
-
 ×
 </button>
 
-
-<h2>
-✏️ تعديل بيانات الشخص
-</h2>
-
+<h2>✏️ تعديل بيانات الشخص</h2>
 
 <input
 type="hidden"
 id="editID">
 
 
-<label>
-الاسم
-</label>
+<label>الاسم</label>
 
 <input
 id="editName"
@@ -1082,16 +803,39 @@ type="text">
 <br><br>
 
 
-<label>
-رقم الهاتف
-</label>
+<label>رقم الهاتف</label>
 
 <input
 id="editPhone"
 type="text">
 
 
+<br><br>
+
+
+<label>📷 تغيير الصورة</label>
+
+<input
+id="editPhoto"
+type="file"
+accept="image/*"
+onchange="previewEditPhoto()">
+
+
+<div
+id="editPhotoPreview"
+class="photo-preview">
+
+<img
+id="editPhotoPreviewImage"
+src=""
+alt="معاينة الصورة">
+
+</div>
+
+
 <button
+id="saveEditButton"
 class="primary"
 onclick="saveEdit()">
 
@@ -1103,7 +847,6 @@ onclick="saveEdit()">
 <div
 id="editMessage"
 class="message">
-
 </div>
 
 </div>
@@ -1111,54 +854,68 @@ class="message">
 </div>
 
 
-
-<!-- =========================
-QR MODAL
-========================= -->
+<!-- QR MODAL -->
 
 <div
 id="qrModal"
 class="modal">
-
 
 <div class="modal-content">
 
 <button
 class="close"
 onclick="closeQR()">
-
 ×
 </button>
 
-
-<h2 id="qrName">
-</h2>
-
+<h2 id="qrName"></h2>
 
 <div
 id="qrCode"
 class="qr-container">
 </div>
 
-
 <p
 id="qrValue"
 style="text-align:center;font-weight:bold;">
 </p>
 
-
 <button
 class="primary"
 onclick="downloadQR()">
-
 ⬇️ تحميل QR
-
 </button>
 
 </div>
 
 </div>
 
+
+<!-- PHOTO MODAL -->
+
+<div
+id="photoModal"
+class="modal">
+
+<div class="modal-content">
+
+<button
+class="close"
+onclick="closePhoto()">
+×
+</button>
+
+<h2 id="photoName"></h2>
+
+<img
+id="bigPhoto"
+class="big-photo"
+src=""
+alt="صورة الشخص">
+
+</div>
+
+</div>
 
 
 <script>
@@ -1185,7 +942,6 @@ let attendance = [];
 let currentQR = "";
 
 
-
 // ============================================================
 // API JSONP
 // ============================================================
@@ -1203,30 +959,21 @@ function apiGet(params) {
                     Math.random()*100000
                 );
 
-
             const script =
-                document.createElement(
-                    "script"
-                );
-
+                document.createElement("script");
 
             const query =
-                new URLSearchParams(
-                    params
-                );
-
+                new URLSearchParams(params);
 
             query.append(
                 "callback",
                 callbackName
             );
 
-
             script.src =
                 API_URL +
                 "?" +
                 query.toString();
-
 
             window[callbackName] =
                 function(data) {
@@ -1236,7 +983,6 @@ function apiGet(params) {
                     cleanup();
 
                 };
-
 
             script.onerror =
                 function() {
@@ -1251,16 +997,13 @@ function apiGet(params) {
 
                 };
 
-
             document.body
                 .appendChild(script);
 
 
             function cleanup() {
 
-                delete window[
-                    callbackName
-                ];
+                delete window[callbackName];
 
                 script.remove();
 
@@ -1272,25 +1015,17 @@ function apiGet(params) {
 }
 
 
-
 // ============================================================
 // Navigation
 // ============================================================
 
-function showSection(
-    section,
-    button
-) {
+function showSection(section, button) {
 
     document
-        .querySelectorAll(
-            ".section"
-        )
+        .querySelectorAll(".section")
         .forEach(
             el =>
-                el.classList.remove(
-                    "active"
-                )
+                el.classList.remove("active")
         );
 
 
@@ -1300,48 +1035,29 @@ function showSection(
 
 
     document
-        .querySelectorAll(
-            ".nav button"
-        )
+        .querySelectorAll(".nav button")
         .forEach(
             el =>
-                el.classList.remove(
-                    "active"
-                )
+                el.classList.remove("active")
         );
 
 
     button.classList.add("active");
 
 
-    if (
-        section === "people"
-    ) {
-
+    if (section === "people") {
         loadPeople();
-
     }
 
-
-    if (
-        section === "meetings"
-    ) {
-
+    if (section === "meetings") {
         loadMeetings();
-
     }
 
-
-    if (
-        section === "attendance"
-    ) {
-
+    if (section === "attendance") {
         loadAttendance();
-
     }
 
 }
-
 
 
 // ============================================================
@@ -1354,50 +1070,35 @@ async function loadPeople() {
 
         const data =
             await apiGet({
-
-                action:
-                    "people"
-
+                action: "people"
             });
 
 
         if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
+            throw new Error(data.message);
         }
 
 
-        people =
-            data.people;
-
+        people = data.people || [];
 
         renderPeople();
 
 
         document
-            .getElementById(
-                "peopleCount"
-            )
+            .getElementById("peopleCount")
             .textContent =
             people.length;
 
     }
-
     catch(error) {
 
         console.error(error);
 
-        alert(
-            error.message
-        );
+        alert(error.message);
 
     }
 
 }
-
 
 
 // ============================================================
@@ -1407,17 +1108,12 @@ async function loadPeople() {
 function renderPeople() {
 
     const table =
-        document
-            .getElementById(
-                "peopleTable"
-            );
+        document.getElementById("peopleTable");
 
 
     const search =
         document
-            .getElementById(
-                "peopleSearch"
-            )
+            .getElementById("peopleSearch")
             .value
             .toLowerCase();
 
@@ -1429,19 +1125,19 @@ function renderPeople() {
         .filter(
             person =>
 
-                person.name
+                String(person.name)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                person.id
+                String(person.id)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                person.phone
+                String(person.phone)
                     .toLowerCase()
                     .includes(search)
 
@@ -1449,30 +1145,61 @@ function renderPeople() {
         .forEach(
             person => {
 
-
                 const row =
-                    document.createElement(
-                        "tr"
-                    );
+                    document.createElement("tr");
 
 
                 const active =
-                    person.status ===
-                    "active";
+                    person.status === "active";
+
+
+                let photoHTML = "";
+
+                if (person.photo) {
+
+                    photoHTML = `
+<img
+class="person-photo"
+src="${escapeHTML(person.photo)}"
+alt="صورة"
+onclick="showPhoto(
+'${escapeJS(person.name)}',
+'${escapeJS(person.photo)}'
+)"
+style="cursor:pointer"
+>
+`;
+
+                }
+                else {
+
+                    photoHTML = `
+<span
+class="no-photo"
+title="لا توجد صورة">
+👤
+</span>
+`;
+
+                }
 
 
                 row.innerHTML = `
 
 <td>
-${person.id}
+${photoHTML}
 </td>
 
 <td>
-${person.name}
+${escapeHTML(person.id)}
 </td>
 
 <td>
-${person.phone}
+${escapeHTML(person.name)}
+</td>
+
+<td>
+${escapeHTML(person.phone)}
 </td>
 
 <td>
@@ -1497,16 +1224,23 @@ ${
 
 <div class="actions">
 
-
 <button
 class="action qr"
 onclick="showQR(
 '${escapeJS(person.name)}',
 '${escapeJS(person.qr)}'
 )">
-
 🔲 QR
+</button>
 
+
+<button
+class="action photo-btn"
+onclick="showPhoto(
+'${escapeJS(person.name)}',
+'${escapeJS(person.photo || "")}'
+)">
+📷 صورة
 </button>
 
 
@@ -1515,9 +1249,7 @@ class="action edit"
 onclick="openEdit(
 '${escapeJS(person.id)}'
 )">
-
 ✏️ تعديل
-
 </button>
 
 
@@ -1545,11 +1277,8 @@ class="action regenerate"
 onclick="regenerateQR(
 '${escapeJS(person.id)}'
 )">
-
 🔄 QR جديد
-
 </button>
-
 
 </div>
 
@@ -1566,7 +1295,6 @@ onclick="regenerateQR(
 }
 
 
-
 // ============================================================
 // ADD PERSON
 // ============================================================
@@ -1575,20 +1303,24 @@ async function addPerson() {
 
     const name =
         document
-            .getElementById(
-                "personName"
-            )
+            .getElementById("personName")
             .value
             .trim();
 
 
     const phone =
         document
-            .getElementById(
-                "personPhone"
-            )
+            .getElementById("personPhone")
             .value
             .trim();
+
+
+    const photoInput =
+        document.getElementById("personPhoto");
+
+
+    const photoFile =
+        photoInput.files[0];
 
 
     if (!name) {
@@ -1604,19 +1336,25 @@ async function addPerson() {
     }
 
 
+    const button =
+        document.getElementById("addPersonButton");
+
+
     try {
+
+        button.disabled = true;
+
+        button.textContent = "⏳ جاري إضافة الشخص...";
+
 
         const data =
             await apiGet({
 
-                action:
-                    "addPerson",
+                action: "addPerson",
 
-                name:
-                    name,
+                name: name,
 
-                phone:
-                    phone
+                phone: phone
 
             });
 
@@ -1630,12 +1368,50 @@ async function addPerson() {
         }
 
 
+        let photoMessage = "";
+
+
+        if (photoFile) {
+
+            button.textContent =
+                "⏳ جاري رفع الصورة...";
+
+
+            const compressed =
+                await compressImage(
+                    photoFile
+                );
+
+
+            const upload =
+                await uploadPhotoInChunks(
+                    data.id,
+                    compressed
+                );
+
+
+            if (!upload.success) {
+
+                throw new Error(
+                    upload.message
+                );
+
+            }
+
+
+            photoMessage =
+                " + تم رفع الصورة";
+
+        }
+
+
         showMessage(
 
             "personMessage",
 
             "✅ تم إضافة الشخص - ID: " +
-            data.id,
+            data.id +
+            photoMessage,
 
             "success"
 
@@ -1643,17 +1419,21 @@ async function addPerson() {
 
 
         document
-            .getElementById(
-                "personName"
-            )
+            .getElementById("personName")
             .value = "";
 
 
         document
-            .getElementById(
-                "personPhone"
-            )
+            .getElementById("personPhone")
             .value = "";
+
+
+        photoInput.value = "";
+
+
+        document
+            .getElementById("addPhotoPreview")
+            .style.display = "none";
 
 
         await loadPeople();
@@ -1665,7 +1445,6 @@ async function addPerson() {
         );
 
     }
-
     catch(error) {
 
         showMessage(
@@ -1680,9 +1459,222 @@ async function addPerson() {
         );
 
     }
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "إضافة الشخص";
+
+    }
 
 }
 
+
+// ============================================================
+// ضغط الصورة
+// ============================================================
+
+function compressImage(file) {
+
+    return new Promise(
+        function(resolve,reject) {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    const img =
+                        new Image();
+
+
+                    img.onload =
+                        function() {
+
+                            const maxSize = 600;
+
+                            let width =
+                                img.width;
+
+                            let height =
+                                img.height;
+
+
+                            if (
+                                width > maxSize ||
+                                height > maxSize
+                            ) {
+
+                                if (width > height) {
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            maxSize /
+                                            width
+                                        );
+
+                                    width =
+                                        maxSize;
+
+                                }
+                                else {
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            maxSize /
+                                            height
+                                        );
+
+                                    height =
+                                        maxSize;
+
+                                }
+
+                            }
+
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+
+                            canvas.width =
+                                width;
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            ctx.drawImage(
+                                img,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            const result =
+                                canvas.toDataURL(
+                                    "image/jpeg",
+                                    0.65
+                                );
+
+
+                            resolve(result);
+
+                        };
+
+
+                    img.onerror =
+                        function() {
+
+                            reject(
+                                new Error(
+                                    "تعذر قراءة الصورة"
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        event.target.result;
+
+                };
+
+
+            reader.onerror =
+                function() {
+
+                    reject(
+                        new Error(
+                            "تعذر قراءة الملف"
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// رفع الصورة على أجزاء
+// ============================================================
+
+async function uploadPhotoInChunks(id, imageData) {
+
+    const chunkSize = 900;
+
+    const total =
+        Math.ceil(
+            imageData.length /
+            chunkSize
+        );
+
+
+    for (
+        let i = 0;
+        i < total;
+        i++
+    ) {
+
+        const chunk =
+            imageData.substring(
+                i * chunkSize,
+                Math.min(
+                    (i + 1) * chunkSize,
+                    imageData.length
+                )
+            );
+
+
+        const result =
+            await apiGet({
+
+                action: "uploadPhoto",
+
+                id: id,
+
+                image: chunk
+
+            });
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message
+            );
+
+        }
+
+    }
+
+
+    return {
+        success: true
+    };
+
+}
 
 
 // ============================================================
@@ -1693,112 +1685,152 @@ function openEdit(id) {
 
     const person =
         people.find(
-            p =>
-                p.id === id
+            p => p.id === id
         );
 
 
     if (!person) {
-
         return;
-
     }
 
 
     document
-        .getElementById(
-            "editID"
-        )
+        .getElementById("editID")
         .value =
         person.id;
 
 
     document
-        .getElementById(
-            "editName"
-        )
+        .getElementById("editName")
         .value =
         person.name;
 
 
     document
-        .getElementById(
-            "editPhone"
-        )
+        .getElementById("editPhone")
         .value =
         person.phone;
 
 
-    document
-        .getElementById(
-            "editModal"
-        )
-        .classList.add(
-            "show"
+    const preview =
+        document.getElementById(
+            "editPhotoPreview"
         );
 
-}
 
+    const previewImage =
+        document.getElementById(
+            "editPhotoPreviewImage"
+        );
+
+
+    if (person.photo) {
+
+        previewImage.src =
+            person.photo;
+
+        preview.style.display =
+            "block";
+
+    }
+    else {
+
+        preview.style.display =
+            "none";
+
+    }
+
+
+    document
+        .getElementById("editPhoto")
+        .value = "";
+
+
+    document
+        .getElementById("editModal")
+        .classList.add("show");
+
+}
 
 
 function closeEdit() {
 
     document
-        .getElementById(
-            "editModal"
-        )
-        .classList.remove(
-            "show"
-        );
+        .getElementById("editModal")
+        .classList.remove("show");
 
 }
-
 
 
 async function saveEdit() {
 
     const id =
         document
-            .getElementById(
-                "editID"
-            )
+            .getElementById("editID")
             .value;
 
 
     const name =
         document
-            .getElementById(
-                "editName"
-            )
+            .getElementById("editName")
             .value
             .trim();
 
 
     const phone =
         document
-            .getElementById(
-                "editPhone"
-            )
+            .getElementById("editPhone")
             .value
             .trim();
 
 
+    const photoInput =
+        document.getElementById(
+            "editPhoto"
+        );
+
+
+    const photoFile =
+        photoInput.files[0];
+
+
+    const button =
+        document.getElementById(
+            "saveEditButton"
+        );
+
+
+    if (!name) {
+
+        showMessage(
+            "editMessage",
+            "اكتب الاسم",
+            "error"
+        );
+
+        return;
+
+    }
+
+
     try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "⏳ جاري الحفظ...";
+
 
         const data =
             await apiGet({
 
-                action:
-                    "updatePerson",
+                action: "updatePerson",
 
-                id:
-                    id,
+                id: id,
 
-                name:
-                    name,
+                name: name,
 
-                phone:
-                    phone
+                phone: phone
 
             });
 
@@ -1812,8 +1844,37 @@ async function saveEdit() {
         }
 
 
-        closeEdit();
+        if (photoFile) {
 
+            button.textContent =
+                "⏳ جاري رفع الصورة...";
+
+
+            const compressed =
+                await compressImage(
+                    photoFile
+                );
+
+
+            const upload =
+                await uploadPhotoInChunks(
+                    id,
+                    compressed
+                );
+
+
+            if (!upload.success) {
+
+                throw new Error(
+                    upload.message
+                );
+
+            }
+
+        }
+
+
+        closeEdit();
 
         await loadPeople();
 
@@ -1823,7 +1884,6 @@ async function saveEdit() {
         );
 
     }
-
     catch(error) {
 
         showMessage(
@@ -1838,9 +1898,172 @@ async function saveEdit() {
         );
 
     }
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "💾 حفظ التعديلات";
+
+    }
 
 }
 
+
+// ============================================================
+// PREVIEW ADD PHOTO
+// ============================================================
+
+function previewAddPhoto() {
+
+    const input =
+        document.getElementById(
+            "personPhoto"
+        );
+
+
+    const preview =
+        document.getElementById(
+            "addPhotoPreview"
+        );
+
+
+    const image =
+        document.getElementById(
+            "addPhotoPreviewImage"
+        );
+
+
+    const file =
+        input.files[0];
+
+
+    if (!file) {
+
+        preview.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(event) {
+
+            image.src =
+                event.target.result;
+
+            preview.style.display =
+                "block";
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+// ============================================================
+// PREVIEW EDIT PHOTO
+// ============================================================
+
+function previewEditPhoto() {
+
+    const input =
+        document.getElementById(
+            "editPhoto"
+        );
+
+
+    const preview =
+        document.getElementById(
+            "editPhotoPreview"
+        );
+
+
+    const image =
+        document.getElementById(
+            "editPhotoPreviewImage"
+        );
+
+
+    const file =
+        input.files[0];
+
+
+    if (!file) {
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(event) {
+
+            image.src =
+                event.target.result;
+
+            preview.style.display =
+                "block";
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+// ============================================================
+// PHOTO VIEW
+// ============================================================
+
+function showPhoto(name, photo) {
+
+    if (!photo) {
+
+        alert("لا توجد صورة لهذا الشخص");
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("photoName")
+        .textContent =
+        name;
+
+
+    document
+        .getElementById("bigPhoto")
+        .src =
+        photo;
+
+
+    document
+        .getElementById("photoModal")
+        .classList.add("show");
+
+}
+
+
+function closePhoto() {
+
+    document
+        .getElementById("photoModal")
+        .classList.remove("show");
+
+}
 
 
 // ============================================================
@@ -1851,15 +2074,12 @@ async function togglePerson(id) {
 
     const person =
         people.find(
-            p =>
-                p.id === id
+            p => p.id === id
         );
 
 
     if (!person) {
-
         return;
-
     }
 
 
@@ -1876,9 +2096,7 @@ async function togglePerson(id) {
             " الشخص؟"
         )
     ) {
-
         return;
-
     }
 
 
@@ -1887,11 +2105,9 @@ async function togglePerson(id) {
         const data =
             await apiGet({
 
-                action:
-                    "togglePerson",
+                action: "togglePerson",
 
-                id:
-                    id
+                id: id
 
             });
 
@@ -1908,7 +2124,6 @@ async function togglePerson(id) {
         await loadPeople();
 
     }
-
     catch(error) {
 
         alert(
@@ -1921,7 +2136,6 @@ async function togglePerson(id) {
 }
 
 
-
 // ============================================================
 // REGENERATE QR
 // ============================================================
@@ -1930,15 +2144,12 @@ async function regenerateQR(id) {
 
     const person =
         people.find(
-            p =>
-                p.id === id
+            p => p.id === id
         );
 
 
     if (!person) {
-
         return;
-
     }
 
 
@@ -1948,9 +2159,7 @@ async function regenerateQR(id) {
             "الـQR القديم لن يعمل بعد ذلك."
         )
     ) {
-
         return;
-
     }
 
 
@@ -1959,11 +2168,9 @@ async function regenerateQR(id) {
         const data =
             await apiGet({
 
-                action:
-                    "regenerateQR",
+                action: "regenerateQR",
 
-                id:
-                    id
+                id: id
 
             });
 
@@ -1985,9 +2192,7 @@ async function regenerateQR(id) {
             data.qr
         );
 
-
     }
-
     catch(error) {
 
         alert(
@@ -2000,41 +2205,31 @@ async function regenerateQR(id) {
 }
 
 
-
 // ============================================================
 // QR
 // ============================================================
 
-function showQR(
-    name,
-    qr
-) {
+function showQR(name, qr) {
 
-    currentQR =
-        qr;
+    currentQR = qr;
 
 
     document
-        .getElementById(
-            "qrName"
-        )
+        .getElementById("qrName")
         .textContent =
         name;
 
 
     document
-        .getElementById(
-            "qrValue"
-        )
+        .getElementById("qrValue")
         .textContent =
         qr;
 
 
     const container =
-        document
-            .getElementById(
-                "qrCode"
-            );
+        document.getElementById(
+            "qrCode"
+        );
 
 
     container.innerHTML = "";
@@ -2046,14 +2241,11 @@ function showQR(
 
         {
 
-            text:
-                qr,
+            text: qr,
 
-            width:
-                240,
+            width: 240,
 
-            height:
-                240,
+            height: 240,
 
             correctLevel:
                 QRCode.CorrectLevel.H
@@ -2064,54 +2256,36 @@ function showQR(
 
 
     document
-        .getElementById(
-            "qrModal"
-        )
-        .classList.add(
-            "show"
-        );
+        .getElementById("qrModal")
+        .classList.add("show");
 
 }
-
 
 
 function closeQR() {
 
     document
-        .getElementById(
-            "qrModal"
-        )
-        .classList.remove(
-            "show"
-        );
+        .getElementById("qrModal")
+        .classList.remove("show");
 
 }
-
 
 
 function downloadQR() {
 
     const canvas =
         document
-            .getElementById(
-                "qrCode"
-            )
-            .querySelector(
-                "canvas"
-            );
+            .getElementById("qrCode")
+            .querySelector("canvas");
 
 
     if (!canvas) {
-
         return;
-
     }
 
 
     const link =
-        document.createElement(
-            "a"
-        );
+        document.createElement("a");
 
 
     link.download =
@@ -2121,15 +2295,12 @@ function downloadQR() {
 
 
     link.href =
-        canvas.toDataURL(
-            "image/png"
-        );
+        canvas.toDataURL("image/png");
 
 
     link.click();
 
 }
-
 
 
 // ============================================================
@@ -2142,10 +2313,7 @@ async function loadMeetings() {
 
         const data =
             await apiGet({
-
-                action:
-                    "meetings"
-
+                action: "meetings"
             });
 
 
@@ -2159,21 +2327,18 @@ async function loadMeetings() {
 
 
         meetings =
-            data.meetings;
+            data.meetings || [];
 
 
         renderMeetings();
 
 
         document
-            .getElementById(
-                "meetingsCount"
-            )
+            .getElementById("meetingsCount")
             .textContent =
             meetings.length;
 
     }
-
     catch(error) {
 
         console.error(error);
@@ -2183,14 +2348,12 @@ async function loadMeetings() {
 }
 
 
-
 function renderMeetings() {
 
     const table =
-        document
-            .getElementById(
-                "meetingsTable"
-            );
+        document.getElementById(
+            "meetingsTable"
+        );
 
 
     table.innerHTML = "";
@@ -2200,23 +2363,21 @@ function renderMeetings() {
         meeting => {
 
             const row =
-                document.createElement(
-                    "tr"
-                );
+                document.createElement("tr");
 
 
             row.innerHTML = `
 
 <td>
-${meeting.id}
+${escapeHTML(meeting.id)}
 </td>
 
 <td>
-${meeting.name}
+${escapeHTML(meeting.name)}
 </td>
 
 <td>
-${meeting.date}
+${escapeHTML(meeting.date)}
 </td>
 
 `;
@@ -2230,23 +2391,18 @@ ${meeting.date}
 }
 
 
-
 async function addMeeting() {
 
     const name =
         document
-            .getElementById(
-                "meetingName"
-            )
+            .getElementById("meetingName")
             .value
             .trim();
 
 
     const date =
         document
-            .getElementById(
-                "meetingDate"
-            )
+            .getElementById("meetingDate")
             .value;
 
 
@@ -2272,14 +2428,11 @@ async function addMeeting() {
         const data =
             await apiGet({
 
-                action:
-                    "addMeeting",
+                action: "addMeeting",
 
-                name:
-                    name,
+                name: name,
 
-                date:
-                    date
+                date: date
 
             });
 
@@ -2306,23 +2459,18 @@ async function addMeeting() {
 
 
         document
-            .getElementById(
-                "meetingName"
-            )
+            .getElementById("meetingName")
             .value = "";
 
 
         document
-            .getElementById(
-                "meetingDate"
-            )
+            .getElementById("meetingDate")
             .value = "";
 
 
         await loadMeetings();
 
     }
-
     catch(error) {
 
         showMessage(
@@ -2341,7 +2489,6 @@ async function addMeeting() {
 }
 
 
-
 // ============================================================
 // ATTENDANCE
 // ============================================================
@@ -2353,8 +2500,7 @@ async function loadAttendance() {
         const data =
             await apiGet({
 
-                action:
-                    "attendanceList"
+                action: "attendanceList"
 
             });
 
@@ -2369,21 +2515,18 @@ async function loadAttendance() {
 
 
         attendance =
-            data.attendance;
+            data.attendance || [];
 
 
         renderAttendance();
 
 
         document
-            .getElementById(
-                "attendanceCount"
-            )
+            .getElementById("attendanceCount")
             .textContent =
             attendance.length;
 
     }
-
     catch(error) {
 
         console.error(error);
@@ -2393,14 +2536,12 @@ async function loadAttendance() {
 }
 
 
-
 function renderAttendance() {
 
     const table =
-        document
-            .getElementById(
-                "attendanceTable"
-            );
+        document.getElementById(
+            "attendanceTable"
+        );
 
 
     const search =
@@ -2419,25 +2560,25 @@ function renderAttendance() {
         .filter(
             item =>
 
-                item.id
+                String(item.id)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                item.name
+                String(item.name)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                item.meeting
+                String(item.meeting)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                item.date
+                String(item.date)
                     .toLowerCase()
                     .includes(search)
 
@@ -2446,31 +2587,29 @@ function renderAttendance() {
             item => {
 
                 const row =
-                    document.createElement(
-                        "tr"
-                    );
+                    document.createElement("tr");
 
 
                 row.innerHTML = `
 
 <td>
-${item.id}
+${escapeHTML(item.id)}
 </td>
 
 <td>
-${item.name}
+${escapeHTML(item.name)}
 </td>
 
 <td>
-${item.meeting}
+${escapeHTML(item.meeting)}
 </td>
 
 <td>
-${item.date}
+${escapeHTML(item.date)}
 </td>
 
 <td>
-${item.time}
+${escapeHTML(item.time)}
 </td>
 
 `;
@@ -2484,16 +2623,11 @@ ${item.time}
 }
 
 
-
 // ============================================================
 // MESSAGE
 // ============================================================
 
-function showMessage(
-    id,
-    text,
-    type
-) {
+function showMessage(id, text, type) {
 
     const element =
         document.getElementById(id);
@@ -2510,37 +2644,39 @@ function showMessage(
 }
 
 
+// ============================================================
+// ESCAPE HTML
+// ============================================================
+
+function escapeHTML(text) {
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
 
 // ============================================================
-// ESCAPE
+// ESCAPE JS
 // ============================================================
 
 function escapeJS(text) {
 
-    return String(text)
+    return String(text || "")
 
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
+        .replace(/\\/g, "\\\\")
 
-        .replace(
-            /'/g,
-            "\\'"
-        )
+        .replace(/'/g, "\\'")
 
-        .replace(
-            /\n/g,
-            "\\n"
-        )
+        .replace(/\n/g, "\\n")
 
-        .replace(
-            /\r/g,
-            "\\r"
-        );
+        .replace(/\r/g, "\\r");
 
 }
-
 
 
 // ============================================================
