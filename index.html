@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 
 <head>
@@ -11,17 +10,19 @@ content="width=device-width, initial-scale=1.0">
 
 <title>Attendance Admin</title>
 
+<script src="https://unpkg.com/html5-qrcode"></script>
+
 <style>
 
 body {
     font-family: Arial;
     text-align: center;
     background: #f5f5f5;
-    padding: 30px;
+    padding: 20px;
 }
 
 h1 {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 button {
@@ -31,17 +32,23 @@ button {
     border-radius: 10px;
     padding: 15px 30px;
     font-size: 20px;
+    margin: 10px;
 }
 
-video {
+#reader {
     width: 100%;
     max-width: 500px;
-    margin-top: 30px;
+    margin: 20px auto;
+    background: white;
     border-radius: 15px;
+    overflow: hidden;
 }
 
-#status {
+#result {
     margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
     font-size: 20px;
 }
 
@@ -49,66 +56,93 @@ video {
 
 </head>
 
+
 <body>
 
-<h1>📷 Attendance Admin</h1>
+<h1>📷 تسجيل الحضور</h1>
 
-<button onclick="startCamera()">
-تشغيل الكاميرا
+<button onclick="startScanner()">
+تشغيل QR Scanner
 </button>
 
-<br>
+<div id="reader"></div>
 
-<video
-id="camera"
-autoplay
-playsinline>
-</video>
-
-<div id="status">
-اضغط على تشغيل الكاميرا
+<div id="result">
+اضغط تشغيل QR Scanner
 </div>
 
 
 <script>
 
-async function startCamera() {
+let scanner = null;
 
-    const status =
-        document.getElementById("status");
+let scanning = false;
 
-    const video =
-        document.getElementById("camera");
+
+async function startScanner() {
+
+    if (scanning) {
+        return;
+    }
+
+    scanning = true;
+
+    document.getElementById("result").innerHTML =
+        "⏳ جاري تشغيل الكاميرا...";
+
+    scanner = new Html5Qrcode("reader");
+
 
     try {
 
-        const stream =
-            await navigator.mediaDevices.getUserMedia({
+        await scanner.start(
 
-                video: {
-                    facingMode: {
-                        ideal: "environment"
-                    }
-                },
+            {
+                facingMode: "environment"
+            },
 
-                audio: false
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
 
-            });
+            function(decodedText) {
 
-        video.srcObject = stream;
+                console.log(
+                    "QR:",
+                    decodedText
+                );
 
-        status.innerHTML =
-            "✅ الكاميرا تعمل بنجاح";
+
+                document.getElementById("result").innerHTML =
+                    "✅ تم قراءة QR<br><br>" +
+                    "ID: " +
+                    decodedText;
+
+
+                scanner.stop();
+
+                scanning = false;
+
+            }
+
+        );
+
+        document.getElementById("result").innerHTML =
+            "📷 وجّه الكاميرا إلى QR Code";
 
     }
 
     catch(error) {
 
-        status.innerHTML =
-            "❌ " +
-            error.name +
-            "<br>" +
-            error.message;
+        scanning = false;
+
+        document.getElementById("result").innerHTML =
+            "❌ خطأ في تشغيل الكاميرا<br><br>" +
+            error;
 
         console.error(error);
 
