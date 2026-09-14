@@ -1622,120 +1622,125 @@ function compressImage(file) {
 
 async function uploadPhotoInChunks(id, imageData) {
 
-  const chunkSize = 900;
+    const chunkSize = 900;
 
-  const total =
-    Math.ceil(
-      imageData.length / chunkSize
-    );
-
-
-  // ==========================================
-  // بدء الرفع
-  // ==========================================
-
-  const start =
-    await apiGet({
-      action: "photoStart",
-      id: id,
-      total: total
-    });
+    const total =
+        Math.ceil(
+            imageData.length / chunkSize
+        );
 
 
-  if (!start || !start.success) {
+    // ==========================================
+    // بدء رفع الصورة
+    // ==========================================
 
-    throw new Error(
-      start?.message ||
-      "فشل بدء رفع الصورة"
-    );
+    const start =
+        await apiGet({
 
-  }
+            action: "photoStart",
 
+            id: id,
 
-  const token =
-    start.token;
+            total: total
 
-
-  // ==========================================
-  // إرسال أجزاء الصورة
-  // ==========================================
-
-  for (
-    let i = 0;
-    i < total;
-    i++
-  ) {
-
-    const chunk =
-      imageData.substring(
-        i * chunkSize,
-        (i + 1) * chunkSize
-      );
+        });
 
 
-    const result =
-      await apiGet({
+    if (!start || !start.success) {
 
-        action: "photoChunk",
+        throw new Error(
 
-        token: token,
+            start?.message ||
 
-        index: i,
+            "فشل بدء رفع الصورة"
 
-        /*
-         * encodeURIComponent مهم جدًا
-         * لحماية + / = الموجودة في Base64
-         */
-        chunk:
-          encodeURIComponent(chunk)
-
-      });
-
-
-    if (!result || !result.success) {
-
-      throw new Error(
-
-        result?.message ||
-
-        "فشل رفع الجزء رقم " +
-        (i + 1)
-
-      );
+        );
 
     }
 
-  }
+
+    const token =
+        start.token;
 
 
-  // ==========================================
-  // إنهاء الرفع وتجميع الصورة
-  // ==========================================
+    // ==========================================
+    // إرسال أجزاء الصورة
+    // ==========================================
 
-  const finish =
-    await apiGet({
+    for (
+        let i = 0;
+        i < total;
+        i++
+    ) {
 
-      action: "photoFinish",
+        const chunk =
+            imageData.substring(
 
-      token: token
+                i * chunkSize,
 
-    });
+                (i + 1) * chunkSize
 
-
-  if (!finish || !finish.success) {
-
-    throw new Error(
-
-      finish?.message ||
-
-      "فشل تجميع الصورة"
-
-    );
-
-  }
+            );
 
 
-  return finish;
+        const result =
+            await apiGet({
+
+                action: "photoChunk",
+
+                token: token,
+
+                index: i,
+
+                chunk: chunk
+
+            });
+
+
+        if (!result || !result.success) {
+
+            throw new Error(
+
+                result?.message ||
+
+                "فشل رفع الجزء رقم " +
+                (i + 1)
+
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // إنهاء الرفع وتجميع الصورة
+    // ==========================================
+
+    const finish =
+        await apiGet({
+
+            action: "photoFinish",
+
+            token: token
+
+        });
+
+
+    if (!finish || !finish.success) {
+
+        throw new Error(
+
+            finish?.message ||
+
+            "فشل تجميع الصورة"
+
+        );
+
+    }
+
+
+    return finish;
 
 }
 
@@ -2763,154 +2768,7 @@ async function init() {
 
 init();
 
-    async function uploadPersonPhoto(
-  id,
-  file
-) {
-
-  if (!id) {
-    throw new Error("ID الشخص غير موجود");
-  }
-
-  if (!file) {
-    throw new Error("لم يتم اختيار صورة");
-  }
-
-  // حجم الجزء حوالي 40KB
-  const CHUNK_SIZE = 40000;
-
-  // قراءة الصورة
-  const base64 =
-    await fileToBase64(file);
-
-  // إزالة data:image/...;base64,
-  const commaIndex =
-    base64.indexOf(",");
-
-  if (commaIndex === -1) {
-    throw new Error(
-      "صيغة الصورة غير صحيحة"
-    );
-  }
-
-  const pureBase64 =
-    base64.substring(
-      commaIndex + 1
-    );
-
-  const total =
-    Math.ceil(
-      pureBase64.length /
-      CHUNK_SIZE
-    );
-
-  for (
-    let index = 0;
-    index < total;
-    index++
-  ) {
-
-    const start =
-      index * CHUNK_SIZE;
-
-    const end =
-      Math.min(
-        start + CHUNK_SIZE,
-        pureBase64.length
-      );
-
-    const chunk =
-      pureBase64.substring(
-        start,
-        end
-      );
-
-    const data =
-      await apiGet({
-
-        action:
-          "uploadPhotoChunk",
-
-        id:
-          id,
-
-        chunk:
-          chunk,
-
-        index:
-          index,
-
-        total:
-          total,
-
-        fileName:
-          file.name,
-
-        mimeType:
-          file.type || "image/jpeg"
-
-      });
-
-    if (!data.success) {
-
-      throw new Error(
-        data.message ||
-        "فشل رفع الصورة"
-      );
-
-    }
-
-    console.log(
-      "Photo upload:",
-      index + 1,
-      "/",
-      total
-    );
-
-  }
-
-  return true;
-}
-
-
-// ============================================================
-// تحويل File إلى Base64
-// ============================================================
-
-function fileToBase64(file) {
-
-  return new Promise(
-    function(resolve, reject) {
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        function() {
-
-          resolve(
-            reader.result
-          );
-
-        };
-
-      reader.onerror =
-        function() {
-
-          reject(
-            new Error(
-              "تعذر قراءة الصورة"
-            )
-          );
-
-        };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-}
+    
 </script>
 
 </body>
