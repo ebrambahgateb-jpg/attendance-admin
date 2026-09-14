@@ -2763,6 +2763,154 @@ async function init() {
 
 init();
 
+    async function uploadPersonPhoto(
+  id,
+  file
+) {
+
+  if (!id) {
+    throw new Error("ID الشخص غير موجود");
+  }
+
+  if (!file) {
+    throw new Error("لم يتم اختيار صورة");
+  }
+
+  // حجم الجزء حوالي 40KB
+  const CHUNK_SIZE = 40000;
+
+  // قراءة الصورة
+  const base64 =
+    await fileToBase64(file);
+
+  // إزالة data:image/...;base64,
+  const commaIndex =
+    base64.indexOf(",");
+
+  if (commaIndex === -1) {
+    throw new Error(
+      "صيغة الصورة غير صحيحة"
+    );
+  }
+
+  const pureBase64 =
+    base64.substring(
+      commaIndex + 1
+    );
+
+  const total =
+    Math.ceil(
+      pureBase64.length /
+      CHUNK_SIZE
+    );
+
+  for (
+    let index = 0;
+    index < total;
+    index++
+  ) {
+
+    const start =
+      index * CHUNK_SIZE;
+
+    const end =
+      Math.min(
+        start + CHUNK_SIZE,
+        pureBase64.length
+      );
+
+    const chunk =
+      pureBase64.substring(
+        start,
+        end
+      );
+
+    const data =
+      await apiGet({
+
+        action:
+          "uploadPhotoChunk",
+
+        id:
+          id,
+
+        chunk:
+          chunk,
+
+        index:
+          index,
+
+        total:
+          total,
+
+        fileName:
+          file.name,
+
+        mimeType:
+          file.type || "image/jpeg"
+
+      });
+
+    if (!data.success) {
+
+      throw new Error(
+        data.message ||
+        "فشل رفع الصورة"
+      );
+
+    }
+
+    console.log(
+      "Photo upload:",
+      index + 1,
+      "/",
+      total
+    );
+
+  }
+
+  return true;
+}
+
+
+// ============================================================
+// تحويل File إلى Base64
+// ============================================================
+
+function fileToBase64(file) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function() {
+
+          resolve(
+            reader.result
+          );
+
+        };
+
+      reader.onerror =
+        function() {
+
+          reject(
+            new Error(
+              "تعذر قراءة الصورة"
+            )
+          );
+
+        };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
 </script>
 
 </body>
