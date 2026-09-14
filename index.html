@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 
 <head>
@@ -39,7 +39,7 @@ body {
 
     margin: auto;
 
-    padding: 20px;
+    padding: 15px;
 
 }
 
@@ -47,7 +47,7 @@ h1 {
 
     text-align: center;
 
-    margin-bottom: 25px;
+    margin: 10px 0 20px;
 
 }
 
@@ -57,9 +57,9 @@ h1 {
 
     border-radius: 18px;
 
-    padding: 20px;
+    padding: 18px;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
     box-shadow:
         0 3px 10px rgba(0,0,0,0.08);
@@ -98,15 +98,15 @@ button {
 
     width: 100%;
 
-    padding: 16px;
+    padding: 15px;
 
     border: none;
 
     border-radius: 12px;
 
-    font-size: 19px;
+    font-size: 18px;
 
-    margin-top: 15px;
+    margin-top: 10px;
 
     cursor: pointer;
 
@@ -119,6 +119,8 @@ button {
 button:disabled {
 
     background: #aaa;
+
+    cursor: not-allowed;
 
 }
 
@@ -139,6 +141,14 @@ button:disabled {
     font-size: 20px;
 
     line-height: 1.7;
+
+    min-height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
 }
 
@@ -166,6 +176,56 @@ button:disabled {
 
 }
 
+.stats {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+}
+
+.stat {
+
+    background: #f8f8f8;
+
+    border-radius: 14px;
+
+    padding: 15px;
+
+    text-align: center;
+
+}
+
+.stat-number {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+
+}
+
+.stat-label {
+
+    font-size: 15px;
+
+    color: #666;
+
+}
+
+.last-person {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    line-height: 1.7;
+
+}
+
 .hidden {
 
     display: none;
@@ -188,14 +248,15 @@ button:disabled {
 </h1>
 
 
-<!-- اختيار الاجتماع -->
+<!-- =========================
+     اختيار الاجتماع
+========================= -->
 
 <div class="card">
 
 <label>
 اختر الاجتماع
 </label>
-
 
 <select id="meeting">
 
@@ -208,7 +269,59 @@ button:disabled {
 </div>
 
 
-<!-- Scanner -->
+<!-- =========================
+     الإحصائيات
+========================= -->
+
+<div class="card">
+
+<div class="stats">
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="presentCount">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+الحاضرون
+
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="totalCount">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+إجمالي الأشخاص
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     Scanner
+========================= -->
 
 <div class="card">
 
@@ -236,13 +349,36 @@ disabled>
 </div>
 
 
-<!-- النتيجة -->
+<!-- =========================
+     النتيجة
+========================= -->
 
 <div class="card">
 
 <div id="result">
 
 اختر الاجتماع ثم شغّل الكاميرا
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     آخر شخص
+========================= -->
+
+<div class="card">
+
+<div class="last-person">
+
+<b>آخر تسجيل</b>
+
+<div id="lastPerson">
+
+لا يوجد تسجيل حتى الآن
+
+</div>
 
 </div>
 
@@ -256,7 +392,7 @@ disabled>
 
 
 // ==================================================
-// ضع هنا رابط Apps Script Web App
+// رابط Apps Script
 // ==================================================
 
 const API_URL =
@@ -275,6 +411,268 @@ let selectedMeeting = "";
 
 let processing = false;
 
+let attendanceData = [];
+
+let peopleData = [];
+
+
+// ==================================================
+// JSONP API
+// ==================================================
+
+function apiGet(params) {
+
+    return new Promise(
+        function(resolve, reject) {
+
+            const callbackName =
+                "callback_" +
+                Date.now() +
+                "_" +
+                Math.floor(
+                    Math.random() * 10000
+                );
+
+
+            const script =
+                document.createElement("script");
+
+
+            const query =
+                new URLSearchParams(
+                    params
+                );
+
+
+            query.append(
+                "callback",
+                callbackName
+            );
+
+
+            window[callbackName] =
+                function(data) {
+
+                    resolve(data);
+
+                    delete window[
+                        callbackName
+                    ];
+
+                    script.remove();
+
+                };
+
+
+            script.src =
+                API_URL +
+                "?" +
+                query.toString();
+
+
+            script.onerror =
+                function() {
+
+                    reject(
+                        new Error(
+                            "API Error"
+                        )
+                    );
+
+                    delete window[
+                        callbackName
+                    ];
+
+                    script.remove();
+
+                };
+
+
+            document.body.appendChild(
+                script
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// تحميل الأشخاص
+// ==================================================
+
+async function loadPeople() {
+
+    try {
+
+        const data =
+            await apiGet({
+                action: "people"
+            });
+
+
+        if (
+            !data.success
+        ) {
+
+            throw new Error(
+                "People error"
+            );
+
+        }
+
+
+        peopleData =
+            data.people || [];
+
+
+        document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+            peopleData.filter(
+                function(person) {
+
+                    return (
+                        person.status ===
+                        "active"
+                    );
+
+                }
+            ).length;
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "People:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// تحميل الحضور
+// ==================================================
+
+async function loadAttendance() {
+
+    try {
+
+        const data =
+            await apiGet({
+                action:
+                    "attendanceList"
+            });
+
+
+        if (
+            !data.success
+        ) {
+
+            return;
+
+        }
+
+
+        attendanceData =
+            data.attendance || [];
+
+
+        updateCounter();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Attendance:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// تحديث عداد الحضور
+// ==================================================
+
+function updateCounter() {
+
+    if (!selectedMeeting) {
+
+        document
+        .getElementById(
+            "presentCount"
+        )
+        .textContent = "0";
+
+        return;
+
+    }
+
+
+    const count =
+        attendanceData.filter(
+            function(item) {
+
+                return (
+                    item.meeting ===
+                    getSelectedMeetingName()
+                );
+
+            }
+        ).length;
+
+
+    document
+    .getElementById(
+        "presentCount"
+    )
+    .textContent =
+        count;
+
+}
+
+
+// ==================================================
+// الحصول على اسم الاجتماع
+// ==================================================
+
+function getSelectedMeetingName() {
+
+    const select =
+        document.getElementById(
+            "meeting"
+        );
+
+
+    const option =
+        select.options[
+            select.selectedIndex
+        ];
+
+
+    if (!option) {
+
+        return "";
+
+    }
+
+
+    return option.textContent;
+
+}
+
 
 // ==================================================
 // تحميل الاجتماعات
@@ -283,26 +681,23 @@ let processing = false;
 async function loadMeetings() {
 
     const select =
-        document.getElementById("meeting");
+        document.getElementById(
+            "meeting"
+        );
 
 
     try {
 
-        const response =
-            await fetch(
-                API_URL +
-                "?action=meetings"
-            );
-
-
         const data =
-            await response.json();
+            await apiGet({
+                action: "meetings"
+            });
 
 
         if (!data.success) {
 
             throw new Error(
-                "Failed to load meetings"
+                "Meetings error"
             );
 
         }
@@ -316,7 +711,9 @@ async function loadMeetings() {
             function(meeting) {
 
                 const option =
-                    document.createElement("option");
+                    document.createElement(
+                        "option"
+                    );
 
 
                 option.value =
@@ -327,7 +724,9 @@ async function loadMeetings() {
                     meeting.name;
 
 
-                select.appendChild(option);
+                select.appendChild(
+                    option
+                );
 
             }
         );
@@ -346,6 +745,7 @@ async function loadMeetings() {
             "error"
         );
 
+
         console.error(error);
 
     }
@@ -361,16 +761,37 @@ document
 .getElementById("meeting")
 .addEventListener(
     "change",
-    function() {
+    async function() {
 
         selectedMeeting =
             this.value;
 
 
-        if (selectedMeeting) {
+        if (
+            selectedMeeting
+        ) {
+
+            await loadAttendance();
 
             showResult(
-                "اضغط تشغيل الكاميرا لبدء تسجيل الحضور",
+                "📷 اضغط تشغيل الكاميرا لبدء تسجيل الحضور",
+                "loading"
+            );
+
+        }
+
+        else {
+
+            document
+            .getElementById(
+                "presentCount"
+            )
+            .textContent =
+                "0";
+
+
+            showResult(
+                "اختر الاجتماع ثم شغّل الكاميرا",
                 "loading"
             );
 
@@ -381,11 +802,10 @@ document
 
 
 // ==================================================
-// تشغيل Scanner
+// تشغيل الكاميرا
 // ==================================================
 
 async function startScanner() {
-
 
     if (!selectedMeeting) {
 
@@ -408,8 +828,11 @@ async function startScanner() {
 
     processing = false;
 
+
     scanner =
-        new Html5Qrcode("reader");
+        new Html5Qrcode(
+            "reader"
+        );
 
 
     try {
@@ -417,15 +840,20 @@ async function startScanner() {
         await scanner.start(
 
             {
-                facingMode: "environment"
+                facingMode:
+                    "environment"
             },
 
             {
+
                 fps: 10,
 
                 qrbox: {
+
                     width: 250,
+
                     height: 250
+
                 }
 
             },
@@ -445,12 +873,16 @@ async function startScanner() {
 
 
         document
-        .getElementById("startButton")
+        .getElementById(
+            "startButton"
+        )
         .disabled = true;
 
 
         document
-        .getElementById("stopButton")
+        .getElementById(
+            "stopButton"
+        )
         .disabled = false;
 
 
@@ -459,16 +891,20 @@ async function startScanner() {
             "loading"
         );
 
-
     }
 
     catch(error) {
 
         showResult(
-            "❌ لم يتم تشغيل الكاميرا<br><br>" +
+
+            "❌ لم يتم تشغيل الكاميرا" +
+            "<br><br>" +
             error,
+
             "error"
+
         );
+
 
         console.error(error);
 
@@ -485,8 +921,6 @@ async function handleQRCode(
     qr
 ) {
 
-
-    // منع قراءة نفس QR عدة مرات
     if (processing) {
 
         return;
@@ -505,30 +939,23 @@ async function handleQRCode(
 
     try {
 
-        const url =
-            API_URL +
-
-            "?action=attendance" +
-
-            "&qr=" +
-            encodeURIComponent(qr) +
-
-            "&meeting=" +
-            encodeURIComponent(
-                selectedMeeting
-            );
-
-
-        const response =
-            await fetch(url);
-
-
         const data =
-            await response.json();
+            await apiGet({
+
+                action:
+                    "attendance",
+
+                qr:
+                    qr,
+
+                meeting:
+                    selectedMeeting
+
+            });
 
 
         // ==========================
-        // تسجيل ناجح
+        // نجاح
         // ==========================
 
         if (data.success) {
@@ -540,12 +967,16 @@ async function handleQRCode(
                 "<br><br>" +
 
                 "👤 " +
-                data.name +
+                escapeHTML(
+                    data.name
+                ) +
 
                 "<br>" +
 
                 "🆔 ID: " +
-                data.id +
+                escapeHTML(
+                    data.id
+                ) +
 
                 "<br>" +
 
@@ -561,14 +992,69 @@ async function handleQRCode(
 
             );
 
+
+            // تحديث آخر شخص
+
+            document
+            .getElementById(
+                "lastPerson"
+            )
+            .innerHTML =
+
+                "👤 <b>" +
+                escapeHTML(
+                    data.name
+                ) +
+                "</b>" +
+
+                "<br>" +
+
+                "⏰ " +
+                data.time;
+
+
+            // إضافة التسجيل محليًا
+
+            attendanceData.push({
+
+                id:
+                    data.id,
+
+                name:
+                    data.name,
+
+                meeting:
+                    data.meeting,
+
+                date:
+                    data.date,
+
+                time:
+                    data.time
+
+            });
+
+
+            updateCounter();
+
+
+            // صوت نجاح
+
+            playBeep(
+                800,
+                180
+            );
+
         }
 
 
         // ==========================
-        // الشخص مسجل بالفعل
+        // مكرر
         // ==========================
 
-        else if (data.duplicate) {
+        else if (
+            data.duplicate
+        ) {
 
             showResult(
 
@@ -577,16 +1063,52 @@ async function handleQRCode(
                 "<br><br>" +
 
                 "👤 " +
-                data.name +
+                escapeHTML(
+                    data.name
+                ) +
 
                 "<br>" +
 
-                "وقت التسجيل: " +
-
+                "⏰ وقت التسجيل: " +
                 data.oldTime,
 
                 "warning"
 
+            );
+
+
+            playBeep(
+                400,
+                250
+            );
+
+        }
+
+
+        // ==========================
+        // شخص غير مفعل
+        // ==========================
+
+        else if (
+            data.inactive
+        ) {
+
+            showResult(
+
+                "🚫 <b>الشخص غير مفعل</b>" +
+
+                "<br><br>" +
+
+                data.message,
+
+                "error"
+
+            );
+
+
+            playBeep(
+                250,
+                400
             );
 
         }
@@ -601,16 +1123,23 @@ async function handleQRCode(
             showResult(
 
                 "❌ " +
-                data.message,
+                escapeHTML(
+                    data.message
+                ),
 
                 "error"
 
             );
 
+
+            playBeep(
+                250,
+                400
+            );
+
         }
 
     }
-
 
     catch(error) {
 
@@ -622,7 +1151,14 @@ async function handleQRCode(
 
         );
 
+
         console.error(error);
+
+
+        playBeep(
+            250,
+            400
+        );
 
     }
 
@@ -630,13 +1166,99 @@ async function handleQRCode(
     // السماح بالـScan التالي
 
     setTimeout(
+
         function() {
 
             processing = false;
 
+            if (scanning) {
+
+                showResult(
+                    "📷 جاهز لمسح QR التالي",
+                    "loading"
+                );
+
+            }
+
         },
+
         2000
+
     );
+
+}
+
+
+// ==================================================
+// صوت التنبيه
+// ==================================================
+
+function playBeep(
+    frequency,
+    duration
+) {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.frequency.value =
+            frequency;
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        gain.gain.value =
+            0.15;
+
+
+        oscillator.start();
+
+
+        setTimeout(
+            function() {
+
+                oscillator.stop();
+
+                audioContext.close();
+
+            },
+            duration
+        );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Audio error",
+            error
+        );
+
+    }
 
 }
 
@@ -647,7 +1269,6 @@ async function handleQRCode(
 
 async function stopScanner() {
 
-
     if (
         scanner &&
         scanning
@@ -657,11 +1278,15 @@ async function stopScanner() {
 
             await scanner.stop();
 
+            await scanner.clear();
+
         }
 
         catch(error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
         }
 
@@ -670,15 +1295,27 @@ async function stopScanner() {
 
     scanning = false;
 
+    processing = false;
+
 
     document
-    .getElementById("startButton")
+    .getElementById(
+        "startButton"
+    )
     .disabled = false;
 
 
     document
-    .getElementById("stopButton")
+    .getElementById(
+        "stopButton"
+    )
     .disabled = true;
+
+
+    showResult(
+        "📷 تم إيقاف الكاميرا",
+        "loading"
+    );
 
 }
 
@@ -709,10 +1346,48 @@ function showResult(
 
 
 // ==================================================
-// بدء تحميل الاجتماعات
+// حماية HTML
 // ==================================================
 
-loadMeetings();
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text == null
+            ? ""
+            : String(text);
+
+
+    return div.innerHTML;
+
+}
+
+
+// ==================================================
+// بدء التشغيل
+// ==================================================
+
+async function init() {
+
+    await loadPeople();
+
+    await loadMeetings();
+
+    await loadAttendance();
+
+}
+
+
+// تشغيل
+
+init();
 
 
 </script>
@@ -721,3 +1396,4 @@ loadMeetings();
 </body>
 
 </html>
+```
