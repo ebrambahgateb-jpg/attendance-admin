@@ -2994,38 +2994,48 @@ function renderMeetings() {
 
 
         /*
-         * nextDate:
-         * أقرب موعد متاح بعد تخطي الموعد الملغي
+         * الموعد القادم المتاح فعلياً
+         * بعد تخطي أي موعد ملغي
          */
-        const nextDate =
+        const nextAvailableDate =
+            meeting.nextAvailableDateISO ||
             meeting.nextDateISO ||
+            meeting.nextAvailableDate ||
             meeting.nextDate ||
             "";
 
 
         /*
-         * الموعد الملغي الذي يمكن استرجاعه
+         * تاريخ الموعد الملغي
+         *
+         * backend يجب أن يرجع:
+         * nextCancelledDateISO
          */
         const cancelledDate =
+            meeting.nextCancelledDateISO ||
             meeting.cancelledDateISO ||
-            meeting.cancelledDate ||
             "";
 
 
-        const hasCancelledDate =
-            meeting.hasCancelledDate === true ||
-            meeting.hasCancelledDate === "true";
+        /*
+         * هل يوجد موعد ملغي يحتاج استرجاع؟
+         */
+        const hasCancelled =
+            !!cancelledDate;
 
 
         let nextHTML = "—";
 
 
-        if (nextDate) {
+        /*
+         * عرض الموعد القادم المتاح
+         */
+        if (nextAvailableDate) {
 
             nextHTML =
                 escapeHTML(
                     formatDisplayDate(
-                        nextDate
+                        nextAvailableDate
                     )
                 );
 
@@ -3033,82 +3043,86 @@ function renderMeetings() {
 
 
         /*
-         * إظهار الموعد الملغي أسفل الموعد القادم
+         * لو يوجد موعد ملغي
+         * نظهره أيضاً تحت الموعد القادم
          */
-        if (
-            hasCancelledDate &&
-            cancelledDate
-        ) {
+        if (hasCancelled) {
 
             nextHTML +=
+
                 '<br>' +
+
                 '<span class="badge badge-cancelled">' +
-                '❌ الموعد الملغي: ' +
+
+                '❌ ملغي: ' +
+
                 escapeHTML(
                     formatDisplayDate(
                         cancelledDate
                     )
                 ) +
+
                 '</span>';
 
         }
 
 
         /*
-         * أزرار مواعيد الاجتماع
+         * أزرار الإجراءات
          */
         let occurrenceButtons = "";
 
 
-        /*
-         * إلغاء الموعد القادم
-         */
-        if (
-            nextDate &&
-            active
-        ) {
+        if (active) {
 
-            occurrenceButtons += `
+            /*
+             * لو فيه موعد ملغي:
+             * نظهر زر الاسترجاع
+             */
+            if (hasCancelled) {
 
-                <button
-                    class="action cancel"
-                    onclick="openCancelMeeting(
-                        '${escapeJS(meeting.id)}',
-                        '${escapeJS(nextDate)}',
-                        '${escapeJS(meeting.name)}'
-                    )">
+                occurrenceButtons += `
 
-                    ❌ إلغاء الموعد
+                    <button
+                        class="action restore"
+                        onclick="restoreOccurrence(
+                            '${escapeJS(meeting.id)}',
+                            '${escapeJS(cancelledDate)}'
+                        )">
 
-                </button>
+                        🔄 استعادة الموعد
 
-            `;
+                    </button>
 
-        }
+                `;
+
+            }
 
 
-        /*
-         * استرجاع الموعد الملغي
-         */
-        if (
-            hasCancelledDate &&
-            cancelledDate
-        ) {
+            /*
+             * زر إلغاء الموعد القادم
+             *
+             * نستخدم الموعد المتاح وليس الموعد الملغي
+             */
+            if (nextAvailableDate) {
 
-            occurrenceButtons += `
+                occurrenceButtons += `
 
-                <button
-                    class="action restore"
-                    onclick="restoreOccurrence(
-                        '${escapeJS(meeting.id)}',
-                        '${escapeJS(cancelledDate)}'
-                    )">
+                    <button
+                        class="action cancel"
+                        onclick="openCancelMeeting(
+                            '${escapeJS(meeting.id)}',
+                            '${escapeJS(nextAvailableDate)}',
+                            '${escapeJS(meeting.name)}'
+                        )">
 
-                    ↩️ استرجاع الموعد الملغي
+                        ❌ إلغاء الموعد القادم
 
-                </button>
+                    </button>
 
-            `;
+                `;
+
+            }
 
         }
 
@@ -3119,11 +3133,15 @@ function renderMeetings() {
                 ${escapeHTML(meeting.id)}
             </td>
 
+
             <td>
+
                 <strong>
                     ${escapeHTML(meeting.name)}
                 </strong>
+
             </td>
+
 
             <td>
 
@@ -3137,7 +3155,9 @@ function renderMeetings() {
 
             </td>
 
+
             <td>
+
                 ${escapeHTML(
                     formatDisplayDate(
                         meeting.dateStart ||
@@ -3145,23 +3165,33 @@ function renderMeetings() {
                         ""
                     )
                 )}
+
             </td>
 
+
             <td>
+
                 ${
                     type === "weekly"
+
                     ? escapeHTML(dayName)
+
                     : "—"
                 }
+
             </td>
 
+
             <td>
+
                 ${escapeHTML(
                     formatDisplayTime(
                         meeting.time
                     )
                 )}
+
             </td>
+
 
             <td>
 
@@ -3175,13 +3205,16 @@ function renderMeetings() {
 
             </td>
 
+
             <td>
                 ${nextHTML}
             </td>
 
+
             <td>
 
                 <div class="actions">
+
 
                     <button
                         class="action edit"
@@ -3225,6 +3258,7 @@ function renderMeetings() {
                         🗑️ حذف
 
                     </button>
+
 
                 </div>
 
