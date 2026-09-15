@@ -11,6 +11,7 @@ content="width=device-width, initial-scale=1.0">
 <title>لوحة الإدارة - نظام الحضور</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 
@@ -394,6 +395,19 @@ th {
 <body>
 
 
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" style="position:fixed;inset:0;background:#f3f4f6;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div class="card" style="max-width:430px;width:100%;text-align:center;">
+    <h2>🔐 تسجيل الدخول</h2>
+    <p id="authMessage">سجّل الدخول بحساب Google المصرح له.</p>
+    <div id="googleButton" style="display:flex;justify-content:center;margin:20px 0;"></div>
+    <div id="roleBox" style="display:none;">
+      <h3>اختر الصلاحية</h3>
+      <div id="roleButtons"></div>
+    </div>
+  </div>
+</div>
+
 <!-- HEADER -->
 
 <div class="header">
@@ -666,11 +680,35 @@ placeholder="اجتماع الشباب">
 
 <div>
 
+<label>نوع الاجتماع</label>
+
+<select
+id="meetingType"
+style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:16px;">
+<option value="once">مرة واحدة</option>
+<option value="weekly">أسبوعي</option>
+</select>
+
+</div>
+
+<div>
+
 <label>التاريخ</label>
 
 <input
 id="meetingDate"
 type="date">
+
+</div>
+
+<div>
+
+<label>الوقت</label>
+
+<input
+id="meetingTime"
+type="time"
+value="19:00">
 
 </div>
 
@@ -932,11 +970,18 @@ alt="صورة الشخص">
 
 
 // ============================================================
-// API
+// AUTH + API
 // ============================================================
 
+const GOOGLE_CLIENT_ID =
+"869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.googleusercontent.com";
+
+let idToken = sessionStorage.getItem("attendance_idToken") || "";
+let currentAccount = null;
+let selectedRole = sessionStorage.getItem("attendance_selectedRole") || "";
+
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxN6kZVZYQD-gS0n8ovnQQZh7IW9KpFKiI2mrx6uYpVww0wFyJ-Wfw_NnX4YDedLg/exec";
+"https://script.google.com/macros/s/AKfycbwQUN1qxVtmgOZ2ODINmkbbmEZTTzJkfsQirwz9nuzz7nJ2t9Nayr_MkB-f6Pptklbn/exec";
 
 
 // ============================================================
@@ -958,70 +1003,84 @@ let currentQR = "";
 
 function apiGet(params) {
 
-    return new Promise(
-        function(resolve,reject) {
+    return new Promise(function(resolve, reject) {
 
-            const callbackName =
-                "cb_" +
-                Date.now() +
-                "_" +
-                Math.floor(
-                    Math.random()*100000
-                );
+        const callbackName =
+            "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
 
-            const script =
-                document.createElement("script");
+        const script = document.createElement("script");
+        const query = new URLSearchParams(params || {});
 
-            const query =
-                new URLSearchParams(params);
-
-            query.append(
-                "callback",
-                callbackName
-            );
-
-            script.src =
-                API_URL +
-                "?" +
-                query.toString();
-
-            window[callbackName] =
-                function(data) {
-
-                    resolve(data);
-
-                    cleanup();
-
-                };
-
-            script.onerror =
-                function() {
-
-                    reject(
-                        new Error(
-                            "فشل الاتصال بالسيرفر"
-                        )
-                    );
-
-                    cleanup();
-
-                };
-
-            document.body
-                .appendChild(script);
-
-
-            function cleanup() {
-
-                delete window[callbackName];
-
-                script.remove();
-
-            }
-
+        if (idToken && !query.has("idToken")) {
+            query.append("idToken", idToken);
         }
-    );
 
+        query.append("callback", callbackName);
+
+        script.src = API_URL + "?" + query.toString();
+
+        window[callbackName] = function(data) {
+            resolve(data || {});
+            cleanup();
+        };
+
+        script.onerror = function() {
+            reject(new Error("فشل الاتصال بالسيرفر"));
+            cleanup();
+        };
+
+        document.body.appendChild(script);
+
+        function cleanup() {
+            delete window[callbackName];
+            script.remove();
+        }
+    });
+}
+
+function ok(data) {
+    return !!(data && (data.ok === true || data.success === true));
+}
+
+function normalizePerson(p) {
+    return {
+        id: p.ID ?? p.id ?? "",
+        name: p.Name ?? p.name ?? "",
+        phone: p.Phone ?? p.phone ?? "",
+        whatsapp: p.WhatsApp ?? p.whatsapp ?? "",
+        email: p.Email ?? p.email ?? "",
+        qr: p.QR ?? p.qr ?? "",
+        photo: p.Photo ?? p.photo ?? "",
+        status: String(p.Status ?? p.status ?? "Active").toLowerCase(),
+        createdAt: p.CreatedAt ?? p.createdAt ?? ""
+    };
+}
+
+function normalizeMeeting(m) {
+    return {
+        id: m.ID ?? m.id ?? "",
+        name: m.Name ?? m.name ?? "",
+        type: m.Type ?? m.type ?? "once",
+        date: m.StartDate ?? m.date ?? "",
+        day: m.Day ?? m.day ?? "",
+        time: m.Time ?? m.time ?? "",
+        active: m.Active ?? m.active ?? false,
+        skipDates: m.SkipDates ?? m.skipDates ?? "",
+        nextOccurrence: m.NextOccurrence ?? m.nextOccurrence ?? null
+    };
+}
+
+function normalizeAttendance(a) {
+    return {
+        id: a.ID ?? a.id ?? "",
+        personId: a.PersonID ?? a.personId ?? "",
+        name: a.PersonName ?? a.name ?? "",
+        meetingId: a.MeetingID ?? a.meetingId ?? "",
+        meeting: a.MeetingName ?? a.meeting ?? "",
+        date: a.MeetingDate ?? a.date ?? "",
+        time: a.MeetingTime ?? a.time ?? "",
+        recordedAt: a.RecordedAt ?? a.recordedAt ?? ""
+    };
 }
 
 
@@ -1080,16 +1139,16 @@ async function loadPeople() {
 
         const data =
             await apiGet({
-                action: "people"
+                action: "getPeople"
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
             throw new Error(data.message);
         }
 
 
-        people = data.people || [];
+        people = (data.people || []).map(normalizePerson);
 
         renderPeople();
 
@@ -1282,22 +1341,8 @@ ${
 </button>
 
 
-<button
-class="action regenerate"
-onclick="regenerateQR(
-'${escapeJS(person.id)}'
-)">
-🔄 QR جديد
-</button>
 
 
-<button
-class="action delete"
-onclick="deletePerson(
-'${escapeJS(person.id)}'
-)">
-🗑️ حذف
-</button>
 
 </div>
 
@@ -1317,93 +1362,6 @@ onclick="deletePerson(
 // ============================================================
 // DELETE PERSON
 // ============================================================
-
-async function deletePerson(id) {
-
-    const person =
-        people.find(
-            p => p.id === id
-        );
-
-
-    if (!person) {
-
-        alert("الشخص غير موجود");
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-
-            "⚠️ تأكيد حذف الشخص\n\n" +
-
-            "الاسم: " +
-            person.name +
-            "\n" +
-
-            "ID: " +
-            person.id +
-            "\n\n" +
-
-            "سيتم حذف الشخص من قائمة الأشخاص " +
-            "وصورته من Google Drive.\n\n" +
-
-            "سجل الحضور القديم لن يتم حذفه.\n\n" +
-
-            "هل أنت متأكد؟"
-
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "deletePerson",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        alert(
-            "✅ تم حذف الشخص: " +
-            data.name
-        );
-
-
-        await loadPeople();
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ فشل حذف الشخص\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
 
 // ============================================================
 // ADD PERSON
@@ -1469,7 +1427,7 @@ async function addPerson() {
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -1494,13 +1452,13 @@ async function addPerson() {
 
 
             const upload =
-                await uploadPhotoInChunks(
-                    data.id,
+                await uploadPhoto(
+                    ((data.person || {}).ID || (data.person || {}).id),
                     compressed
                 );
 
 
-            if (!upload.success) {
+            if (!ok(upload)) {
 
                 throw new Error(
                     upload.message
@@ -1520,7 +1478,7 @@ async function addPerson() {
             "personMessage",
 
             "✅ تم إضافة الشخص - ID: " +
-            data.id +
+            ((data.person || {}).ID || (data.person || {}).id) +
             photoMessage,
 
             "success"
@@ -1550,8 +1508,8 @@ async function addPerson() {
 
 
         showQR(
-            data.name,
-            data.qr
+            (data.person || {}).Name || (data.person || {}).name,
+            (data.person || {}).QR || (data.person || {}).qr
         );
 
     }
@@ -1730,116 +1688,23 @@ function compressImage(file) {
 // رفع الصورة على أجزاء
 // ============================================================
 
-async function uploadPhotoInChunks(id, imageData) {
+async function uploadPhoto(id, imageData) {
 
-    const chunkSize = 900;
+    const comma = imageData.indexOf(",");
+    const base64 = comma >= 0 ? imageData.substring(comma + 1) : imageData;
 
-    const total =
-        Math.ceil(
-            imageData.length / chunkSize
-        );
+    const result = await apiGet({
+        action: "uploadPersonPhoto",
+        personId: id,
+        base64: base64,
+        contentType: "image/jpeg"
+    });
 
-
-    const start =
-        await apiGet({
-
-            action: "photoStart",
-
-            id: id,
-
-            total: total
-
-        });
-
-
-    if (!start || !start.success) {
-
-        throw new Error(
-
-            start?.message ||
-
-            "فشل بدء رفع الصورة"
-
-        );
-
+    if (!ok(result)) {
+        throw new Error(result.message || result.error || "فشل رفع الصورة");
     }
 
-
-    const token =
-        start.token;
-
-
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-        const chunk =
-            imageData.substring(
-
-                i * chunkSize,
-
-                (i + 1) * chunkSize
-
-            );
-
-
-        const result =
-            await apiGet({
-
-                action: "photoChunk",
-
-                token: token,
-
-                index: i,
-
-                chunk: chunk
-
-            });
-
-
-        if (!result || !result.success) {
-
-            throw new Error(
-
-                result?.message ||
-
-                "فشل رفع الجزء رقم " +
-                (i + 1)
-
-            );
-
-        }
-
-    }
-
-
-    const finish =
-        await apiGet({
-
-            action: "photoFinish",
-
-            token: token
-
-        });
-
-
-    if (!finish || !finish.success) {
-
-        throw new Error(
-
-            finish?.message ||
-
-            "فشل تجميع الصورة"
-
-        );
-
-    }
-
-
-    return finish;
-
+    return result;
 }
 
 
@@ -2001,7 +1866,7 @@ async function saveEdit() {
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -2023,13 +1888,13 @@ async function saveEdit() {
 
 
             const upload =
-                await uploadPhotoInChunks(
+                await uploadPhoto(
                     id,
                     compressed
                 );
 
 
-            if (!upload.success) {
+            if (!ok(upload)) {
 
                 throw new Error(
                     upload.message
@@ -2271,14 +2136,14 @@ async function togglePerson(id) {
         const data =
             await apiGet({
 
-                action: "togglePerson",
+                action: "setPersonStatus",
 
                 id: id
 
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -2306,169 +2171,6 @@ async function togglePerson(id) {
 // REGENERATE QR
 // ============================================================
 
-async function regenerateQR(id) {
-
-    const person =
-        people.find(
-            p => p.id === id
-        );
-
-
-    if (!person) {
-        return;
-    }
-
-
-    if (
-        !confirm(
-            "⚠️ هل تريد إنشاء QR جديد؟\n\n" +
-            "الـQR القديم لن يعمل بعد ذلك."
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "regenerateQR",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        await loadPeople();
-
-
-        showQR(
-            data.name,
-            data.qr
-        );
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// QR
-// ============================================================
-
-function showQR(name, qr) {
-
-    currentQR = qr;
-
-
-    document
-        .getElementById("qrName")
-        .textContent =
-        name;
-
-
-    document
-        .getElementById("qrValue")
-        .textContent =
-        qr;
-
-
-    const container =
-        document.getElementById(
-            "qrCode"
-        );
-
-
-    container.innerHTML = "";
-
-
-    new QRCode(
-
-        container,
-
-        {
-
-            text: qr,
-
-            width: 240,
-
-            height: 240,
-
-            correctLevel:
-                QRCode.CorrectLevel.H
-
-        }
-
-    );
-
-
-    document
-        .getElementById("qrModal")
-        .classList.add("show");
-
-}
-
-
-function closeQR() {
-
-    document
-        .getElementById("qrModal")
-        .classList.remove("show");
-
-}
-
-
-function downloadQR() {
-
-    const canvas =
-        document
-            .getElementById("qrCode")
-            .querySelector("canvas");
-
-
-    if (!canvas) {
-        return;
-    }
-
-
-    const link =
-        document.createElement("a");
-
-
-    link.download =
-        "QR-" +
-        currentQR +
-        ".png";
-
-
-    link.href =
-        canvas.toDataURL("image/png");
-
-
-    link.click();
-
-}
-
-
 // ============================================================
 // MEETINGS
 // ============================================================
@@ -2479,11 +2181,11 @@ async function loadMeetings() {
 
         const data =
             await apiGet({
-                action: "meetings"
+                action: "getMeetings"
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -2493,7 +2195,7 @@ async function loadMeetings() {
 
 
         meetings =
-            data.meetings || [];
+            (data.meetings || []).map(normalizeMeeting);
 
 
         renderMeetings();
@@ -2597,13 +2299,14 @@ async function addMeeting() {
                 action: "addMeeting",
 
                 name: name,
-
-                date: date
+                type: document.getElementById("meetingType").value,
+                startDate: date,
+                time: document.getElementById("meetingTime").value
 
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -2632,6 +2335,8 @@ async function addMeeting() {
         document
             .getElementById("meetingDate")
             .value = "";
+
+        document.getElementById("meetingTime").value = "19:00";
 
 
         await loadMeetings();
@@ -2666,12 +2371,12 @@ async function loadAttendance() {
         const data =
             await apiGet({
 
-                action: "attendanceList"
+                action: "getAttendance"
 
             });
 
 
-        if (!data.success) {
+        if (!ok(data)) {
 
             throw new Error(
                 data.message
@@ -2681,7 +2386,7 @@ async function loadAttendance() {
 
 
         attendance =
-            data.attendance || [];
+            (data.attendance || []).map(normalizeAttendance);
 
 
         renderAttendance();
@@ -2846,6 +2551,109 @@ function escapeJS(text) {
 
 
 // ============================================================
+// AUTHENTICATION
+// ============================================================
+
+function showAuthMessage(text) {
+    document.getElementById("authMessage").textContent = text;
+}
+
+function renderRoles(roles) {
+    const box = document.getElementById("roleBox");
+    const buttons = document.getElementById("roleButtons");
+    buttons.innerHTML = "";
+
+    const allowed = (roles || []).filter(r => r === "Owner" || r === "Admin");
+
+    if (!allowed.length) {
+        showAuthMessage("هذا الحساب ليس لديه صلاحية مدير.");
+        return;
+    }
+
+    box.style.display = "block";
+
+    allowed.forEach(function(role) {
+        const b = document.createElement("button");
+        b.className = "primary";
+        b.style.width = "100%";
+        b.textContent = role === "Owner" ? "👑 Owner" : "⚙️ المدير";
+        b.onclick = function() {
+            selectedRole = role;
+            sessionStorage.setItem("attendance_selectedRole", role);
+            document.getElementById("authOverlay").style.display = "none";
+            init();
+        };
+        buttons.appendChild(b);
+    });
+
+    if (allowed.length === 1 && !selectedRole) {
+        buttons.firstElementChild.click();
+    }
+}
+
+function onGoogleCredential(response) {
+    idToken = response.credential;
+    sessionStorage.setItem("attendance_idToken", idToken);
+    showAuthMessage("⏳ جاري التحقق من الحساب...");
+
+    apiGet({ action: "authenticate" })
+        .then(function(data) {
+            if (!ok(data) || data.authorized === false) {
+                throw new Error(data.message || data.error || "الحساب غير مصرح له.");
+            }
+            currentAccount = data.account || data;
+            sessionStorage.setItem("attendance_account", JSON.stringify(currentAccount));
+            renderRoles(data.roles || []);
+            showAuthMessage("تم تسجيل الدخول. اختر الصلاحية.");
+        })
+        .catch(function(error) {
+            idToken = "";
+            sessionStorage.removeItem("attendance_idToken");
+            showAuthMessage("❌ " + error.message);
+        });
+}
+
+function initGoogleLogin() {
+    if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: onGoogleCredential
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("googleButton"),
+            { theme: "outline", size: "large", text: "signin_with", shape: "rectangular" }
+        );
+    } else {
+        setTimeout(initGoogleLogin, 300);
+    }
+}
+
+function startAdmin() {
+    document.getElementById("authOverlay").style.display = "flex";
+
+    if (idToken) {
+        apiGet({ action: "getMyAccount" })
+            .then(function(data) {
+                if (ok(data)) {
+                    currentAccount = data.account || data;
+                    const roles = data.roles || (currentAccount.roles || []);
+                    renderRoles(roles);
+                    return;
+                }
+                throw new Error(data.message || data.error || "انتهت جلسة الدخول.");
+            })
+            .catch(function() {
+                sessionStorage.removeItem("attendance_idToken");
+                sessionStorage.removeItem("attendance_account");
+                idToken = "";
+                initGoogleLogin();
+            });
+    } else {
+        initGoogleLogin();
+    }
+}
+
+// ============================================================
 // INIT
 // ============================================================
 
@@ -2864,7 +2672,7 @@ async function init() {
 }
 
 
-init();
+startAdmin();
 
     
 </script>
