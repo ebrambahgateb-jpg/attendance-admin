@@ -1022,17 +1022,33 @@ function selectRole(
     // يفتح لوحة الإدارة
     // ==================================================
 
-    if (
-        role === "Owner"
-    ) {
+  if (
+    role === "Owner" ||
+    role === "Admin"
+) {
 
-        window.location.href =
-            "admin.html";
+    // حفظ جلسة Google مؤقتًا حتى تصل إلى admin.html
+    sessionStorage.setItem(
+        "attendance_idToken",
+        idToken
+    );
 
-        return;
+    sessionStorage.setItem(
+        "attendance_account",
+        JSON.stringify(currentAccount)
+    );
 
-    }
+    sessionStorage.setItem(
+        "attendance_selectedRole",
+        role
+    );
 
+    window.location.href =
+        "admin.html";
+
+    return;
+
+}
 
     // ==================================================
     // ADMIN
