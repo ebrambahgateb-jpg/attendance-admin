@@ -767,7 +767,6 @@ th {
 
                 <label>تاريخ البداية</label>
 
-                <!-- تم تغيير ID لمنع أي تعارض -->
                 <input
                     id="addMeetingDate"
                     type="date">
@@ -2916,6 +2915,10 @@ async function loadMeetings() {
 }
 
 
+// ============================================================
+// RENDER MEETINGS - UPDATED
+// ============================================================
+
 function renderMeetings() {
 
     const table =
@@ -2990,15 +2993,28 @@ function renderMeetings() {
             );
 
 
+        /*
+         * nextDate:
+         * أقرب موعد متاح بعد تخطي الموعد الملغي
+         */
         const nextDate =
             meeting.nextDateISO ||
             meeting.nextDate ||
             "";
 
 
-        const nextCancelled =
-            meeting.nextCancelled === true ||
-            meeting.nextCancelled === "true";
+        /*
+         * الموعد الملغي الذي يمكن استرجاعه
+         */
+        const cancelledDate =
+            meeting.cancelledDateISO ||
+            meeting.cancelledDate ||
+            "";
+
+
+        const hasCancelledDate =
+            meeting.hasCancelledDate === true ||
+            meeting.hasCancelledDate === "true";
 
 
         let nextHTML = "—";
@@ -3013,13 +3029,86 @@ function renderMeetings() {
                     )
                 );
 
+        }
 
-            if (nextCancelled) {
 
-                nextHTML +=
-                    '<br><span class="badge badge-cancelled">❌ ملغي</span>';
+        /*
+         * إظهار الموعد الملغي أسفل الموعد القادم
+         */
+        if (
+            hasCancelledDate &&
+            cancelledDate
+        ) {
 
-            }
+            nextHTML +=
+                '<br>' +
+                '<span class="badge badge-cancelled">' +
+                '❌ الموعد الملغي: ' +
+                escapeHTML(
+                    formatDisplayDate(
+                        cancelledDate
+                    )
+                ) +
+                '</span>';
+
+        }
+
+
+        /*
+         * أزرار مواعيد الاجتماع
+         */
+        let occurrenceButtons = "";
+
+
+        /*
+         * إلغاء الموعد القادم
+         */
+        if (
+            nextDate &&
+            active
+        ) {
+
+            occurrenceButtons += `
+
+                <button
+                    class="action cancel"
+                    onclick="openCancelMeeting(
+                        '${escapeJS(meeting.id)}',
+                        '${escapeJS(nextDate)}',
+                        '${escapeJS(meeting.name)}'
+                    )">
+
+                    ❌ إلغاء الموعد
+
+                </button>
+
+            `;
+
+        }
+
+
+        /*
+         * استرجاع الموعد الملغي
+         */
+        if (
+            hasCancelledDate &&
+            cancelledDate
+        ) {
+
+            occurrenceButtons += `
+
+                <button
+                    class="action restore"
+                    onclick="restoreOccurrence(
+                        '${escapeJS(meeting.id)}',
+                        '${escapeJS(cancelledDate)}'
+                    )">
+
+                    ↩️ استرجاع الموعد الملغي
+
+                </button>
+
+            `;
 
         }
 
@@ -3099,8 +3188,11 @@ function renderMeetings() {
                         onclick="openMeetingEdit(
                             '${escapeJS(meeting.id)}'
                         )">
+
                         ✏️ تعديل
+
                     </button>
+
 
                     <button
                         class="action ${
@@ -3120,51 +3212,18 @@ function renderMeetings() {
 
                     </button>
 
-                    ${
-                        nextDate && active
 
-                        ? (
+                    ${occurrenceButtons}
 
-                            nextCancelled
-
-                            ? `
-
-                                <button
-                                    class="action restore"
-                                    onclick="restoreOccurrence(
-                                        '${escapeJS(meeting.id)}',
-                                        '${escapeJS(nextDate)}'
-                                    )">
-                                    🔄 استعادة الموعد
-                                </button>
-
-                            `
-
-                            : `
-
-                                <button
-                                    class="action cancel"
-                                    onclick="openCancelMeeting(
-                                        '${escapeJS(meeting.id)}',
-                                        '${escapeJS(nextDate)}',
-                                        '${escapeJS(meeting.name)}'
-                                    )">
-                                    ❌ إلغاء الموعد
-                                </button>
-
-                            `
-
-                        )
-
-                        : ""
-                    }
 
                     <button
                         class="action delete"
                         onclick="deleteMeeting(
                             '${escapeJS(meeting.id)}'
                         )">
+
                         🗑️ حذف
+
                     </button>
 
                 </div>
@@ -3182,7 +3241,7 @@ function renderMeetings() {
 
 
 // ============================================================
-// ADD MEETING - FIXED
+// ADD MEETING
 // ============================================================
 
 async function addMeeting() {
@@ -3595,7 +3654,8 @@ async function saveMeetingEdit() {
 
                 dateStart: dateStart,
 
-                day: type === "weekly"
+                day:
+                    type === "weekly"
                     ? day
                     : "",
 
