@@ -1138,6 +1138,40 @@ async function apiPost(params) {
 // GOOGLE LOGIN
 // ============================================================
 
+async function restoreSession() {
+    const savedToken = sessionStorage.getItem("attendance_idToken");
+    const savedRole = sessionStorage.getItem("attendance_selectedRole");
+
+    if (!savedToken || !savedRole) return false;
+    if (savedRole !== "Owner" && savedRole !== "Admin") return false;
+
+    try {
+        const result = await apiGet({ action: "authenticate", idToken: savedToken });
+        if (!result || !result.ok || !result.authorized) throw new Error(result?.message || "انتهت صلاحية تسجيل الدخول");
+        const roles = Array.isArray(result.roles) ? result.roles : [];
+        const adminRoles = roles.filter(role => role === "Owner" || role === "Admin");
+        if (!adminRoles.length) throw new Error("الحساب غير مصرح له بإدارة النظام");
+        idToken = savedToken;
+        selectedRole = adminRoles.includes(savedRole) ? savedRole : adminRoles[0];
+        currentAccount = result.account || result.user || result;
+        sessionStorage.setItem("attendance_selectedRole", selectedRole);
+        sessionStorage.setItem("attendance_account", JSON.stringify(currentAccount));
+        const emailElement = document.getElementById("adminEmail");
+        if (emailElement) emailElement.textContent = currentAccount.email || result.email || "";
+        document.getElementById("loginScreen")?.classList.add("hidden");
+        document.getElementById("roleScreen")?.classList.add("hidden");
+        document.getElementById("adminApp")?.classList.remove("hidden");
+        await init();
+        return true;
+    } catch (error) {
+        console.warn("Session restore failed:", error);
+        sessionStorage.removeItem("attendance_idToken");
+        sessionStorage.removeItem("attendance_account");
+        sessionStorage.removeItem("attendance_selectedRole");
+        return false;
+    }
+}
+
 function initializeGoogleLogin() {
     if (!window.google || !google.accounts || !google.accounts.id) {
         setTimeout(initializeGoogleLogin, 500);
@@ -1232,14 +1266,20 @@ function selectRole(role) {
 }
 
 function logout() {
-    idToken = "";
+        sessionStorage.removeItem("attendance_idToken");
+    sessionStorage.removeItem("attendance_account");
+    sessionStorage.removeItem("attendance_selectedRole");
+idToken = "";
     currentAccount = null;
     selectedRole = "";
     document.getElementById("adminApp").classList.add("hidden");
     document.getElementById("roleScreen").classList.add("hidden");
     document.getElementById("loginScreen").classList.remove("hidden");
     document.getElementById("loginMessage").innerHTML = "";
-    initializeGoogleLogin();
+    (async function() {
+        const restored = await restoreSession();
+        if (!restored) initializeGoogleLogin();
+    })();
 }
 
 // ============================================================
