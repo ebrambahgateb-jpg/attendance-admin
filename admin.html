@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -487,8 +488,6 @@ th {
 
 <body>
 
-<!-- HEADER -->
-
 <div class="header">
 
     <div class="header-content">
@@ -503,9 +502,6 @@ th {
 
 
 <div class="container">
-
-
-<!-- NAV -->
 
 <div class="nav">
 
@@ -532,8 +528,6 @@ th {
 
 </div>
 
-
-<!-- DASHBOARD -->
 
 <section
     id="dashboard"
@@ -601,8 +595,6 @@ th {
 
 </section>
 
-
-<!-- PEOPLE -->
 
 <section
     id="people"
@@ -727,14 +719,9 @@ th {
 </section>
 
 
-<!-- MEETINGS -->
-
 <section
     id="meetings"
     class="section">
-
-
-    <!-- ADD MEETING -->
 
     <div class="card">
 
@@ -780,8 +767,9 @@ th {
 
                 <label>تاريخ البداية</label>
 
+                <!-- تم تغيير ID لمنع أي تعارض -->
                 <input
-                    id="meetingDate"
+                    id="addMeetingDate"
                     type="date">
 
                 <div class="meeting-type-info">
@@ -852,8 +840,6 @@ th {
     </div>
 
 
-    <!-- MEETINGS LIST -->
-
     <div class="card">
 
         <h2>📅 الاجتماعات</h2>
@@ -901,8 +887,6 @@ th {
 
 </section>
 
-
-<!-- ATTENDANCE -->
 
 <section
     id="attendance"
@@ -952,8 +936,6 @@ th {
 
 </div>
 
-
-<!-- EDIT PERSON MODAL -->
 
 <div
     id="editModal"
@@ -1035,8 +1017,6 @@ th {
 </div>
 
 
-<!-- QR MODAL -->
-
 <div
     id="qrModal"
     class="modal">
@@ -1072,8 +1052,6 @@ th {
 </div>
 
 
-<!-- PHOTO MODAL -->
-
 <div
     id="photoModal"
     class="modal">
@@ -1098,8 +1076,6 @@ th {
 
 </div>
 
-
-<!-- EDIT MEETING MODAL -->
 
 <div
     id="editMeetingModal"
@@ -1219,8 +1195,6 @@ th {
 </div>
 
 
-<!-- CANCEL OCCURRENCE MODAL -->
-
 <div
     id="cancelMeetingModal"
     class="modal">
@@ -1270,17 +1244,8 @@ th {
 
 <script>
 
-// ============================================================
-// API
-// ============================================================
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwQUN1qxVtmgOZ2ODINmkbbmEZTTzJkfsQirwz9nuzz7nJ2t9Nayr_MkB-f6Pptklbn/exec";
-
-
-// ============================================================
-// DATA
-// ============================================================
 
 let people = [];
 let meetings = [];
@@ -1288,10 +1253,6 @@ let attendance = [];
 
 let currentQR = "";
 
-
-// ============================================================
-// API JSONP
-// ============================================================
 
 function apiGet(params) {
 
@@ -1340,7 +1301,6 @@ function apiGet(params) {
 
         document.body.appendChild(script);
 
-
         function cleanup() {
 
             delete window[callbackName];
@@ -1353,10 +1313,6 @@ function apiGet(params) {
 
 }
 
-
-// ============================================================
-// NAVIGATION
-// ============================================================
 
 function showSection(section, button) {
 
@@ -1401,10 +1357,6 @@ function showSection(section, button) {
 }
 
 
-// ============================================================
-// PEOPLE
-// ============================================================
-
 async function loadPeople() {
 
     try {
@@ -1443,10 +1395,6 @@ async function loadPeople() {
 
 }
 
-
-// ============================================================
-// RENDER PEOPLE
-// ============================================================
 
 function renderPeople() {
 
@@ -1544,21 +1492,13 @@ function renderPeople() {
 
         row.innerHTML = `
 
-            <td>
-                ${photoHTML}
-            </td>
+            <td>${photoHTML}</td>
 
-            <td>
-                ${escapeHTML(person.id)}
-            </td>
+            <td>${escapeHTML(person.id)}</td>
 
-            <td>
-                ${escapeHTML(person.name)}
-            </td>
+            <td>${escapeHTML(person.name)}</td>
 
-            <td>
-                ${escapeHTML(person.phone)}
-            </td>
+            <td>${escapeHTML(person.phone)}</td>
 
             <td>
 
@@ -1656,10 +1596,6 @@ function renderPeople() {
 }
 
 
-// ============================================================
-// DELETE PERSON
-// ============================================================
-
 async function deletePerson(id) {
 
     const person =
@@ -1748,10 +1684,6 @@ async function deletePerson(id) {
 
 }
 
-
-// ============================================================
-// ADD PERSON
-// ============================================================
 
 async function addPerson() {
 
@@ -1928,10 +1860,6 @@ async function addPerson() {
 }
 
 
-// ============================================================
-// COMPRESS IMAGE
-// ============================================================
-
 function compressImage(file) {
 
     return new Promise(function(resolve, reject) {
@@ -2068,10 +1996,6 @@ function compressImage(file) {
 }
 
 
-// ============================================================
-// UPLOAD PHOTO IN CHUNKS
-// ============================================================
-
 async function uploadPhotoInChunks(id, imageData) {
 
     const chunkSize = 900;
@@ -2183,10 +2107,6 @@ async function uploadPhotoInChunks(id, imageData) {
 
 }
 
-
-// ============================================================
-// EDIT PERSON
-// ============================================================
 
 function openEdit(id) {
 
@@ -2419,10 +2339,6 @@ async function saveEdit() {
 }
 
 
-// ============================================================
-// PHOTO PREVIEW
-// ============================================================
-
 function previewAddPhoto() {
 
     const input =
@@ -2528,10 +2444,6 @@ function previewEditPhoto() {
 }
 
 
-// ============================================================
-// PHOTO VIEW
-// ============================================================
-
 function showPhoto(name, photo) {
 
     if (!photo) {
@@ -2572,10 +2484,6 @@ function closePhoto() {
 
 }
 
-
-// ============================================================
-// TOGGLE PERSON
-// ============================================================
 
 async function togglePerson(id) {
 
@@ -2645,10 +2553,6 @@ async function togglePerson(id) {
 }
 
 
-// ============================================================
-// REGENERATE QR
-// ============================================================
-
 async function regenerateQR(id) {
 
     const person =
@@ -2715,10 +2619,6 @@ async function regenerateQR(id) {
 
 }
 
-
-// ============================================================
-// QR
-// ============================================================
 
 function showQR(name, qr) {
 
@@ -2842,11 +2742,11 @@ function meetingTypeChanged() {
 
         const dateInput =
             document.getElementById(
-                "meetingDate"
+                "addMeetingDate"
             );
 
 
-        if (dateInput.value) {
+        if (dateInput && dateInput.value) {
 
             const date =
                 new Date(
@@ -2919,7 +2819,7 @@ function editMeetingTypeChanged() {
 // ============================================================
 
 document
-    .getElementById("meetingDate")
+    .getElementById("addMeetingDate")
     .addEventListener(
         "change",
         function() {
@@ -3015,10 +2915,6 @@ async function loadMeetings() {
 
 }
 
-
-// ============================================================
-// RENDER MEETINGS
-// ============================================================
 
 function renderMeetings() {
 
@@ -3286,49 +3182,45 @@ function renderMeetings() {
 
 
 // ============================================================
-// ADD MEETING
+// ADD MEETING - FIXED
 // ============================================================
 
 async function addMeeting() {
 
     const name =
         document
-            .getElementById(
-                "meetingName"
-            )
+            .getElementById("meetingName")
             .value
             .trim();
 
 
     const type =
         document
-            .getElementById(
-                "meetingType"
-            )
+            .getElementById("meetingType")
             .value;
+
+
+    const dateInput =
+        document.getElementById(
+            "addMeetingDate"
+        );
 
 
     const dateStart =
-        document
-            .getElementById(
-                "meetingDate"
-            )
-            .value;
+        dateInput
+            ? dateInput.value
+            : "";
 
 
     const day =
         document
-            .getElementById(
-                "meetingDay"
-            )
+            .getElementById("meetingDay")
             .value;
 
 
     const time =
         document
-            .getElementById(
-                "meetingTime"
-            )
+            .getElementById("meetingTime")
             .value;
 
 
@@ -3412,7 +3304,8 @@ async function addMeeting() {
 
                 dateStart: dateStart,
 
-                day: type === "weekly"
+                day:
+                    type === "weekly"
                     ? day
                     : "",
 
@@ -3443,23 +3336,17 @@ async function addMeeting() {
 
 
         document
-            .getElementById(
-                "meetingName"
-            )
+            .getElementById("meetingName")
             .value = "";
 
 
         document
-            .getElementById(
-                "meetingDate"
-            )
+            .getElementById("addMeetingDate")
             .value = "";
 
 
         document
-            .getElementById(
-                "meetingTime"
-            )
+            .getElementById("meetingTime")
             .value = "";
 
 
@@ -3491,10 +3378,6 @@ async function addMeeting() {
 
 }
 
-
-// ============================================================
-// OPEN EDIT MEETING
-// ============================================================
 
 function openMeetingEdit(id) {
 
@@ -3594,10 +3477,6 @@ function closeEditMeeting() {
 
 }
 
-
-// ============================================================
-// SAVE EDIT MEETING
-// ============================================================
 
 async function saveMeetingEdit() {
 
@@ -3768,10 +3647,6 @@ async function saveMeetingEdit() {
 }
 
 
-// ============================================================
-// TOGGLE MEETING
-// ============================================================
-
 async function toggleMeeting(id) {
 
     const meeting =
@@ -3847,10 +3722,6 @@ async function toggleMeeting(id) {
 
 }
 
-
-// ============================================================
-// DELETE MEETING
-// ============================================================
 
 async function deleteMeeting(id) {
 
@@ -3937,10 +3808,6 @@ async function deleteMeeting(id) {
 
 }
 
-
-// ============================================================
-// CANCEL OCCURRENCE
-// ============================================================
 
 function openCancelMeeting(
     id,
@@ -4064,10 +3931,6 @@ async function confirmCancelOccurrence() {
 }
 
 
-// ============================================================
-// RESTORE OCCURRENCE
-// ============================================================
-
 async function restoreOccurrence(
     id,
     date
@@ -4129,10 +3992,6 @@ async function restoreOccurrence(
 }
 
 
-// ============================================================
-// ATTENDANCE
-// ============================================================
-
 async function loadAttendance() {
 
     try {
@@ -4182,10 +4041,6 @@ async function loadAttendance() {
 
 }
 
-
-// ============================================================
-// RENDER ATTENDANCE
-// ============================================================
 
 function renderAttendance() {
 
@@ -4286,10 +4141,6 @@ function renderAttendance() {
 
 }
 
-
-// ============================================================
-// MEETING HELPERS
-// ============================================================
 
 function isMeetingActive(status) {
 
@@ -4486,10 +4337,6 @@ function formatDisplayTime(value) {
 }
 
 
-// ============================================================
-// MESSAGE
-// ============================================================
-
 function showMessage(
     id,
     text,
@@ -4511,10 +4358,6 @@ function showMessage(
 }
 
 
-// ============================================================
-// ESCAPE HTML
-// ============================================================
-
 function escapeHTML(text) {
 
     return String(text || "")
@@ -4526,10 +4369,6 @@ function escapeHTML(text) {
 
 }
 
-
-// ============================================================
-// ESCAPE JS
-// ============================================================
 
 function escapeJS(text) {
 
@@ -4545,10 +4384,6 @@ function escapeJS(text) {
 
 }
 
-
-// ============================================================
-// INIT
-// ============================================================
 
 async function init() {
 
@@ -4573,3 +4408,4 @@ init();
 
 </body>
 </html>
+```
