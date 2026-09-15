@@ -10,6 +10,7 @@ content="width=device-width, initial-scale=1.0">
 
 <title>لوحة الإدارة - نظام الحضور</title>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -355,6 +356,40 @@ th {
     border-radius: 15px;
 }
 
+#loginScreen, #roleScreen {
+    position: fixed;
+    inset: 0;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 9999;
+}
+
+#roleScreen { z-index: 9998; }
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border-radius: 22px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 5px 25px rgba(0,0,0,.12);
+}
+
+.auth-icon { font-size: 55px; margin-bottom: 10px; }
+.auth-title { font-size: 26px; font-weight: bold; margin-bottom: 10px; }
+.auth-text { color: #666; line-height: 1.8; margin-bottom: 22px; }
+#googleLogin { display:flex; justify-content:center; margin-top:15px; }
+#loginMessage { margin-top:18px; line-height:1.8; }
+.auth-error { color:#b91c1c; }
+.auth-loading { color:#555; }
+.role-button { width:100%; border:none; background:#111827; color:white; padding:14px; border-radius:10px; cursor:pointer; font-size:16px; margin-top:10px; }
+.logout-button { width:100%; border:none; background:#b91c1c; color:white; padding:12px; border-radius:10px; cursor:pointer; font-size:15px; margin-top:14px; }
+.hidden { display:none !important; }
+
 @media(max-width:700px) {
 
     .container {
@@ -394,6 +429,30 @@ th {
 <body>
 
 
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="auth-card">
+    <div class="auth-icon">🔐</div>
+    <div class="auth-title">لوحة الإدارة</div>
+    <div class="auth-text">يجب تسجيل الدخول باستخدام حساب Google مصرح له بإدارة نظام الحضور.</div>
+    <div id="googleLogin"></div>
+    <div id="loginMessage"></div>
+  </div>
+</div>
+
+<!-- ROLE SELECTION -->
+<div id="roleScreen" class="hidden">
+  <div class="auth-card">
+    <div class="auth-icon">👑</div>
+    <div class="auth-title">اختر نوع الدخول</div>
+    <div class="auth-text">هذا الحساب لديه أكثر من صلاحية إدارية.</div>
+    <div id="roleButtons"></div>
+    <button class="logout-button" onclick="logout()">تسجيل الخروج</button>
+  </div>
+</div>
+
+<div id="adminApp" class="hidden">
+
 <!-- HEADER -->
 
 <div class="header">
@@ -403,6 +462,10 @@ th {
 <h1>⚙️ لوحة الإدارة</h1>
 
 <span>نظام الحضور</span>
+<div style="display:flex;align-items:center;gap:10px;">
+  <span id="adminUserEmail" style="font-size:13px;"></span>
+  <button onclick="logout()" style="border:none;background:#b91c1c;color:white;padding:8px 12px;border-radius:8px;cursor:pointer;">خروج</button>
+</div>
 
 </div>
 
@@ -793,6 +856,8 @@ id="attendanceTable">
 </div>
 
 
+</div>
+
 <!-- EDIT MODAL -->
 
 <div
@@ -989,7 +1054,7 @@ alt="صورة الشخص">
 // ============================================================
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwQUN1qxVtmgOZ2ODINmkbbmEZTTzJkfsQirwz9nuzz7nJ2t9Nayr_MkB-f6Pptklbn/exec";
+"https://script.google.com/macros/s/AKfycbxN6kZVZYQD-gS0n8ovnQQZh7IW9KpFKiI2mrx6uYpVww0wFyJ-Wfw_NnX4YDedLg/exec";
 
 
 // ============================================================
@@ -1003,6 +1068,10 @@ let meetings = [];
 let attendance = [];
 
 let currentQR = "";
+let idToken = "";
+let currentAccount = null;
+let selectedRole = "";
+const GOOGLE_CLIENT_ID = "869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.googleusercontent.com";
 
 
 // ============================================================
@@ -1010,73 +1079,152 @@ let currentQR = "";
 // ============================================================
 
 function apiGet(params) {
-
-    return new Promise(
-        function(resolve,reject) {
-
-            const callbackName =
-                "cb_" +
-                Date.now() +
-                "_" +
-                Math.floor(
-                    Math.random()*100000
-                );
-
-            const script =
-                document.createElement("script");
-
-            const query =
-                new URLSearchParams(params);
-
-            query.append(
-                "callback",
-                callbackName
-            );
-
-            script.src =
-                API_URL +
-                "?" +
-                query.toString();
-
-            window[callbackName] =
-                function(data) {
-
-                    resolve(data);
-
-                    cleanup();
-
-                };
-
-            script.onerror =
-                function() {
-
-                    reject(
-                        new Error(
-                            "فشل الاتصال بالسيرفر"
-                        )
-                    );
-
-                    cleanup();
-
-                };
-
-            document.body
-                .appendChild(script);
-
-
-            function cleanup() {
-
-                delete window[callbackName];
-
-                script.remove();
-
-            }
-
-        }
-    );
-
+    return apiPost(params);
 }
 
+async function apiPost(params) {
+    const payload = Object.assign({}, params);
+
+    const actionMap = {
+        people: "getPeople",
+        meetings: "getMeetings",
+        attendanceList: "getAttendance",
+        togglePerson: "setPersonStatus",
+        deleteMeeting: "archiveMeeting"
+    };
+
+    if (actionMap[payload.action]) {
+        payload.action = actionMap[payload.action];
+    }
+
+    if (payload.action !== "authenticate") {
+        if (!idToken) {
+            throw new Error("يجب تسجيل الدخول أولاً");
+        }
+        payload.idToken = idToken;
+    }
+
+    if (payload.action === "setPersonStatus" && payload.active === undefined) {
+        const person = people.find(p => String(p.id) === String(payload.id));
+        payload.active = person ? String(person.status).toLowerCase() !== "active" : false;
+    }
+
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error("API HTTP Error: " + response.status);
+
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch (e) { throw new Error("استجابة غير صحيحة من الخادم"); }
+
+    if (data && data.error === "AUTH_REQUIRED") {
+        logout();
+        throw new Error("انتهت جلسة تسجيل الدخول");
+    }
+
+    if (data && data.ok === false && data.message) {
+        return data;
+    }
+
+    return data;
+}
+
+// ============================================================
+// GOOGLE LOGIN
+// ============================================================
+
+function initializeGoogleLogin() {
+    if (!window.google || !google.accounts || !google.accounts.id) {
+        setTimeout(initializeGoogleLogin, 500);
+        return;
+    }
+
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleLogin,
+        auto_select: false,
+        cancel_on_tap_outside: true
+    });
+
+    const box = document.getElementById("googleLogin");
+    box.innerHTML = "";
+    google.accounts.id.renderButton(box, {
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "rectangular",
+        width: 300
+    });
+}
+
+async function handleGoogleLogin(response) {
+    const message = document.getElementById("loginMessage");
+    message.innerHTML = "<span class='auth-loading'>⏳ جاري التحقق من الحساب...</span>";
+
+    try {
+        if (!response || !response.credential) throw new Error("لم يتم الحصول على بيانات Google");
+        idToken = response.credential;
+
+        const result = await apiPost({ action: "authenticate", idToken: idToken });
+        if (!result.ok) throw new Error(result.message || "فشل تسجيل الدخول");
+        if (!result.authorized) throw new Error("هذا الحساب غير مصرح له باستخدام لوحة الإدارة.");
+
+        const adminRoles = (result.roles || []).filter(r => r === "Owner" || r === "Admin");
+        if (!adminRoles.length) throw new Error("هذا الحساب لا يملك صلاحية Owner أو Admin.");
+
+        currentAccount = result;
+        document.getElementById("adminUserEmail").textContent = "👤 " + result.email;
+
+        if (adminRoles.length === 1) {
+            selectRole(adminRoles[0]);
+        } else {
+            showRoleSelection(adminRoles);
+        }
+    } catch (error) {
+        idToken = "";
+        currentAccount = null;
+        message.innerHTML = "<div class='auth-error'>❌ " + escapeHTML(error.message) + "</div>";
+    }
+}
+
+function showRoleSelection(roles) {
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("roleScreen").classList.remove("hidden");
+    const box = document.getElementById("roleButtons");
+    box.innerHTML = "";
+
+    roles.forEach(role => {
+        const button = document.createElement("button");
+        button.className = "role-button";
+        button.textContent = role === "Owner" ? "👑 Owner" : "⚙️ المدير";
+        button.onclick = () => selectRole(role);
+        box.appendChild(button);
+    });
+}
+
+function selectRole(role) {
+    selectedRole = role;
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("roleScreen").classList.add("hidden");
+    document.getElementById("adminApp").classList.remove("hidden");
+    init();
+}
+
+function logout() {
+    idToken = "";
+    currentAccount = null;
+    selectedRole = "";
+    document.getElementById("adminApp").classList.add("hidden");
+    document.getElementById("roleScreen").classList.add("hidden");
+    document.getElementById("loginScreen").classList.remove("hidden");
+    document.getElementById("loginMessage").innerHTML = "";
+    initializeGoogleLogin();
+}
 
 // ============================================================
 // Navigation
@@ -1137,12 +1285,19 @@ async function loadPeople() {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
             throw new Error(data.message);
         }
 
 
-        people = data.people || [];
+        people = (data.people || []).map(p => ({
+            id: p.id ?? p.ID ?? "",
+            name: p.name ?? p.Name ?? "",
+            phone: p.phone ?? p.Phone ?? "",
+            qr: p.qr ?? p.QR ?? "",
+            photo: p.photo ?? p.Photo ?? "",
+            status: String(p.status ?? p.Status ?? "").toLowerCase() === "active" ? "active" : "inactive"
+        }));
 
         renderPeople();
 
@@ -1428,7 +1583,7 @@ async function deletePerson(id) {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -1522,7 +1677,7 @@ async function addPerson() {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -1548,7 +1703,7 @@ async function addPerson() {
 
             const upload =
                 await uploadPhotoInChunks(
-                    data.id,
+                    createdId,
                     compressed
                 );
 
@@ -1784,117 +1939,19 @@ function compressImage(file) {
 // ============================================================
 
 async function uploadPhotoInChunks(id, imageData) {
+    const comma = imageData.indexOf(",");
+    const base64 = comma >= 0 ? imageData.substring(comma + 1) : imageData;
+    const header = comma >= 0 ? imageData.substring(0, comma) : "";
+    const match = header.match(/^data:([^;]+);base64$/);
+    const contentType = match ? match[1] : "image/jpeg";
 
-    const chunkSize = 900;
-
-    const total =
-        Math.ceil(
-            imageData.length / chunkSize
-        );
-
-
-    const start =
-        await apiGet({
-
-            action: "photoStart",
-
-            id: id,
-
-            total: total
-
-        });
-
-
-    if (!start || !start.success) {
-
-        throw new Error(
-
-            start?.message ||
-
-            "فشل بدء رفع الصورة"
-
-        );
-
-    }
-
-
-    const token =
-        start.token;
-
-
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-        const chunk =
-            imageData.substring(
-
-                i * chunkSize,
-
-                (i + 1) * chunkSize
-
-            );
-
-
-        const result =
-            await apiGet({
-
-                action: "photoChunk",
-
-                token: token,
-
-                index: i,
-
-                chunk: chunk
-
-            });
-
-
-        if (!result || !result.success) {
-
-            throw new Error(
-
-                result?.message ||
-
-                "فشل رفع الجزء رقم " +
-                (i + 1)
-
-            );
-
-        }
-
-    }
-
-
-    const finish =
-        await apiGet({
-
-            action: "photoFinish",
-
-            token: token
-
-        });
-
-
-    if (!finish || !finish.success) {
-
-        throw new Error(
-
-            finish?.message ||
-
-            "فشل تجميع الصورة"
-
-        );
-
-    }
-
-
-    return finish;
-
+    return await apiPost({
+        action: "uploadPersonPhoto",
+        personId: id,
+        base64: base64,
+        contentType: contentType
+    });
 }
-
 
 // ============================================================
 // EDIT
@@ -2054,7 +2111,7 @@ async function saveEdit() {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -2331,7 +2388,7 @@ async function togglePerson(id) {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -2394,7 +2451,7 @@ async function regenerateQR(id) {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -2536,7 +2593,7 @@ async function loadMeetings() {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
@@ -2703,7 +2760,7 @@ async function saveMeetingEdit() {
             time: time
         });
 
-        if (!data.success) throw new Error(data.message || "فشل تعديل الاجتماع");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل تعديل الاجتماع");
 
         closeMeetingEdit();
         alert("✅ تم تعديل الاجتماع");
@@ -2716,7 +2773,7 @@ async function saveMeetingEdit() {
 async function toggleMeeting(id) {
     try {
         const data = await apiGet({ action: "toggleMeeting", id: id });
-        if (!data.success) throw new Error(data.message || "فشل تغيير حالة الاجتماع");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل تغيير حالة الاجتماع");
         await loadMeetings();
     } catch (error) {
         alert("❌ " + error.message);
@@ -2731,7 +2788,7 @@ async function deleteMeeting(id) {
 
     try {
         const data = await apiGet({ action: "deleteMeeting", id: id });
-        if (!data.success) throw new Error(data.message || "فشل حذف الاجتماع");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل حذف الاجتماع");
         alert("✅ تم حذف الاجتماع");
         await loadMeetings();
     } catch (error) {
@@ -2751,7 +2808,7 @@ async function cancelNextMeeting(id, date) {
             date: date
         });
 
-        if (!data.success) throw new Error(data.message || "فشل إلغاء الموعد");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل إلغاء الموعد");
 
         alert("✅ تم إلغاء الموعد القادم");
         await loadMeetings();
@@ -2772,7 +2829,7 @@ async function restoreMeeting(id, date) {
             date: date
         });
 
-        if (!data.success) throw new Error(data.message || "فشل استعادة الموعد");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل استعادة الموعد");
 
         alert("✅ تم استعادة الموعد");
         await loadMeetings();
@@ -2805,7 +2862,7 @@ async function addMeeting() {
             time: time
         });
 
-        if (!data.success) throw new Error(data.message || "فشل إضافة الاجتماع");
+        if (!(data.success || data.ok)) throw new Error(data.message || "فشل إضافة الاجتماع");
 
         showMessage("meetingMessage", "✅ تم إضافة الاجتماع - " + data.id, "success");
 
@@ -2837,7 +2894,7 @@ async function loadAttendance() {
             });
 
 
-        if (!data.success) {
+        if (!(data.success || data.ok)) {
 
             throw new Error(
                 data.message
