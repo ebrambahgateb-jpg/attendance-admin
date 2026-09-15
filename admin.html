@@ -10,7 +10,6 @@ content="width=device-width, initial-scale=1.0">
 
 <title>لوحة الإدارة - نظام الحضور</title>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -356,40 +355,6 @@ th {
     border-radius: 15px;
 }
 
-#loginScreen, #roleScreen {
-    position: fixed;
-    inset: 0;
-    background: #f3f4f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 9999;
-}
-
-#roleScreen { z-index: 9998; }
-
-.auth-card {
-    width: 100%;
-    max-width: 430px;
-    background: white;
-    border-radius: 22px;
-    padding: 30px 20px;
-    text-align: center;
-    box-shadow: 0 5px 25px rgba(0,0,0,.12);
-}
-
-.auth-icon { font-size: 55px; margin-bottom: 10px; }
-.auth-title { font-size: 26px; font-weight: bold; margin-bottom: 10px; }
-.auth-text { color: #666; line-height: 1.8; margin-bottom: 22px; }
-#googleLogin { display:flex; justify-content:center; margin-top:15px; }
-#loginMessage { margin-top:18px; line-height:1.8; }
-.auth-error { color:#b91c1c; }
-.auth-loading { color:#555; }
-.role-button { width:100%; border:none; background:#111827; color:white; padding:14px; border-radius:10px; cursor:pointer; font-size:16px; margin-top:10px; }
-.logout-button { width:100%; border:none; background:#b91c1c; color:white; padding:12px; border-radius:10px; cursor:pointer; font-size:15px; margin-top:14px; }
-.hidden { display:none !important; }
-
 @media(max-width:700px) {
 
     .container {
@@ -429,30 +394,6 @@ th {
 <body>
 
 
-<!-- LOGIN -->
-<div id="loginScreen">
-  <div class="auth-card">
-    <div class="auth-icon">🔐</div>
-    <div class="auth-title">لوحة الإدارة</div>
-    <div class="auth-text">يجب تسجيل الدخول باستخدام حساب Google مصرح له بإدارة نظام الحضور.</div>
-    <div id="googleLogin"></div>
-    <div id="loginMessage"></div>
-  </div>
-</div>
-
-<!-- ROLE SELECTION -->
-<div id="roleScreen" class="hidden">
-  <div class="auth-card">
-    <div class="auth-icon">👑</div>
-    <div class="auth-title">اختر نوع الدخول</div>
-    <div class="auth-text">هذا الحساب لديه أكثر من صلاحية إدارية.</div>
-    <div id="roleButtons"></div>
-    <button class="logout-button" onclick="logout()">تسجيل الخروج</button>
-  </div>
-</div>
-
-<div id="adminApp" class="hidden">
-
 <!-- HEADER -->
 
 <div class="header">
@@ -462,10 +403,6 @@ th {
 <h1>⚙️ لوحة الإدارة</h1>
 
 <span>نظام الحضور</span>
-<div style="display:flex;align-items:center;gap:10px;">
-  <span id="adminUserEmail" style="font-size:13px;"></span>
-  <button onclick="logout()" style="border:none;background:#b91c1c;color:white;padding:8px 12px;border-radius:8px;cursor:pointer;">خروج</button>
-</div>
 
 </div>
 
@@ -716,44 +653,33 @@ class="section">
 <div class="form-grid">
 
 <div>
+
 <label>اسم الاجتماع</label>
-<input id="meetingName" type="text" placeholder="اجتماع الشباب">
+
+<input
+id="meetingName"
+type="text"
+placeholder="اجتماع الشباب">
+
 </div>
+
 
 <div>
-<label>نوع الاجتماع</label>
-<select id="meetingType">
-<option value="once">مرة واحدة</option>
-<option value="weekly">أسبوعي</option>
-</select>
-</div>
 
-<div>
-<label>تاريخ البداية</label>
-<input id="meetingDate" type="date">
-</div>
+<label>التاريخ</label>
 
-<div>
-<label>اليوم الأسبوعي</label>
-<select id="meetingDay">
-<option value="0">الأحد</option>
-<option value="1">الإثنين</option>
-<option value="2">الثلاثاء</option>
-<option value="3">الأربعاء</option>
-<option value="4">الخميس</option>
-<option value="5">الجمعة</option>
-<option value="6">السبت</option>
-</select>
-</div>
+<input
+id="meetingDate"
+type="date">
 
-<div>
-<label>وقت الاجتماع</label>
-<input id="meetingTime" type="time">
 </div>
 
 </div>
 
-<button class="primary" onclick="addMeeting()">
+
+<button
+class="primary"
+onclick="addMeeting()">
 إضافة الاجتماع
 </button>
 
@@ -777,13 +703,13 @@ class="message">
 <thead>
 
 <tr>
+
 <th>ID</th>
+
 <th>الاسم</th>
-<th>النوع</th>
-<th>الوقت</th>
-<th>الموعد القادم</th>
-<th>الحالة</th>
-<th>الإجراءات</th>
+
+<th>التاريخ</th>
+
 </tr>
 
 </thead>
@@ -855,8 +781,6 @@ id="attendanceTable">
 
 </div>
 
-
-</div>
 
 <!-- EDIT MODAL -->
 
@@ -939,48 +863,6 @@ class="message">
 
 </div>
 
-
-<!-- EDIT MEETING MODAL -->
-<div id="meetingEditModal" class="modal">
-<div class="modal-content">
-<button class="close" onclick="closeMeetingEdit()">×</button>
-<h2>✏️ تعديل الاجتماع</h2>
-<input type="hidden" id="editMeetingID">
-
-<label>اسم الاجتماع</label>
-<input id="editMeetingName" type="text">
-<br><br>
-
-<label>نوع الاجتماع</label>
-<select id="editMeetingType">
-<option value="once">مرة واحدة</option>
-<option value="weekly">أسبوعي</option>
-</select>
-<br><br>
-
-<label>تاريخ البداية</label>
-<input id="editMeetingDate" type="date">
-<br><br>
-
-<label>اليوم الأسبوعي</label>
-<select id="editMeetingDay">
-<option value="0">الأحد</option>
-<option value="1">الإثنين</option>
-<option value="2">الثلاثاء</option>
-<option value="3">الأربعاء</option>
-<option value="4">الخميس</option>
-<option value="5">الجمعة</option>
-<option value="6">السبت</option>
-</select>
-<br><br>
-
-<label>وقت الاجتماع</label>
-<input id="editMeetingTime" type="time">
-
-<button class="primary" onclick="saveMeetingEdit()">💾 حفظ التعديلات</button>
-<div id="editMeetingMessage" class="message"></div>
-</div>
-</div>
 
 <!-- QR MODAL -->
 
@@ -1068,10 +950,6 @@ let meetings = [];
 let attendance = [];
 
 let currentQR = "";
-let idToken = "";
-let currentAccount = null;
-let selectedRole = "";
-const GOOGLE_CLIENT_ID = "869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.googleusercontent.com";
 
 
 // ============================================================
@@ -1079,208 +957,73 @@ const GOOGLE_CLIENT_ID = "869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.goo
 // ============================================================
 
 function apiGet(params) {
-    return apiPost(params);
-}
 
-async function apiPost(params) {
-    const payload = Object.assign({}, params);
+    return new Promise(
+        function(resolve,reject) {
 
-    const actionMap = {
-        people: "getPeople",
-        meetings: "getMeetings",
-        attendanceList: "getAttendance",
-        togglePerson: "setPersonStatus",
-        deleteMeeting: "archiveMeeting"
-    };
+            const callbackName =
+                "cb_" +
+                Date.now() +
+                "_" +
+                Math.floor(
+                    Math.random()*100000
+                );
 
-    if (actionMap[payload.action]) {
-        payload.action = actionMap[payload.action];
-    }
+            const script =
+                document.createElement("script");
 
-    if (payload.action !== "authenticate") {
-        if (!idToken) {
-            throw new Error("يجب تسجيل الدخول أولاً");
+            const query =
+                new URLSearchParams(params);
+
+            query.append(
+                "callback",
+                callbackName
+            );
+
+            script.src =
+                API_URL +
+                "?" +
+                query.toString();
+
+            window[callbackName] =
+                function(data) {
+
+                    resolve(data);
+
+                    cleanup();
+
+                };
+
+            script.onerror =
+                function() {
+
+                    reject(
+                        new Error(
+                            "فشل الاتصال بالسيرفر"
+                        )
+                    );
+
+                    cleanup();
+
+                };
+
+            document.body
+                .appendChild(script);
+
+
+            function cleanup() {
+
+                delete window[callbackName];
+
+                script.remove();
+
+            }
+
         }
-        payload.idToken = idToken;
-    }
+    );
 
-    if (payload.action === "setPersonStatus" && payload.active === undefined) {
-        const person = people.find(p => String(p.id) === String(payload.id));
-        payload.active = person ? String(person.status).toLowerCase() !== "active" : false;
-    }
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) throw new Error("API HTTP Error: " + response.status);
-
-    const text = await response.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch (e) { throw new Error("استجابة غير صحيحة من الخادم"); }
-
-    if (data && data.error === "AUTH_REQUIRED") {
-        logout();
-        throw new Error("انتهت جلسة تسجيل الدخول");
-    }
-
-    if (data && data.ok === false && data.message) {
-        return data;
-    }
-
-    return data;
 }
 
-// ============================================================
-// GOOGLE LOGIN
-// ============================================================
-
-async function restoreSession() {
-    const savedToken = sessionStorage.getItem("attendance_idToken");
-    const savedRole = sessionStorage.getItem("attendance_selectedRole");
-
-    if (!savedToken || !savedRole) return false;
-    if (savedRole !== "Owner" && savedRole !== "Admin") return false;
-
-    try {
-        const result = await apiGet({ action: "authenticate", idToken: savedToken });
-        if (!result || !result.ok || !result.authorized) throw new Error(result?.message || "انتهت صلاحية تسجيل الدخول");
-        const roles = Array.isArray(result.roles) ? result.roles : [];
-        const adminRoles = roles.filter(role => role === "Owner" || role === "Admin");
-        if (!adminRoles.length) throw new Error("الحساب غير مصرح له بإدارة النظام");
-        idToken = savedToken;
-        selectedRole = adminRoles.includes(savedRole) ? savedRole : adminRoles[0];
-        currentAccount = result.account || result.user || result;
-        sessionStorage.setItem("attendance_selectedRole", selectedRole);
-        sessionStorage.setItem("attendance_account", JSON.stringify(currentAccount));
-        const emailElement = document.getElementById("adminEmail");
-        if (emailElement) emailElement.textContent = currentAccount.email || result.email || "";
-        document.getElementById("loginScreen")?.classList.add("hidden");
-        document.getElementById("roleScreen")?.classList.add("hidden");
-        document.getElementById("adminApp")?.classList.remove("hidden");
-        await init();
-        return true;
-    } catch (error) {
-        console.warn("Session restore failed:", error);
-        sessionStorage.removeItem("attendance_idToken");
-        sessionStorage.removeItem("attendance_account");
-        sessionStorage.removeItem("attendance_selectedRole");
-        return false;
-    }
-}
-
-function initializeGoogleLogin() {
-    if (!window.google || !google.accounts || !google.accounts.id) {
-        setTimeout(initializeGoogleLogin, 500);
-        return;
-    }
-
-    google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleLogin,
-        auto_select: false,
-        cancel_on_tap_outside: true
-    });
-
-    const box = document.getElementById("googleLogin");
-    box.innerHTML = "";
-    google.accounts.id.renderButton(box, {
-        theme: "outline",
-        size: "large",
-        text: "signin_with",
-        shape: "rectangular",
-        width: 300
-    });
-}
-
-async function handleGoogleLogin(response) {
-    const message = document.getElementById("loginMessage");
-    message.innerHTML = "<span class='auth-loading'>⏳ جاري التحقق من الحساب...</span>";
-
-    try {
-        if (!response || !response.credential) throw new Error("لم يتم الحصول على بيانات Google");
-        idToken = response.credential;
-
-        const result = await apiPost({ action: "authenticate", idToken: idToken });
-        if (!result.ok) throw new Error(result.message || "فشل تسجيل الدخول");
-        if (!result.authorized) throw new Error("هذا الحساب غير مصرح له باستخدام لوحة الإدارة.");
-
-        const adminRoles = (result.roles || [])
-            .map(r => String(r))
-            .filter(r => r.toLowerCase() === "owner" || r.toLowerCase() === "admin")
-            .map(r => r.toLowerCase() === "owner" ? "Owner" : "Admin");
-
-        if (!adminRoles.length) {
-            throw new Error("هذا الحساب لا يملك صلاحية Owner أو Admin.");
-        }
-
-        currentAccount = result;
-        document.getElementById("adminUserEmail").textContent = "👤 " + result.email;
-
-        if (adminRoles.length === 1) {
-            selectRole(adminRoles[0]);
-        } else {
-            showRoleSelection(adminRoles);
-        }
-    } catch (error) {
-        idToken = "";
-        currentAccount = null;
-        message.innerHTML = "<div class='auth-error'>❌ " + escapeHTML(error.message) + "</div>";
-    }
-}
-
-function showRoleSelection(roles) {
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("roleScreen").classList.remove("hidden");
-    const box = document.getElementById("roleButtons");
-    box.innerHTML = "";
-
-    roles.forEach(role => {
-        const button = document.createElement("button");
-        button.className = "role-button";
-        button.textContent = role === "Owner" ? "👑 Owner" : "⚙️ المدير";
-        button.onclick = () => selectRole(role);
-        box.appendChild(button);
-    });
-}
-
-function selectRole(role) {
-    if (!currentAccount || !idToken) {
-        alert("يجب تسجيل الدخول أولاً");
-        return;
-    }
-
-    if (!["Owner", "Admin"].includes(role)) {
-        alert("هذه الصفحة مخصصة لصلاحيات الإدارة فقط");
-        return;
-    }
-
-    selectedRole = role;
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("roleScreen").classList.add("hidden");
-    document.getElementById("adminApp").classList.remove("hidden");
-    init();
-}
-
-function logout() {
-        sessionStorage.removeItem("attendance_idToken");
-    sessionStorage.removeItem("attendance_account");
-    sessionStorage.removeItem("attendance_selectedRole");
-idToken = "";
-    currentAccount = null;
-    selectedRole = "";
-    document.getElementById("adminApp").classList.add("hidden");
-    document.getElementById("roleScreen").classList.add("hidden");
-    document.getElementById("loginScreen").classList.remove("hidden");
-    document.getElementById("loginMessage").innerHTML = "";
-    (async function() {
-        const restored = await restoreSession();
-        if (!restored) initializeGoogleLogin();
-    })();
-}
 
 // ============================================================
 // Navigation
@@ -1341,19 +1084,12 @@ async function loadPeople() {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
             throw new Error(data.message);
         }
 
 
-        people = (data.people || []).map(p => ({
-            id: p.id ?? p.ID ?? "",
-            name: p.name ?? p.Name ?? "",
-            phone: p.phone ?? p.Phone ?? "",
-            qr: p.qr ?? p.QR ?? "",
-            photo: p.photo ?? p.Photo ?? "",
-            status: String(p.status ?? p.Status ?? "").toLowerCase() === "active" ? "active" : "inactive"
-        }));
+        people = data.people || [];
 
         renderPeople();
 
@@ -1639,7 +1375,7 @@ async function deletePerson(id) {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -1733,7 +1469,7 @@ async function addPerson() {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -1995,19 +1731,117 @@ function compressImage(file) {
 // ============================================================
 
 async function uploadPhotoInChunks(id, imageData) {
-    const comma = imageData.indexOf(",");
-    const base64 = comma >= 0 ? imageData.substring(comma + 1) : imageData;
-    const header = comma >= 0 ? imageData.substring(0, comma) : "";
-    const match = header.match(/^data:([^;]+);base64$/);
-    const contentType = match ? match[1] : "image/jpeg";
 
-    return await apiPost({
-        action: "uploadPersonPhoto",
-        personId: id,
-        base64: base64,
-        contentType: contentType
-    });
+    const chunkSize = 900;
+
+    const total =
+        Math.ceil(
+            imageData.length / chunkSize
+        );
+
+
+    const start =
+        await apiGet({
+
+            action: "photoStart",
+
+            id: id,
+
+            total: total
+
+        });
+
+
+    if (!start || !start.success) {
+
+        throw new Error(
+
+            start?.message ||
+
+            "فشل بدء رفع الصورة"
+
+        );
+
+    }
+
+
+    const token =
+        start.token;
+
+
+    for (
+        let i = 0;
+        i < total;
+        i++
+    ) {
+
+        const chunk =
+            imageData.substring(
+
+                i * chunkSize,
+
+                (i + 1) * chunkSize
+
+            );
+
+
+        const result =
+            await apiGet({
+
+                action: "photoChunk",
+
+                token: token,
+
+                index: i,
+
+                chunk: chunk
+
+            });
+
+
+        if (!result || !result.success) {
+
+            throw new Error(
+
+                result?.message ||
+
+                "فشل رفع الجزء رقم " +
+                (i + 1)
+
+            );
+
+        }
+
+    }
+
+
+    const finish =
+        await apiGet({
+
+            action: "photoFinish",
+
+            token: token
+
+        });
+
+
+    if (!finish || !finish.success) {
+
+        throw new Error(
+
+            finish?.message ||
+
+            "فشل تجميع الصورة"
+
+        );
+
+    }
+
+
+    return finish;
+
 }
+
 
 // ============================================================
 // EDIT
@@ -2167,7 +2001,7 @@ async function saveEdit() {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -2444,7 +2278,7 @@ async function togglePerson(id) {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -2507,7 +2341,7 @@ async function regenerateQR(id) {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -2649,7 +2483,7 @@ async function loadMeetings() {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -2682,255 +2516,142 @@ async function loadMeetings() {
 
 function renderMeetings() {
 
-    const table = document.getElementById("meetingsTable");
+    const table =
+        document.getElementById(
+            "meetingsTable"
+        );
+
+
     table.innerHTML = "";
 
-    if (!meetings.length) {
-        table.innerHTML = `
-            <tr>
-                <td colspan="7" style="text-align:center;padding:25px;color:#777;">
-                    لا توجد اجتماعات
-                </td>
-            </tr>`;
-        return;
-    }
 
-    meetings.forEach(function(meeting) {
+    meetings.forEach(
+        meeting => {
 
-        const row = document.createElement("tr");
+            const row =
+                document.createElement("tr");
 
-        const active = String(meeting.active || "yes").toLowerCase() === "yes";
-        const type = String(meeting.type || "once").toLowerCase();
-        const typeText = type === "weekly" ? "أسبوعي" : "مرة واحدة";
 
-        const nextAvailableDate =
-            meeting.nextAvailableDateISO ||
-            meeting.nextDateISO ||
-            meeting.nextAvailableDate ||
-            meeting.nextDate || "";
+            row.innerHTML = `
 
-        const cancelledDate =
-            meeting.nextCancelledDateISO ||
-            meeting.cancelledDateISO ||
-            meeting.nextCancelledDate ||
-            meeting.cancelledDate || "";
+<td>
+${escapeHTML(meeting.id)}
+</td>
 
-        const nextDateText = nextAvailableDate
-            ? formatDateArabic(nextAvailableDate)
-            : (cancelledDate ? "ملغي: " + formatDateArabic(cancelledDate) : "لا يوجد");
+<td>
+${escapeHTML(meeting.name)}
+</td>
 
-        let statusText = active ? "🟢 مفعل" : "🔴 معطل";
-        let statusClass = active ? "status-active" : "status-inactive";
+<td>
+${escapeHTML(meeting.date)}
+</td>
 
-        let actions = `
-            <button class="action edit" onclick="editMeeting('${escapeJS(meeting.id)}')">✏️ تعديل</button>
-            <button class="action ${active ? "disable" : "enable"}" onclick="toggleMeeting('${escapeJS(meeting.id)}')">
-                ${active ? "🔴 تعطيل" : "🟢 تفعيل"}
-            </button>
-            <button class="action delete" onclick="deleteMeeting('${escapeJS(meeting.id)}')">🗑️ حذف</button>
-        `;
+`;
 
-        if (nextAvailableDate) {
-            actions += `
-                <button class="action" style="background:#f59e0b;color:white;" onclick="cancelNextMeeting('${escapeJS(meeting.id)}','${escapeJS(nextAvailableDate)}')">
-                    ⛔ إلغاء الموعد القادم
-                </button>
-            `;
+
+            table.appendChild(row);
+
         }
+    );
 
-        if (cancelledDate) {
-            actions += `
-                <button class="action" style="background:#16a34a;color:white;" onclick="restoreMeeting('${escapeJS(meeting.id)}','${escapeJS(cancelledDate)}')">
-                    ↩️ استعادة الموعد
-                </button>
-            `;
-        }
-
-        row.innerHTML = `
-            <td>${escapeHTML(meeting.id)}</td>
-            <td><strong>${escapeHTML(meeting.name)}</strong></td>
-            <td>${typeText}</td>
-            <td>${escapeHTML(meeting.time || "—")}</td>
-            <td>
-                <span style="font-weight:bold;color:${nextAvailableDate ? '#15803d' : '#dc2626'};">
-                    ${escapeHTML(nextDateText)}
-                </span>
-            </td>
-            <td><span class="${statusClass}">${statusText}</span></td>
-            <td><div class="actions">${actions}</div></td>
-        `;
-
-        table.appendChild(row);
-    });
-}
-
-function formatDateArabic(value) {
-    if (!value) return "";
-    const s = String(value);
-    const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
-    return s;
-}
-
-function editMeeting(id) {
-    const meeting = meetings.find(m => String(m.id) === String(id));
-    if (!meeting) {
-        alert("❌ الاجتماع غير موجود");
-        return;
-    }
-
-    document.getElementById("editMeetingID").value = meeting.id || "";
-    document.getElementById("editMeetingName").value = meeting.name || "";
-    document.getElementById("editMeetingType").value = meeting.type || "once";
-    document.getElementById("editMeetingDate").value = meeting.dateStartISO || meeting.dateISO || meeting.date || "";
-    document.getElementById("editMeetingDay").value = String(meeting.day ?? 0);
-    document.getElementById("editMeetingTime").value = meeting.time || "";
-    document.getElementById("meetingEditModal").classList.add("show");
-}
-
-function closeMeetingEdit() {
-    document.getElementById("meetingEditModal").classList.remove("show");
-}
-
-async function saveMeetingEdit() {
-    const id = document.getElementById("editMeetingID").value;
-    const name = document.getElementById("editMeetingName").value.trim();
-    const type = document.getElementById("editMeetingType").value;
-    const dateStart = document.getElementById("editMeetingDate").value;
-    const day = document.getElementById("editMeetingDay").value;
-    const time = document.getElementById("editMeetingTime").value;
-
-    if (!id || !name || !dateStart || !time) {
-        showMessage("editMeetingMessage", "اكتب كل البيانات المطلوبة", "error");
-        return;
-    }
-
-    try {
-        const data = await apiGet({
-            action: "updateMeeting",
-            id: id,
-            name: name,
-            type: type,
-            dateStart: dateStart,
-            day: day,
-            time: time
-        });
-
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل تعديل الاجتماع");
-
-        closeMeetingEdit();
-        alert("✅ تم تعديل الاجتماع");
-        await loadMeetings();
-    } catch (error) {
-        showMessage("editMeetingMessage", "❌ " + error.message, "error");
-    }
-}
-
-async function toggleMeeting(id) {
-    try {
-        const data = await apiGet({ action: "toggleMeeting", id: id });
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل تغيير حالة الاجتماع");
-        await loadMeetings();
-    } catch (error) {
-        alert("❌ " + error.message);
-    }
-}
-
-async function deleteMeeting(id) {
-    const meeting = meetings.find(m => String(m.id) === String(id));
-    if (!meeting) return;
-
-    if (!confirm(`⚠️ هل أنت متأكد من حذف الاجتماع؟\n\n${meeting.name}`)) return;
-
-    try {
-        const data = await apiGet({ action: "deleteMeeting", id: id });
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل حذف الاجتماع");
-        alert("✅ تم حذف الاجتماع");
-        await loadMeetings();
-    } catch (error) {
-        alert("❌ " + error.message);
-    }
-}
-
-async function cancelNextMeeting(id, date) {
-    if (!id || !date) return;
-
-    if (!confirm(`هل أنت متأكد من إلغاء الموعد القادم؟\n\nالتاريخ: ${formatDateArabic(date)}`)) return;
-
-    try {
-        const data = await apiGet({
-            action: "cancelOccurrence",
-            id: id,
-            date: date
-        });
-
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل إلغاء الموعد");
-
-        alert("✅ تم إلغاء الموعد القادم");
-        await loadMeetings();
-    } catch (error) {
-        alert("❌ " + error.message);
-    }
-}
-
-async function restoreMeeting(id, date) {
-    if (!id || !date) return;
-
-    if (!confirm(`هل تريد استعادة الموعد؟\n\nالتاريخ: ${formatDateArabic(date)}`)) return;
-
-    try {
-        const data = await apiGet({
-            action: "restoreOccurrence",
-            id: id,
-            date: date
-        });
-
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل استعادة الموعد");
-
-        alert("✅ تم استعادة الموعد");
-        await loadMeetings();
-    } catch (error) {
-        alert("❌ " + error.message);
-    }
 }
 
 
 async function addMeeting() {
 
-    const name = document.getElementById("meetingName").value.trim();
-    const type = document.getElementById("meetingType").value;
-    const dateStart = document.getElementById("meetingDate").value;
-    const day = document.getElementById("meetingDay").value;
-    const time = document.getElementById("meetingTime").value;
+    const name =
+        document
+            .getElementById("meetingName")
+            .value
+            .trim();
 
-    if (!name || !dateStart || !time) {
-        showMessage("meetingMessage", "اكتب اسم الاجتماع والتاريخ والوقت", "error");
+
+    const date =
+        document
+            .getElementById("meetingDate")
+            .value;
+
+
+    if (!name || !date) {
+
+        showMessage(
+
+            "meetingMessage",
+
+            "اكتب اسم الاجتماع واختر التاريخ",
+
+            "error"
+
+        );
+
         return;
+
     }
+
 
     try {
-        const data = await apiGet({
-            action: "addMeeting",
-            name: name,
-            type: type,
-            dateStart: dateStart,
-            day: day,
-            time: time
-        });
 
-        if (!(data.success || data.ok)) throw new Error(data.message || "فشل إضافة الاجتماع");
+        const data =
+            await apiGet({
 
-        showMessage("meetingMessage", "✅ تم إضافة الاجتماع - " + data.id, "success");
+                action: "addMeeting",
 
-        document.getElementById("meetingName").value = "";
-        document.getElementById("meetingDate").value = "";
-        document.getElementById("meetingTime").value = "";
-        document.getElementById("meetingType").value = "once";
+                name: name,
+
+                date: date
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        showMessage(
+
+            "meetingMessage",
+
+            "✅ تم إضافة الاجتماع - " +
+            data.id,
+
+            "success"
+
+        );
+
+
+        document
+            .getElementById("meetingName")
+            .value = "";
+
+
+        document
+            .getElementById("meetingDate")
+            .value = "";
+
 
         await loadMeetings();
-    } catch (error) {
-        showMessage("meetingMessage", "❌ " + error.message, "error");
+
     }
+    catch(error) {
+
+        showMessage(
+
+            "meetingMessage",
+
+            "❌ " +
+            error.message,
+
+            "error"
+
+        );
+
+    }
+
 }
 
 
@@ -2950,7 +2671,7 @@ async function loadAttendance() {
             });
 
 
-        if (!(data.success || data.ok)) {
+        if (!data.success) {
 
             throw new Error(
                 data.message
@@ -3142,6 +2863,10 @@ async function init() {
 
 }
 
+
+init();
+
+    
 </script>
 
 </body>
