@@ -1,1 +1,2242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>نظام تسجيل الحضور</title>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- QR Scanner -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #f3f4f6;
+
+    color: #222;
+
+}
+
+.container {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    padding: 15px;
+
+}
+
+h1 {
+
+    text-align: center;
+
+    margin: 10px 0 20px;
+
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.08);
+
+}
+
+label {
+
+    display: block;
+
+    font-size: 18px;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+
+}
+
+select {
+
+    width: 100%;
+
+    padding: 15px;
+
+    font-size: 18px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    background: white;
+
+}
+
+button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 18px;
+
+    margin-top: 10px;
+
+    cursor: pointer;
+
+    background: #222;
+
+    color: white;
+
+}
+
+button:disabled {
+
+    background: #aaa;
+
+    cursor: not-allowed;
+
+}
+
+#reader {
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+}
+
+#result {
+
+    text-align: center;
+
+    font-size: 20px;
+
+    line-height: 1.7;
+
+    min-height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.success {
+
+    color: #16803c;
+
+}
+
+.error {
+
+    color: #c62828;
+
+}
+
+.warning {
+
+    color: #d97706;
+
+}
+
+.loading {
+
+    color: #555;
+
+}
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+}
+
+.stat {
+
+    background: #f8f8f8;
+
+    border-radius: 14px;
+
+    padding: 15px;
+
+    text-align: center;
+
+}
+
+.stat-number {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+
+}
+
+.stat-label {
+
+    font-size: 15px;
+
+    color: #666;
+
+}
+
+.last-person {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    line-height: 1.7;
+
+}
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: #f3f4f6;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+
+}
+
+.login-card {
+
+    width: 100%;
+
+    max-width: 420px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 30px 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,0.12);
+
+}
+
+.login-icon {
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+
+}
+
+.login-title {
+
+    font-size: 26px;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+
+}
+
+.login-text {
+
+    color: #666;
+
+    line-height: 1.7;
+
+    margin-bottom: 25px;
+
+}
+
+#googleLogin {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 15px;
+
+}
+
+#loginMessage {
+
+    margin-top: 20px;
+
+    line-height: 1.7;
+
+}
+
+.role-button {
+
+    background: #222;
+
+    margin-top: 10px;
+
+}
+
+.logout-button {
+
+    background: #b91c1c;
+
+    margin-top: 10px;
+
+}
+
+.top-user {
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #666;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================
+   ROLE SELECTION
+========================= */
+
+#roleScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: #f3f4f6;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9998;
+
+}
+
+.role-card {
+
+    width: 100%;
+
+    max-width: 420px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,0.12);
+
+}
+
+.role-card button {
+
+    background: #222;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     LOGIN SCREEN
+================================================== -->
+
+<div id="loginScreen">
+
+    <div class="login-card">
+
+        <div class="login-icon">
+            🔐
+        </div>
+
+        <div class="login-title">
+            نظام تسجيل الحضور
+        </div>
+
+        <div class="login-text">
+            يجب تسجيل الدخول باستخدام حساب Google
+            المصرح له باستخدام النظام.
+        </div>
+
+        <div id="googleLogin"></div>
+
+        <div id="loginMessage"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     ROLE SCREEN
+================================================== -->
+
+<div id="roleScreen" class="hidden">
+
+    <div class="role-card">
+
+        <div class="login-icon">
+            👤
+        </div>
+
+        <div class="login-title">
+            اختر نوع الدخول
+        </div>
+
+        <div class="login-text">
+            هذا الحساب لديه أكثر من صلاحية.
+            اختر الصلاحية التي تريد استخدامها.
+        </div>
+
+        <div id="roleButtons"></div>
+
+        <button
+            class="logout-button"
+            onclick="logout()">
+
+            تسجيل الخروج
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     MAIN APPLICATION
+================================================== -->
+
+<div
+    id="app"
+    class="container hidden">
+
+
+    <div class="top-user">
+
+        <span id="userEmail"></span>
+
+        <button
+            onclick="logout()"
+            style="
+                width:auto;
+                padding:8px 14px;
+                font-size:14px;
+                margin-top:5px;
+            ">
+
+            تسجيل الخروج
+
+        </button>
+
+    </div>
+
+
+    <h1>
+        📋 تسجيل الحضور
+    </h1>
+
+
+    <!-- =========================
+         اختيار الاجتماع
+    ========================= -->
+
+    <div class="card">
+
+        <label>
+            اختر الاجتماع
+        </label>
+
+        <select id="meeting">
+
+            <option value="">
+                ⏳ جاري تحميل الاجتماعات...
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =========================
+         الإحصائيات
+    ========================= -->
+
+    <div class="card">
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div
+                    class="stat-number"
+                    id="presentCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+
+                    الحاضرون
+
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div
+                    class="stat-number"
+                    id="totalCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+
+                    إجمالي الأشخاص
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         Scanner
+    ========================= -->
+
+    <div class="card">
+
+        <div id="reader"></div>
+
+
+        <button
+            id="startButton"
+            onclick="startScanner()">
+
+            📷 تشغيل الكاميرا
+
+        </button>
+
+
+        <button
+            id="stopButton"
+            onclick="stopScanner()"
+            disabled>
+
+            ⛔ إيقاف الكاميرا
+
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         النتيجة
+    ========================= -->
+
+    <div class="card">
+
+        <div id="result">
+
+            اختر الاجتماع ثم شغّل الكاميرا
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         آخر شخص
+    ========================= -->
+
+    <div class="card">
+
+        <div class="last-person">
+
+            <b>آخر تسجيل</b>
+
+            <div id="lastPerson">
+
+                لا يوجد تسجيل حتى الآن
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+// ==================================================
+// CONFIGURATION
+// ==================================================
+
+// Apps Script الجديد
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxN6kZVZYQD-gS0n8ovnQQZh7IW9KpFKiI2mrx6uYpVww0wFyJ-Wfw_NnX4YDedLg/exec";
+
+
+// Google OAuth Client ID
+const GOOGLE_CLIENT_ID =
+"869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.googleusercontent.com";
+
+
+// ==================================================
+// Variables
+// ==================================================
+
+let scanner = null;
+
+let scanning = false;
+
+let selectedMeeting = "";
+
+let processing = false;
+
+let attendanceData = [];
+
+let peopleData = [];
+
+let idToken = "";
+
+let currentAccount = null;
+
+let selectedRole = "";
+
+
+// ==================================================
+// Google Login
+// ==================================================
+
+function initializeGoogleLogin() {
+
+    if (
+        !window.google ||
+        !google.accounts ||
+        !google.accounts.id
+    ) {
+
+        setTimeout(
+            initializeGoogleLogin,
+            500
+        );
+
+        return;
+
+    }
+
+
+    google.accounts.id.initialize({
+
+        client_id:
+            GOOGLE_CLIENT_ID,
+
+        callback:
+            handleGoogleLogin,
+
+        auto_select:
+            false,
+
+        cancel_on_tap_outside:
+            true
+
+    });
+
+
+    google.accounts.id.renderButton(
+
+        document.getElementById(
+            "googleLogin"
+        ),
+
+        {
+
+            theme: "outline",
+
+            size: "large",
+
+            text: "signin_with",
+
+            shape: "rectangular",
+
+            width: 300
+
+        }
+
+    );
+
+}
+
+
+// ==================================================
+// Google Login Callback
+// ==================================================
+
+async function handleGoogleLogin(
+    response
+) {
+
+    const message =
+        document.getElementById(
+            "loginMessage"
+        );
+
+
+    message.innerHTML =
+        "<span class='loading'>⏳ جاري التحقق من الحساب...</span>";
+
+
+    try {
+
+        if (
+            !response ||
+            !response.credential
+        ) {
+
+            throw new Error(
+                "لم يتم الحصول على بيانات Google"
+            );
+
+        }
+
+
+        idToken =
+            response.credential;
+
+
+        const result =
+            await apiPost({
+
+                action:
+                    "authenticate",
+
+                idToken:
+                    idToken
+
+            });
+
+
+        if (!result.ok) {
+
+            throw new Error(
+                result.message ||
+                "فشل تسجيل الدخول"
+            );
+
+        }
+
+
+        if (
+            !result.authorized
+        ) {
+
+            throw new Error(
+                "هذا الحساب غير مصرح له باستخدام النظام."
+            );
+
+        }
+
+
+        currentAccount =
+            result;
+
+
+        document
+        .getElementById(
+            "userEmail"
+        )
+        .textContent =
+            "👤 " +
+            result.email;
+
+
+        const roles =
+            result.roles || [];
+
+
+        if (
+            roles.length === 0
+        ) {
+
+            throw new Error(
+                "الحساب ليس لديه أي صلاحية."
+            );
+
+        }
+
+
+        // لو عنده صلاحية واحدة فقط
+        if (
+            roles.length === 1
+        ) {
+
+            selectRole(
+                roles[0]
+            );
+
+            return;
+
+        }
+
+
+        // أكثر من صلاحية
+        showRoleSelection(
+            roles
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Login error:",
+            error
+        );
+
+
+        idToken = "";
+
+        currentAccount = null;
+
+
+        message.innerHTML =
+            "<div class='error'>" +
+            "❌ " +
+            escapeHTML(
+                error.message
+            ) +
+            "</div>";
+
+    }
+
+}
+
+
+// ==================================================
+// Role Selection
+// ==================================================
+
+function showRoleSelection(
+    roles
+) {
+
+    document
+    .getElementById(
+        "loginScreen"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "roleScreen"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+
+    const container =
+        document.getElementById(
+            "roleButtons"
+        );
+
+
+    container.innerHTML = "";
+
+
+    roles.forEach(
+        function(role) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "role-button";
+
+
+            button.textContent =
+                getRoleName(
+                    role
+                );
+
+
+            button.onclick =
+                function() {
+
+                    selectRole(
+                        role
+                    );
+
+                };
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// Role Name
+// ==================================================
+
+function getRoleName(
+    role
+) {
+
+    const names = {
+
+        Owner:
+            "👑 Owner",
+
+        Admin:
+            "⚙️ المدير",
+
+        Scanner:
+            "📷 تسجيل الحضور",
+
+        User:
+            "👤 المستخدم"
+
+    };
+
+
+    return (
+        names[role] ||
+        role
+    );
+
+}
+
+
+// ==================================================
+// Select Role
+// ==================================================
+
+function selectRole(
+    role
+) {
+
+    selectedRole =
+        role;
+
+
+    document
+    .getElementById(
+        "roleScreen"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "loginScreen"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "app"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+
+    showResult(
+        "⏳ جاري تحميل النظام...",
+        "loading"
+    );
+
+
+    init();
+
+}
+
+
+// ==================================================
+// Logout
+// ==================================================
+
+function logout() {
+
+    stopScanner();
+
+
+    idToken = "";
+
+    currentAccount = null;
+
+    selectedRole = "";
+
+    attendanceData = [];
+
+    peopleData = [];
+
+    selectedMeeting = "";
+
+
+    document
+    .getElementById(
+        "app"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "roleScreen"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "loginScreen"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "loginMessage"
+    )
+    .innerHTML = "";
+
+
+    initializeGoogleLogin();
+
+}
+
+
+// ==================================================
+// POST API
+// ==================================================
+
+async function apiPost(
+    params
+) {
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        params
+                    )
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "API HTTP Error: " +
+            response.status
+        );
+
+    }
+
+
+    const text =
+        await response.text();
+
+
+    let data;
+
+
+    try {
+
+        data =
+            JSON.parse(
+                text
+            );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Invalid API response:",
+            text
+        );
+
+        throw new Error(
+            "استجابة غير صحيحة من الخادم"
+        );
+
+    }
+
+
+    if (
+        data &&
+        data.error ===
+        "AUTH_REQUIRED"
+    ) {
+
+        logout();
+
+        throw new Error(
+            "انتهت جلسة تسجيل الدخول"
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+// ==================================================
+// تحميل الأشخاص
+// ==================================================
+
+async function loadPeople() {
+
+    try {
+
+        const data =
+            await apiPost({
+
+                action:
+                    "getPeople",
+
+                idToken:
+                    idToken
+
+            });
+
+
+        if (
+            !data.ok &&
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "People error"
+            );
+
+        }
+
+
+        peopleData =
+            data.people || [];
+
+
+        document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+            peopleData.filter(
+                function(person) {
+
+                    return (
+                        person.status ===
+                        "active"
+                    );
+
+                }
+            ).length;
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "People:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// تحميل الحضور
+// ==================================================
+
+async function loadAttendance() {
+
+    try {
+
+        const data =
+            await apiPost({
+
+                action:
+                    "getAttendance",
+
+                idToken:
+                    idToken
+
+            });
+
+
+        if (
+            !data.ok &&
+            !data.success
+        ) {
+
+            return;
+
+        }
+
+
+        attendanceData =
+            data.attendance || [];
+
+
+        updateCounter();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Attendance:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// تحديث عداد الحضور
+// ==================================================
+
+function updateCounter() {
+
+    if (!selectedMeeting) {
+
+        document
+        .getElementById(
+            "presentCount"
+        )
+        .textContent =
+            "0";
+
+        return;
+
+    }
+
+
+    const meeting =
+        getSelectedMeeting();
+
+
+    if (!meeting) {
+
+        return;
+
+    }
+
+
+    const count =
+        attendanceData.filter(
+            function(item) {
+
+                return (
+                    item.meetingId ===
+                    selectedMeeting ||
+
+                    item.MeetingID ===
+                    selectedMeeting ||
+
+                    item.meeting ===
+                    meeting.name ||
+
+                    item.MeetingName ===
+                    meeting.name
+                );
+
+            }
+        ).length;
+
+
+    document
+    .getElementById(
+        "presentCount"
+    )
+    .textContent =
+        count;
+
+}
+
+
+// ==================================================
+// الحصول على الاجتماع المختار
+// ==================================================
+
+function getSelectedMeeting() {
+
+    const select =
+        document.getElementById(
+            "meeting"
+        );
+
+
+    const option =
+        select.options[
+            select.selectedIndex
+        ];
+
+
+    if (!option) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        id:
+            option.value,
+
+        name:
+            option.textContent
+
+    };
+
+}
+
+
+// ==================================================
+// تحميل الاجتماعات
+// ==================================================
+
+async function loadMeetings() {
+
+    const select =
+        document.getElementById(
+            "meeting"
+        );
+
+
+    try {
+
+        const data =
+            await apiPost({
+
+                action:
+                    "getMeetings",
+
+                idToken:
+                    idToken
+
+            });
+
+
+        if (
+            !data.ok &&
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Meetings error"
+            );
+
+        }
+
+
+        const meetings =
+            data.meetings || [];
+
+
+        select.innerHTML =
+            '<option value="">اختر الاجتماع</option>';
+
+
+        meetings.forEach(
+            function(meeting) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    meeting.id ||
+                    meeting.ID;
+
+
+                option.textContent =
+                    meeting.name ||
+                    meeting.Name;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    }
+
+    catch(error) {
+
+        select.innerHTML =
+            '<option value="">❌ فشل تحميل الاجتماعات</option>';
+
+
+        showResult(
+            "❌ لا يمكن تحميل الاجتماعات",
+            "error"
+        );
+
+
+        console.error(
+            "Meetings:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// اختيار الاجتماع
+// ==================================================
+
+document
+.getElementById("meeting")
+.addEventListener(
+    "change",
+    async function() {
+
+        selectedMeeting =
+            this.value;
+
+
+        if (
+            selectedMeeting
+        ) {
+
+            await loadAttendance();
+
+
+            showResult(
+                "📷 اضغط تشغيل الكاميرا لبدء تسجيل الحضور",
+                "loading"
+            );
+
+        }
+
+        else {
+
+            document
+            .getElementById(
+                "presentCount"
+            )
+            .textContent =
+                "0";
+
+
+            showResult(
+                "اختر الاجتماع ثم شغّل الكاميرا",
+                "loading"
+            );
+
+        }
+
+    }
+);
+
+
+// ==================================================
+// تشغيل الكاميرا
+// ==================================================
+
+async function startScanner() {
+
+    if (!selectedMeeting) {
+
+        showResult(
+            "⚠️ اختر الاجتماع أولاً",
+            "warning"
+        );
+
+        return;
+
+    }
+
+
+    if (!idToken) {
+
+        showResult(
+            "❌ يجب تسجيل الدخول أولاً",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (scanning) {
+
+        return;
+
+    }
+
+
+    processing = false;
+
+
+    scanner =
+        new Html5Qrcode(
+            "reader"
+        );
+
+
+    try {
+
+        await scanner.start(
+
+            {
+                facingMode:
+                    "environment"
+            },
+
+            {
+
+                fps: 10,
+
+                qrbox: {
+
+                    width: 250,
+
+                    height: 250
+
+                }
+
+            },
+
+            function(decodedText) {
+
+                handleQRCode(
+                    decodedText
+                );
+
+            }
+
+        );
+
+
+        scanning = true;
+
+
+        document
+        .getElementById(
+            "startButton"
+        )
+        .disabled = true;
+
+
+        document
+        .getElementById(
+            "stopButton"
+        )
+        .disabled = false;
+
+
+        showResult(
+            "📷 وجّه الكاميرا إلى QR Code",
+            "loading"
+        );
+
+    }
+
+    catch(error) {
+
+        showResult(
+
+            "❌ لم يتم تشغيل الكاميرا" +
+            "<br><br>" +
+            escapeHTML(error),
+
+            "error"
+
+        );
+
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// QR تم قراءته
+// ==================================================
+
+async function handleQRCode(
+    qr
+) {
+
+    if (processing) {
+
+        return;
+
+    }
+
+
+    processing = true;
+
+
+    showResult(
+        "⏳ جاري تسجيل الحضور...",
+        "loading"
+    );
+
+
+    try {
+
+        const data =
+            await apiPost({
+
+                action:
+                    "scanAttendance",
+
+                idToken:
+                    idToken,
+
+                qr:
+                    qr
+
+            });
+
+
+        // ==========================
+        // نجاح
+        // ==========================
+
+        if (
+            data.ok ||
+            data.success
+        ) {
+
+            const personName =
+                data.name ||
+                data.personName ||
+                "";
+
+
+            const personId =
+                data.id ||
+                data.personId ||
+                "";
+
+
+            const meetingName =
+                data.meeting ||
+                data.meetingName ||
+                "";
+
+
+            const date =
+                data.date ||
+                data.meetingDate ||
+                "";
+
+
+            const time =
+                data.time ||
+                data.recordedTime ||
+                "";
+
+
+            showResult(
+
+                "✅ <b>تم تسجيل الحضور</b>" +
+
+                "<br><br>" +
+
+                "👤 " +
+                escapeHTML(
+                    personName
+                ) +
+
+                "<br>" +
+
+                "🆔 ID: " +
+                escapeHTML(
+                    personId
+                ) +
+
+                "<br>" +
+
+                "📅 " +
+                escapeHTML(
+                    date
+                ) +
+
+                "<br>" +
+
+                "⏰ " +
+                escapeHTML(
+                    time
+                ),
+
+                "success"
+
+            );
+
+
+            document
+            .getElementById(
+                "lastPerson"
+            )
+            .innerHTML =
+
+                "👤 <b>" +
+                escapeHTML(
+                    personName
+                ) +
+                "</b>" +
+
+                "<br>" +
+
+                "⏰ " +
+                escapeHTML(
+                    time
+                );
+
+
+            attendanceData.push({
+
+                id:
+                    personId,
+
+                name:
+                    personName,
+
+                meeting:
+                    meetingName,
+
+                date:
+                    date,
+
+                time:
+                    time
+
+            });
+
+
+            updateCounter();
+
+
+            playBeep(
+                800,
+                180
+            );
+
+        }
+
+
+        // ==========================
+        // مكرر
+        // ==========================
+
+        else if (
+            data.duplicate
+        ) {
+
+            showResult(
+
+                "⚠️ <b>مسجل بالفعل</b>" +
+
+                "<br><br>" +
+
+                "👤 " +
+
+                escapeHTML(
+                    data.name ||
+                    data.personName ||
+                    ""
+                ) +
+
+                "<br>" +
+
+                "⏰ وقت التسجيل: " +
+
+                escapeHTML(
+                    data.oldTime ||
+                    ""
+                ),
+
+                "warning"
+
+            );
+
+
+            playBeep(
+                400,
+                250
+            );
+
+        }
+
+
+        // ==========================
+        // شخص غير مفعل
+        // ==========================
+
+        else if (
+            data.inactive
+        ) {
+
+            showResult(
+
+                "🚫 <b>الشخص غير مفعل</b>" +
+
+                "<br><br>" +
+
+                escapeHTML(
+                    data.message ||
+                    ""
+                ),
+
+                "error"
+
+            );
+
+
+            playBeep(
+                250,
+                400
+            );
+
+        }
+
+
+        // ==========================
+        // خطأ
+        // ==========================
+
+        else {
+
+            showResult(
+
+                "❌ " +
+                escapeHTML(
+                    data.message ||
+                    "حدث خطأ"
+                ),
+
+                "error"
+
+            );
+
+
+            playBeep(
+                250,
+                400
+            );
+
+        }
+
+    }
+
+    catch(error) {
+
+        showResult(
+
+            "❌ حدث خطأ أثناء الاتصال بقاعدة البيانات" +
+            "<br><br>" +
+            escapeHTML(
+                error.message
+            ),
+
+            "error"
+
+        );
+
+
+        console.error(
+            error
+        );
+
+
+        playBeep(
+            250,
+            400
+        );
+
+    }
+
+
+    setTimeout(
+
+        function() {
+
+            processing = false;
+
+
+            if (scanning) {
+
+                showResult(
+                    "📷 جاهز لمسح QR التالي",
+                    "loading"
+                );
+
+            }
+
+        },
+
+        2000
+
+    );
+
+}
+
+
+// ==================================================
+// صوت التنبيه
+// ==================================================
+
+function playBeep(
+    frequency,
+    duration
+) {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.frequency.value =
+            frequency;
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        gain.gain.value =
+            0.15;
+
+
+        oscillator.start();
+
+
+        setTimeout(
+            function() {
+
+                oscillator.stop();
+
+                audioContext.close();
+
+            },
+            duration
+        );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Audio error",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// إيقاف Scanner
+// ==================================================
+
+async function stopScanner() {
+
+    if (
+        scanner &&
+        scanning
+    ) {
+
+        try {
+
+            await scanner.stop();
+
+            await scanner.clear();
+
+        }
+
+        catch(error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    scanning = false;
+
+    processing = false;
+
+
+    document
+    .getElementById(
+        "startButton"
+    )
+    .disabled = false;
+
+
+    document
+    .getElementById(
+        "stopButton"
+    )
+    .disabled = true;
+
+
+    showResult(
+        "📷 تم إيقاف الكاميرا",
+        "loading"
+    );
+
+}
+
+
+// ==================================================
+// عرض النتيجة
+// ==================================================
+
+function showResult(
+    message,
+    type
+) {
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+
+    result.innerHTML =
+        "<div class='" +
+        type +
+        "'>" +
+        message +
+        "</div>";
+
+}
+
+
+// ==================================================
+// حماية HTML
+// ==================================================
+
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text == null
+            ? ""
+            : String(text);
+
+
+    return div.innerHTML;
+
+}
+
+
+// ==================================================
+// بدء التشغيل
+// ==================================================
+
+async function init() {
+
+    await loadPeople();
+
+    await loadMeetings();
+
+    await loadAttendance();
+
+
+    showResult(
+        "📷 اختر الاجتماع ثم شغّل الكاميرا",
+        "loading"
+    );
+
+}
+
+
+// ==================================================
+// تشغيل Google Login
+// ==================================================
+
+initializeGoogleLogin();
+
+
+</script>
+
+
+</body>
+
+</html>
