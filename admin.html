@@ -1,10 +1,12 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>لوحة الإدارة - نظام الحضور</title>
 
@@ -53,7 +55,7 @@ body {
 
 .nav {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 10px;
     margin-bottom: 20px;
 }
@@ -83,7 +85,7 @@ body {
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3,1fr);
     gap: 15px;
     margin-bottom: 20px;
 }
@@ -121,12 +123,6 @@ body {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.form-grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 15px;
 }
 
@@ -171,11 +167,9 @@ input[type="file"] {
     background: #6b7280;
     color: white;
     border: none;
-    padding: 12px 18px;
-    border-radius: 10px;
+    padding: 10px 15px;
+    border-radius: 9px;
     cursor: pointer;
-    font-size: 15px;
-    margin-top: 15px;
 }
 
 .search {
@@ -266,6 +260,11 @@ th {
     color: white;
 }
 
+.stop {
+    background: #6b7280;
+    color: white;
+}
+
 .status-active {
     color: #15803d;
     font-weight: bold;
@@ -278,11 +277,6 @@ th {
 
 .status-cancelled {
     color: #dc2626;
-    font-weight: bold;
-}
-
-.status-ok {
-    color: #15803d;
     font-weight: bold;
 }
 
@@ -319,72 +313,6 @@ th {
     border-radius: 14px;
     object-fit: cover;
     border: 2px solid #ddd;
-}
-
-.info-box {
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 12px;
-}
-
-.meeting-type-info {
-    color: #6b7280;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-.badge {
-    display: inline-block;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.badge-weekly {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.badge-once {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.badge-active {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.badge-inactive {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.badge-cancelled {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.message {
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 15px;
-    display: none;
-}
-
-.message.success {
-    display: block;
-    background: #dcfce7;
-    color: #166534;
-}
-
-.message.error {
-    display: block;
-    background: #fee2e2;
-    color: #991b1b;
 }
 
 .modal {
@@ -429,6 +357,25 @@ th {
     margin: auto;
 }
 
+.message {
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 15px;
+    display: none;
+}
+
+.message.success {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
 .big-photo {
     width: 100%;
     max-width: 350px;
@@ -439,13 +386,45 @@ th {
     border-radius: 15px;
 }
 
-.empty {
-    text-align: center;
-    padding: 25px;
-    color: #777;
+.meeting-next {
+    color: #15803d;
+    font-weight: bold;
 }
 
-@media(max-width:700px) {
+.meeting-cancelled {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.meeting-info {
+    line-height: 1.8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 2px;
+}
+
+.badge-green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-red {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-gray {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+@media(max-width:800px) {
 
     .container {
         padding: 12px;
@@ -464,11 +443,10 @@ th {
     }
 
     .nav {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
     }
 
-    .form-grid,
-    .form-grid-3 {
+    .form-grid {
         grid-template-columns: 1fr;
     }
 
@@ -476,17 +454,19 @@ th {
         flex-wrap: wrap;
     }
 
-    th,
-    td {
-        padding: 9px;
-        font-size: 13px;
-    }
 }
 
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- ============================================================
+HEADER
+============================================================ -->
 
 <div class="header">
 
@@ -502,6 +482,11 @@ th {
 
 
 <div class="container">
+
+
+<!-- ============================================================
+NAV
+============================================================ -->
 
 <div class="nav">
 
@@ -528,6 +513,10 @@ th {
 
 </div>
 
+
+<!-- ============================================================
+DASHBOARD
+============================================================ -->
 
 <section
     id="dashboard"
@@ -588,13 +577,17 @@ th {
 
         <p>
             من هنا يمكنك إدارة الأشخاص والاجتماعات
-            ومتابعة سجل الحضور.
+            ومتابعة الحضور.
         </p>
 
     </div>
 
 </section>
 
+
+<!-- ============================================================
+PEOPLE
+============================================================ -->
 
 <section
     id="people"
@@ -604,6 +597,7 @@ th {
     <div class="card">
 
         <h2>➕ إضافة شخص</h2>
+
 
         <div class="form-grid">
 
@@ -641,6 +635,7 @@ th {
                     accept="image/*"
                     onchange="previewAddPhoto()">
 
+
                 <div
                     id="addPhotoPreview"
                     class="photo-preview">
@@ -675,15 +670,17 @@ th {
     </div>
 
 
+
     <div class="card">
 
         <h2>👥 قائمة الأشخاص</h2>
+
 
         <input
             id="peopleSearch"
             class="search"
             type="text"
-            placeholder="🔎 بحث بالاسم أو ID أو الهاتف..."
+            placeholder="🔎 بحث..."
             oninput="renderPeople()">
 
 
@@ -706,6 +703,7 @@ th {
 
                 </thead>
 
+
                 <tbody
                     id="peopleTable">
                 </tbody>
@@ -719,9 +717,14 @@ th {
 </section>
 
 
+<!-- ============================================================
+MEETINGS
+============================================================ -->
+
 <section
     id="meetings"
     class="section">
+
 
     <div class="card">
 
@@ -730,6 +733,7 @@ th {
 
         <div class="form-grid">
 
+
             <div>
 
                 <label>اسم الاجتماع</label>
@@ -737,7 +741,7 @@ th {
                 <input
                     id="meetingName"
                     type="text"
-                    placeholder="مثال: اجتماع الشباب">
+                    placeholder="اجتماع الشباب">
 
             </div>
 
@@ -748,7 +752,7 @@ th {
 
                 <select
                     id="meetingType"
-                    onchange="meetingTypeChanged()">
+                    onchange="updateMeetingForm()">
 
                     <option value="once">
                         مرة واحدة
@@ -765,15 +769,13 @@ th {
 
             <div>
 
-                <label>تاريخ البداية</label>
+                <label>
+                    تاريخ البداية
+                </label>
 
                 <input
-                    id="addMeetingDate"
+                    id="meetingDate"
                     type="date">
-
-                <div class="meeting-type-info">
-                    للاجتماع الأسبوعي: هذا هو تاريخ بداية الاجتماع.
-                </div>
 
             </div>
 
@@ -781,18 +783,40 @@ th {
             <div
                 id="meetingDayContainer">
 
-                <label>اليوم</label>
+                <label>
+                    يوم الاجتماع الأسبوعي
+                </label>
 
                 <select
                     id="meetingDay">
 
-                    <option value="0">الأحد</option>
-                    <option value="1">الاثنين</option>
-                    <option value="2">الثلاثاء</option>
-                    <option value="3">الأربعاء</option>
-                    <option value="4">الخميس</option>
-                    <option value="5">الجمعة</option>
-                    <option value="6">السبت</option>
+                    <option value="0">
+                        الأحد
+                    </option>
+
+                    <option value="1">
+                        الاثنين
+                    </option>
+
+                    <option value="2">
+                        الثلاثاء
+                    </option>
+
+                    <option value="3">
+                        الأربعاء
+                    </option>
+
+                    <option value="4">
+                        الخميس
+                    </option>
+
+                    <option value="5">
+                        الجمعة
+                    </option>
+
+                    <option value="6">
+                        السبت
+                    </option>
 
                 </select>
 
@@ -801,7 +825,9 @@ th {
 
             <div>
 
-                <label>الوقت</label>
+                <label>
+                    وقت الاجتماع
+                </label>
 
                 <input
                     id="meetingTime"
@@ -809,20 +835,11 @@ th {
 
             </div>
 
-        </div>
-
-
-        <div
-            id="meetingDayInfo"
-            class="info-box">
-
-            الاجتماع الأسبوعي سيتكرر تلقائيًا كل أسبوع في اليوم والوقت المحددين.
 
         </div>
 
 
         <button
-            id="addMeetingButton"
             class="primary"
             onclick="addMeeting()">
 
@@ -839,17 +856,10 @@ th {
     </div>
 
 
+
     <div class="card">
 
         <h2>📅 الاجتماعات</h2>
-
-
-        <input
-            id="meetingsSearch"
-            class="search"
-            type="text"
-            placeholder="🔎 بحث عن اجتماع..."
-            oninput="renderMeetings()">
 
 
         <div class="table-container">
@@ -863,16 +873,16 @@ th {
                         <th>ID</th>
                         <th>الاسم</th>
                         <th>النوع</th>
-                        <th>البداية</th>
                         <th>اليوم</th>
                         <th>الوقت</th>
-                        <th>الحالة</th>
                         <th>الموعد القادم</th>
+                        <th>الحالة</th>
                         <th>الإجراءات</th>
 
                     </tr>
 
                 </thead>
+
 
                 <tbody
                     id="meetingsTable">
@@ -887,13 +897,19 @@ th {
 </section>
 
 
+<!-- ============================================================
+ATTENDANCE
+============================================================ -->
+
 <section
     id="attendance"
     class="section">
 
+
     <div class="card">
 
         <h2>📋 سجل الحضور</h2>
+
 
         <input
             id="attendanceSearch"
@@ -921,6 +937,7 @@ th {
 
                 </thead>
 
+
                 <tbody
                     id="attendanceTable">
                 </tbody>
@@ -936,6 +953,10 @@ th {
 </div>
 
 
+<!-- ============================================================
+EDIT PERSON MODAL
+============================================================ -->
+
 <div
     id="editModal"
     class="modal">
@@ -948,7 +969,11 @@ th {
             ×
         </button>
 
-        <h2>✏️ تعديل بيانات الشخص</h2>
+
+        <h2>
+            ✏️ تعديل بيانات الشخص
+        </h2>
+
 
         <input
             type="hidden"
@@ -1016,65 +1041,9 @@ th {
 </div>
 
 
-<div
-    id="qrModal"
-    class="modal">
-
-    <div class="modal-content">
-
-        <button
-            class="close"
-            onclick="closeQR()">
-            ×
-        </button>
-
-        <h2 id="qrName"></h2>
-
-        <div
-            id="qrCode"
-            class="qr-container">
-        </div>
-
-        <p
-            id="qrValue"
-            style="text-align:center;font-weight:bold;">
-        </p>
-
-        <button
-            class="primary"
-            onclick="downloadQR()">
-            ⬇️ تحميل QR
-        </button>
-
-    </div>
-
-</div>
-
-
-<div
-    id="photoModal"
-    class="modal">
-
-    <div class="modal-content">
-
-        <button
-            class="close"
-            onclick="closePhoto()">
-            ×
-        </button>
-
-        <h2 id="photoName"></h2>
-
-        <img
-            id="bigPhoto"
-            class="big-photo"
-            src=""
-            alt="صورة الشخص">
-
-    </div>
-
-</div>
-
+<!-- ============================================================
+EDIT MEETING MODAL
+============================================================ -->
 
 <div
     id="editMeetingModal"
@@ -1084,18 +1053,24 @@ th {
 
         <button
             class="close"
-            onclick="closeEditMeeting()">
+            onclick="closeMeetingEdit()">
             ×
         </button>
 
-        <h2>✏️ تعديل الاجتماع</h2>
+
+        <h2>
+            ✏️ تعديل الاجتماع
+        </h2>
+
 
         <input
             type="hidden"
             id="editMeetingID">
 
 
-        <label>اسم الاجتماع</label>
+        <label>
+            اسم الاجتماع
+        </label>
 
         <input
             id="editMeetingName"
@@ -1105,11 +1080,13 @@ th {
         <br><br>
 
 
-        <label>نوع الاجتماع</label>
+        <label>
+            نوع الاجتماع
+        </label>
 
         <select
             id="editMeetingType"
-            onchange="editMeetingTypeChanged()">
+            onchange="updateEditMeetingForm()">
 
             <option value="once">
                 مرة واحدة
@@ -1125,7 +1102,9 @@ th {
         <br><br>
 
 
-        <label>تاريخ البداية</label>
+        <label>
+            تاريخ البداية
+        </label>
 
         <input
             id="editMeetingDate"
@@ -1137,18 +1116,40 @@ th {
 
         <div id="editMeetingDayContainer">
 
-            <label>اليوم</label>
+            <label>
+                يوم الاجتماع
+            </label>
 
             <select
                 id="editMeetingDay">
 
-                <option value="0">الأحد</option>
-                <option value="1">الاثنين</option>
-                <option value="2">الثلاثاء</option>
-                <option value="3">الأربعاء</option>
-                <option value="4">الخميس</option>
-                <option value="5">الجمعة</option>
-                <option value="6">السبت</option>
+                <option value="0">
+                    الأحد
+                </option>
+
+                <option value="1">
+                    الاثنين
+                </option>
+
+                <option value="2">
+                    الثلاثاء
+                </option>
+
+                <option value="3">
+                    الأربعاء
+                </option>
+
+                <option value="4">
+                    الخميس
+                </option>
+
+                <option value="5">
+                    الجمعة
+                </option>
+
+                <option value="6">
+                    السبت
+                </option>
 
             </select>
 
@@ -1158,7 +1159,9 @@ th {
         <br>
 
 
-        <label>الوقت</label>
+        <label>
+            وقت الاجتماع
+        </label>
 
         <input
             id="editMeetingTime"
@@ -1175,15 +1178,6 @@ th {
         </button>
 
 
-        <button
-            class="secondary"
-            onclick="closeEditMeeting()">
-
-            إلغاء
-
-        </button>
-
-
         <div
             id="editMeetingMessage"
             class="message">
@@ -1193,6 +1187,10 @@ th {
 
 </div>
 
+
+<!-- ============================================================
+CANCEL MEETING MODAL
+============================================================ -->
 
 <div
     id="cancelMeetingModal"
@@ -1206,7 +1204,22 @@ th {
             ×
         </button>
 
-        <h2>❌ إلغاء موعد الاجتماع</h2>
+
+        <h2>
+            ❌ إلغاء الموعد
+        </h2>
+
+
+        <p>
+            سيتم إلغاء هذا الموعد فقط.
+        </p>
+
+
+        <p
+            id="cancelMeetingInfo"
+            class="meeting-info">
+        </p>
+
 
         <input
             type="hidden"
@@ -1217,20 +1230,9 @@ th {
             id="cancelMeetingDate">
 
 
-        <div
-            id="cancelMeetingInfo"
-            class="info-box">
-        </div>
-
-
-        <p>
-            سيتم إلغاء هذا الموعد فقط، ولن يتم إلغاء الاجتماعات الأسبوعية القادمة.
-        </p>
-
-
         <button
             class="primary"
-            onclick="confirmCancelOccurrence()">
+            onclick="confirmCancelMeeting()">
 
             ❌ تأكيد إلغاء الموعد
 
@@ -1241,87 +1243,215 @@ th {
 </div>
 
 
+<!-- ============================================================
+QR MODAL
+============================================================ -->
+
+<div
+    id="qrModal"
+    class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="close"
+            onclick="closeQR()">
+            ×
+        </button>
+
+
+        <h2 id="qrName"></h2>
+
+
+        <div
+            id="qrCode"
+            class="qr-container">
+        </div>
+
+
+        <p
+            id="qrValue"
+            style="text-align:center;font-weight:bold;">
+        </p>
+
+
+        <button
+            class="primary"
+            onclick="downloadQR()">
+
+            ⬇️ تحميل QR
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+PHOTO MODAL
+============================================================ -->
+
+<div
+    id="photoModal"
+    class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="close"
+            onclick="closePhoto()">
+            ×
+        </button>
+
+
+        <h2 id="photoName"></h2>
+
+
+        <img
+            id="bigPhoto"
+            class="big-photo"
+            src=""
+            alt="صورة الشخص">
+
+    </div>
+
+</div>
+
+
 <script>
+
+
+// ============================================================
+// API
+// ============================================================
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwQUN1qxVtmgOZ2ODINmkbbmEZTTzJkfsQirwz9nuzz7nJ2t9Nayr_MkB-f6Pptklbn/exec";
 
+
+// ============================================================
+// DATA
+// ============================================================
+
 let people = [];
+
 let meetings = [];
+
 let attendance = [];
 
 let currentQR = "";
 
 
+// ============================================================
+// API JSONP
+// ============================================================
+
 function apiGet(params) {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(
+        function(resolve,reject) {
 
-        const callbackName =
-            "cb_" +
-            Date.now() +
-            "_" +
-            Math.floor(Math.random() * 100000);
-
-        const script =
-            document.createElement("script");
-
-        const query =
-            new URLSearchParams(params);
-
-        query.append(
-            "callback",
-            callbackName
-        );
-
-        script.src =
-            API_URL +
-            "?" +
-            query.toString();
-
-        window[callbackName] =
-            function(data) {
-
-                resolve(data);
-                cleanup();
-
-            };
-
-        script.onerror =
-            function() {
-
-                reject(
-                    new Error("فشل الاتصال بالسيرفر")
+            const callbackName =
+                "cb_" +
+                Date.now() +
+                "_" +
+                Math.floor(
+                    Math.random()*100000
                 );
 
-                cleanup();
 
-            };
+            const script =
+                document.createElement("script");
 
-        document.body.appendChild(script);
 
-        function cleanup() {
+            const query =
+                new URLSearchParams(params);
 
-            delete window[callbackName];
 
-            script.remove();
+            query.append(
+                "callback",
+                callbackName
+            );
+
+
+            script.src =
+                API_URL +
+                "?" +
+                query.toString();
+
+
+            let finished = false;
+
+
+            window[callbackName] =
+                function(data) {
+
+                    if (finished) {
+                        return;
+                    }
+
+                    finished = true;
+
+                    resolve(data);
+
+                    cleanup();
+
+                };
+
+
+            script.onerror =
+                function() {
+
+                    if (finished) {
+                        return;
+                    }
+
+                    finished = true;
+
+                    reject(
+                        new Error(
+                            "فشل الاتصال بالسيرفر"
+                        )
+                    );
+
+                    cleanup();
+
+                };
+
+
+            document.body
+                .appendChild(script);
+
+
+            function cleanup() {
+
+                delete window[callbackName];
+
+                if (script.parentNode) {
+                    script.remove();
+                }
+
+            }
 
         }
-
-    });
+    );
 
 }
 
+
+// ============================================================
+// NAVIGATION
+// ============================================================
 
 function showSection(section, button) {
 
     document
         .querySelectorAll(".section")
-        .forEach(function(el) {
-
-            el.classList.remove("active");
-
-        });
+        .forEach(
+            el =>
+                el.classList.remove("active")
+        );
 
 
     document
@@ -1331,11 +1461,10 @@ function showSection(section, button) {
 
     document
         .querySelectorAll(".nav button")
-        .forEach(function(el) {
-
-            el.classList.remove("active");
-
-        });
+        .forEach(
+            el =>
+                el.classList.remove("active")
+        );
 
 
     button.classList.add("active");
@@ -1345,9 +1474,11 @@ function showSection(section, button) {
         loadPeople();
     }
 
+
     if (section === "meetings") {
         loadMeetings();
     }
+
 
     if (section === "attendance") {
         loadAttendance();
@@ -1355,6 +1486,10 @@ function showSection(section, button) {
 
 }
 
+
+// ============================================================
+// PEOPLE
+// ============================================================
 
 async function loadPeople() {
 
@@ -1384,6 +1519,7 @@ async function loadPeople() {
             people.length;
 
     }
+
     catch(error) {
 
         console.error(error);
@@ -1395,15 +1531,23 @@ async function loadPeople() {
 }
 
 
+// ============================================================
+// RENDER PEOPLE
+// ============================================================
+
 function renderPeople() {
 
     const table =
-        document.getElementById("peopleTable");
+        document.getElementById(
+            "peopleTable"
+        );
 
 
     const search =
         document
-            .getElementById("peopleSearch")
+            .getElementById(
+                "peopleSearch"
+            )
             .value
             .toLowerCase();
 
@@ -1411,278 +1555,198 @@ function renderPeople() {
     table.innerHTML = "";
 
 
-    const filtered =
-        people.filter(function(person) {
+    people
+        .filter(
+            person =>
 
-            return (
-
-                String(person.name || "")
+                String(person.name)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                String(person.id || "")
+                String(person.id)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                String(person.phone || "")
+                String(person.phone)
                     .toLowerCase()
                     .includes(search)
 
-            );
+        )
+        .forEach(
+            person => {
 
-        });
-
-
-    if (!filtered.length) {
-
-        table.innerHTML =
-            '<tr><td colspan="6" class="empty">لا توجد بيانات</td></tr>';
-
-        return;
-
-    }
+                const row =
+                    document.createElement("tr");
 
 
-    filtered.forEach(function(person) {
-
-        const row =
-            document.createElement("tr");
+                const active =
+                    person.status === "active";
 
 
-        const active =
-            person.status === "active";
+                let photoHTML = "";
 
 
-        let photoHTML = "";
+                if (person.photo) {
+
+                    photoHTML = `
+
+                        <img
+                            class="person-photo"
+                            src="${escapeHTML(person.photo)}"
+                            alt="صورة"
+                            onclick="showPhoto(
+                                '${escapeJS(person.name)}',
+                                '${escapeJS(person.photo)}'
+                            )"
+                            style="cursor:pointer">
+
+                    `;
+
+                }
+
+                else {
+
+                    photoHTML = `
+
+                        <span
+                            class="no-photo"
+                            title="لا توجد صورة">
+
+                            👤
+
+                        </span>
+
+                    `;
+
+                }
 
 
-        if (person.photo) {
+                row.innerHTML = `
 
-            photoHTML = `
-                <img
-                    class="person-photo"
-                    src="${escapeHTML(person.photo)}"
-                    alt="صورة"
-                    onclick="showPhoto(
-                        '${escapeJS(person.name)}',
-                        '${escapeJS(person.photo)}'
-                    )"
-                    style="cursor:pointer"
-                >
-            `;
+                    <td>
+                        ${photoHTML}
+                    </td>
 
-        }
-        else {
+                    <td>
+                        ${escapeHTML(person.id)}
+                    </td>
 
-            photoHTML = `
-                <span
-                    class="no-photo"
-                    title="لا توجد صورة">
-                    👤
-                </span>
-            `;
+                    <td>
+                        ${escapeHTML(person.name)}
+                    </td>
 
-        }
+                    <td>
+                        ${escapeHTML(person.phone)}
+                    </td>
 
+                    <td>
 
-        row.innerHTML = `
-
-            <td>${photoHTML}</td>
-
-            <td>${escapeHTML(person.id)}</td>
-
-            <td>${escapeHTML(person.name)}</td>
-
-            <td>${escapeHTML(person.phone)}</td>
-
-            <td>
-
-                <span class="${
-                    active
-                    ? "status-active"
-                    : "status-inactive"
-                }">
-
-                    ${
-                        active
-                        ? "🟢 مفعل"
-                        : "🔴 معطل"
-                    }
-
-                </span>
-
-            </td>
-
-            <td>
-
-                <div class="actions">
-
-                    <button
-                        class="action qr"
-                        onclick="showQR(
-                            '${escapeJS(person.name)}',
-                            '${escapeJS(person.qr)}'
-                        )">
-                        🔲 QR
-                    </button>
-
-                    <button
-                        class="action photo-btn"
-                        onclick="showPhoto(
-                            '${escapeJS(person.name)}',
-                            '${escapeJS(person.photo || "")}'
-                        )">
-                        📷 صورة
-                    </button>
-
-                    <button
-                        class="action edit"
-                        onclick="openEdit(
-                            '${escapeJS(person.id)}'
-                        )">
-                        ✏️ تعديل
-                    </button>
-
-                    <button
-                        class="action ${
+                        <span class="${
                             active
-                            ? "disable"
-                            : "enable"
-                        }"
-                        onclick="togglePerson(
-                            '${escapeJS(person.id)}'
-                        )">
+                                ? "status-active"
+                                : "status-inactive"
+                        }">
 
-                        ${
-                            active
-                            ? "🔴 تعطيل"
-                            : "🟢 تفعيل"
-                        }
+                            ${
+                                active
+                                    ? "🟢 مفعل"
+                                    : "🔴 معطل"
+                            }
 
-                    </button>
+                        </span>
 
-                    <button
-                        class="action regenerate"
-                        onclick="regenerateQR(
-                            '${escapeJS(person.id)}'
-                        )">
-                        🔄 QR جديد
-                    </button>
+                    </td>
 
-                    <button
-                        class="action delete"
-                        onclick="deletePerson(
-                            '${escapeJS(person.id)}'
-                        )">
-                        🗑️ حذف
-                    </button>
+                    <td>
 
-                </div>
+                        <div class="actions">
 
-            </td>
+                            <button
+                                class="action qr"
+                                onclick="showQR(
+                                    '${escapeJS(person.name)}',
+                                    '${escapeJS(person.qr)}'
+                                )">
 
-        `;
+                                🔲 QR
+
+                            </button>
 
 
-        table.appendChild(row);
+                            <button
+                                class="action photo-btn"
+                                onclick="showPhoto(
+                                    '${escapeJS(person.name)}',
+                                    '${escapeJS(person.photo || "")}'
+                                )">
 
-    });
+                                📷 صورة
+
+                            </button>
+
+
+                            <button
+                                class="action edit"
+                                onclick="openEdit(
+                                    '${escapeJS(person.id)}'
+                                )">
+
+                                ✏️ تعديل
+
+                            </button>
+
+
+                            <button
+                                class="action ${
+                                    active
+                                        ? "disable"
+                                        : "enable"
+                                }"
+                                onclick="togglePerson(
+                                    '${escapeJS(person.id)}'
+                                )">
+
+                                ${
+                                    active
+                                        ? "🔴 تعطيل"
+                                        : "🟢 تفعيل"
+                                }
+
+                            </button>
+
+
+                            <button
+                                class="action delete"
+                                onclick="deletePerson(
+                                    '${escapeJS(person.id)}'
+                                )">
+
+                                🗑️ حذف
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
 
 }
 
 
-async function deletePerson(id) {
-
-    const person =
-        people.find(function(p) {
-
-            return p.id === id;
-
-        });
-
-
-    if (!person) {
-
-        alert("الشخص غير موجود");
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-
-            "⚠️ تأكيد حذف الشخص\n\n" +
-
-            "الاسم: " +
-            person.name +
-            "\n" +
-
-            "ID: " +
-            person.id +
-            "\n\n" +
-
-            "سيتم حذف الشخص من قائمة الأشخاص " +
-            "وصورته من Google Drive.\n\n" +
-
-            "سجل الحضور القديم لن يتم حذفه.\n\n" +
-
-            "هل أنت متأكد؟"
-
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "deletePerson",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        alert(
-            "✅ تم حذف الشخص: " +
-            data.name
-        );
-
-
-        await loadPeople();
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ فشل حذف الشخص\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
+// ============================================================
+// ADD PERSON
+// ============================================================
 
 async function addPerson() {
 
@@ -1701,7 +1765,9 @@ async function addPerson() {
 
 
     const photoInput =
-        document.getElementById("personPhoto");
+        document.getElementById(
+            "personPhoto"
+        );
 
 
     const photoFile =
@@ -1759,6 +1825,10 @@ async function addPerson() {
         let photoMessage = "";
 
 
+        /*
+         * رفع الصورة مباشرة باستخدام API الحالي
+         */
+
         if (photoFile) {
 
             button.textContent =
@@ -1772,9 +1842,9 @@ async function addPerson() {
 
 
             const upload =
-                await uploadPhotoInChunks(
-                    data.id,
-                    compressed
+                await uploadPhoto(
+                    compressed,
+                    data.name + ".jpg"
                 );
 
 
@@ -1787,6 +1857,35 @@ async function addPerson() {
             }
 
 
+            /*
+             * تحديث الشخص بالرابط
+             */
+
+            const update =
+                await apiGet({
+
+                    action: "updatePerson",
+
+                    id: data.id,
+
+                    name: data.name,
+
+                    phone: phone,
+
+                    photo: upload.url
+
+                });
+
+
+            if (!update.success) {
+
+                throw new Error(
+                    update.message
+                );
+
+            }
+
+
             photoMessage =
                 " + تم رفع الصورة";
 
@@ -1794,7 +1893,6 @@ async function addPerson() {
 
 
         showMessage(
-
             "personMessage",
 
             "✅ تم إضافة الشخص - ID: " +
@@ -1802,17 +1900,20 @@ async function addPerson() {
             photoMessage,
 
             "success"
-
         );
 
 
         document
-            .getElementById("personName")
+            .getElementById(
+                "personName"
+            )
             .value = "";
 
 
         document
-            .getElementById("personPhone")
+            .getElementById(
+                "personPhone"
+            )
             .value = "";
 
 
@@ -1820,7 +1921,9 @@ async function addPerson() {
 
 
         document
-            .getElementById("addPhotoPreview")
+            .getElementById(
+                "addPhotoPreview"
+            )
             .style.display = "none";
 
 
@@ -1833,20 +1936,20 @@ async function addPerson() {
         );
 
     }
+
     catch(error) {
 
         showMessage(
-
             "personMessage",
 
             "❌ " +
             error.message,
 
             "error"
-
         );
 
     }
+
     finally {
 
         button.disabled = false;
@@ -1859,262 +1962,356 @@ async function addPerson() {
 }
 
 
-function compressImage(file) {
+// ============================================================
+// UPLOAD PHOTO
+// ============================================================
 
-    return new Promise(function(resolve, reject) {
+async function uploadPhoto(
+    imageData,
+    fileName
+) {
 
-        const reader =
-            new FileReader();
+    /*
+     * إزالة data:image/jpeg;base64,
+     */
 
-
-        reader.onload =
-            function(event) {
-
-                const img =
-                    new Image();
-
-
-                img.onload =
-                    function() {
-
-                        const maxSize = 600;
-
-                        let width = img.width;
-                        let height = img.height;
+    const base64 =
+        imageData
+            .split(",")
+            .pop();
 
 
-                        if (
-                            width > maxSize ||
-                            height > maxSize
-                        ) {
+    return await apiGet({
 
-                            if (width > height) {
+        action: "uploadPhoto",
 
-                                height =
-                                    Math.round(
-                                        height *
-                                        maxSize /
-                                        width
-                                    );
+        name: fileName,
 
-                                width =
-                                    maxSize;
+        base64: base64,
 
-                            }
-                            else {
-
-                                width =
-                                    Math.round(
-                                        width *
-                                        maxSize /
-                                        height
-                                    );
-
-                                height =
-                                    maxSize;
-
-                            }
-
-                        }
-
-
-                        const canvas =
-                            document.createElement(
-                                "canvas"
-                            );
-
-
-                        canvas.width =
-                            width;
-
-                        canvas.height =
-                            height;
-
-
-                        const ctx =
-                            canvas.getContext(
-                                "2d"
-                            );
-
-
-                        ctx.drawImage(
-                            img,
-                            0,
-                            0,
-                            width,
-                            height
-                        );
-
-
-                        const result =
-                            canvas.toDataURL(
-                                "image/jpeg",
-                                0.65
-                            );
-
-
-                        resolve(result);
-
-                    };
-
-
-                img.onerror =
-                    function() {
-
-                        reject(
-                            new Error(
-                                "تعذر قراءة الصورة"
-                            )
-                        );
-
-                    };
-
-
-                img.src =
-                    event.target.result;
-
-            };
-
-
-        reader.onerror =
-            function() {
-
-                reject(
-                    new Error(
-                        "تعذر قراءة الملف"
-                    )
-                );
-
-            };
-
-
-        reader.readAsDataURL(file);
+        mimeType: "image/jpeg"
 
     });
 
 }
 
 
-async function uploadPhotoInChunks(id, imageData) {
+// ============================================================
+// COMPRESS IMAGE
+// ============================================================
 
-    const chunkSize = 900;
+function compressImage(file) {
 
+    return new Promise(
+        function(resolve,reject) {
 
-    const total =
-        Math.ceil(
-            imageData.length / chunkSize
-        );
-
-
-    const start =
-        await apiGet({
-
-            action: "photoStart",
-
-            id: id,
-
-            total: total
-
-        });
+            const reader =
+                new FileReader();
 
 
-    if (!start || !start.success) {
+            reader.onload =
+                function(event) {
 
-        throw new Error(
-
-            start?.message ||
-            "فشل بدء رفع الصورة"
-
-        );
-
-    }
+                    const img =
+                        new Image();
 
 
-    const token =
-        start.token;
+                    img.onload =
+                        function() {
+
+                            const maxSize =
+                                600;
 
 
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-        const chunk =
-            imageData.substring(
-
-                i * chunkSize,
-
-                (i + 1) * chunkSize
-
-            );
+                            let width =
+                                img.width;
 
 
-        const result =
-            await apiGet({
-
-                action: "photoChunk",
-
-                token: token,
-
-                index: i,
-
-                chunk: chunk
-
-            });
+                            let height =
+                                img.height;
 
 
-        if (!result || !result.success) {
+                            if (
+                                width > maxSize ||
+                                height > maxSize
+                            ) {
 
-            throw new Error(
+                                if (
+                                    width > height
+                                ) {
 
-                result?.message ||
+                                    height =
+                                        Math.round(
+                                            height *
+                                            maxSize /
+                                            width
+                                        );
 
-                "فشل رفع الجزء رقم " +
-                (i + 1)
+                                    width =
+                                        maxSize;
 
-            );
+                                }
+
+                                else {
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            maxSize /
+                                            height
+                                        );
+
+                                    height =
+                                        maxSize;
+
+                                }
+
+                            }
+
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+
+                            canvas.width =
+                                width;
+
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            ctx.drawImage(
+                                img,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            const result =
+                                canvas.toDataURL(
+                                    "image/jpeg",
+                                    0.60
+                                );
+
+
+                            resolve(result);
+
+                        };
+
+
+                    img.onerror =
+                        function() {
+
+                            reject(
+                                new Error(
+                                    "تعذر قراءة الصورة"
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        event.target.result;
+
+                };
+
+
+            reader.onerror =
+                function() {
+
+                    reject(
+                        new Error(
+                            "تعذر قراءة الملف"
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
 
         }
-
-    }
-
-
-    const finish =
-        await apiGet({
-
-            action: "photoFinish",
-
-            token: token
-
-        });
-
-
-    if (!finish || !finish.success) {
-
-        throw new Error(
-
-            finish?.message ||
-            "فشل تجميع الصورة"
-
-        );
-
-    }
-
-
-    return finish;
+    );
 
 }
 
 
+// ============================================================
+// DELETE PERSON
+// ============================================================
+
+async function deletePerson(id) {
+
+    const person =
+        people.find(
+            p => p.id === id
+        );
+
+
+    if (!person) {
+
+        alert(
+            "الشخص غير موجود"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            "⚠️ هل أنت متأكد من حذف الشخص؟\n\n" +
+            "الاسم: " +
+            person.name +
+            "\n" +
+            "ID: " +
+            person.id
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "deletePerson",
+
+                id: id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        alert(
+            "✅ تم حذف الشخص"
+        );
+
+
+        await loadPeople();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "❌ فشل الحذف\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// TOGGLE PERSON
+// ============================================================
+
+async function togglePerson(id) {
+
+    const person =
+        people.find(
+            p => p.id === id
+        );
+
+
+    if (!person) {
+        return;
+    }
+
+
+    const actionText =
+        person.status === "active"
+            ? "تعطيل"
+            : "تفعيل";
+
+
+    if (
+        !confirm(
+            "هل تريد " +
+            actionText +
+            " الشخص؟"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "togglePerson",
+
+                id: id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        await loadPeople();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "❌ " +
+            error.message
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// EDIT PERSON
+// ============================================================
+
 function openEdit(id) {
 
     const person =
-        people.find(function(p) {
-
-            return p.id === id;
-
-        });
+        people.find(
+            p => p.id === id
+        );
 
 
     if (!person) {
@@ -2146,7 +2343,7 @@ function openEdit(id) {
         );
 
 
-    const previewImage =
+    const image =
         document.getElementById(
             "editPhotoPreviewImage"
         );
@@ -2154,13 +2351,14 @@ function openEdit(id) {
 
     if (person.photo) {
 
-        previewImage.src =
+        image.src =
             person.photo;
 
         preview.style.display =
             "block";
 
     }
+
     else {
 
         preview.style.display =
@@ -2170,12 +2368,16 @@ function openEdit(id) {
 
 
     document
-        .getElementById("editPhoto")
+        .getElementById(
+            "editPhoto"
+        )
         .value = "";
 
 
     document
-        .getElementById("editModal")
+        .getElementById(
+            "editModal"
+        )
         .classList.add("show");
 
 }
@@ -2184,30 +2386,42 @@ function openEdit(id) {
 function closeEdit() {
 
     document
-        .getElementById("editModal")
+        .getElementById(
+            "editModal"
+        )
         .classList.remove("show");
 
 }
 
 
+// ============================================================
+// SAVE EDIT PERSON
+// ============================================================
+
 async function saveEdit() {
 
     const id =
         document
-            .getElementById("editID")
+            .getElementById(
+                "editID"
+            )
             .value;
 
 
     const name =
         document
-            .getElementById("editName")
+            .getElementById(
+                "editName"
+            )
             .value
             .trim();
 
 
     const phone =
         document
-            .getElementById("editPhone")
+            .getElementById(
+                "editPhone"
+            )
             .value
             .trim();
 
@@ -2222,10 +2436,21 @@ async function saveEdit() {
         photoInput.files[0];
 
 
-    const button =
-        document.getElementById(
-            "saveEditButton"
+    const person =
+        people.find(
+            p => p.id === id
         );
+
+
+    if (!person) {
+
+        alert(
+            "الشخص غير موجود"
+        );
+
+        return;
+
+    }
 
 
     if (!name) {
@@ -2241,6 +2466,12 @@ async function saveEdit() {
     }
 
 
+    const button =
+        document.getElementById(
+            "saveEditButton"
+        );
+
+
     try {
 
         button.disabled = true;
@@ -2249,27 +2480,8 @@ async function saveEdit() {
             "⏳ جاري الحفظ...";
 
 
-        const data =
-            await apiGet({
-
-                action: "updatePerson",
-
-                id: id,
-
-                name: name,
-
-                phone: phone
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
+        let photo =
+            person.photo || "";
 
 
         if (photoFile) {
@@ -2285,9 +2497,9 @@ async function saveEdit() {
 
 
             const upload =
-                await uploadPhotoInChunks(
-                    id,
-                    compressed
+                await uploadPhoto(
+                    compressed,
+                    name + ".jpg"
                 );
 
 
@@ -2299,10 +2511,40 @@ async function saveEdit() {
 
             }
 
+
+            photo =
+                upload.url;
+
+        }
+
+
+        const data =
+            await apiGet({
+
+                action: "updatePerson",
+
+                id: id,
+
+                name: name,
+
+                phone: phone,
+
+                photo: photo
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
         }
 
 
         closeEdit();
+
 
         await loadPeople();
 
@@ -2312,20 +2554,20 @@ async function saveEdit() {
         );
 
     }
+
     catch(error) {
 
         showMessage(
-
             "editMessage",
 
             "❌ " +
             error.message,
 
             "error"
-
         );
 
     }
+
     finally {
 
         button.disabled = false;
@@ -2337,6 +2579,10 @@ async function saveEdit() {
 
 }
 
+
+// ============================================================
+// PHOTO PREVIEW
+// ============================================================
 
 function previewAddPhoto() {
 
@@ -2443,6 +2689,10 @@ function previewEditPhoto() {
 }
 
 
+// ============================================================
+// PHOTO VIEW
+// ============================================================
+
 function showPhoto(name, photo) {
 
     if (!photo) {
@@ -2457,19 +2707,25 @@ function showPhoto(name, photo) {
 
 
     document
-        .getElementById("photoName")
+        .getElementById(
+            "photoName"
+        )
         .textContent =
         name;
 
 
     document
-        .getElementById("bigPhoto")
+        .getElementById(
+            "bigPhoto"
+        )
         .src =
         photo;
 
 
     document
-        .getElementById("photoModal")
+        .getElementById(
+            "photoModal"
+        )
         .classList.add("show");
 
 }
@@ -2478,160 +2734,36 @@ function showPhoto(name, photo) {
 function closePhoto() {
 
     document
-        .getElementById("photoModal")
+        .getElementById(
+            "photoModal"
+        )
         .classList.remove("show");
 
 }
 
 
-async function togglePerson(id) {
-
-    const person =
-        people.find(function(p) {
-
-            return p.id === id;
-
-        });
-
-
-    if (!person) {
-        return;
-    }
-
-
-    const actionText =
-        person.status === "active"
-            ? "تعطيل"
-            : "تفعيل";
-
-
-    if (
-        !confirm(
-            "هل تريد " +
-            actionText +
-            " الشخص؟"
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "togglePerson",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        await loadPeople();
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
-
-async function regenerateQR(id) {
-
-    const person =
-        people.find(function(p) {
-
-            return p.id === id;
-
-        });
-
-
-    if (!person) {
-        return;
-    }
-
-
-    if (
-        !confirm(
-            "⚠️ هل تريد إنشاء QR جديد؟\n\n" +
-            "الـQR القديم لن يعمل بعد ذلك."
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "regenerateQR",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        await loadPeople();
-
-
-        showQR(
-            data.name,
-            data.qr
-        );
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
+// ============================================================
+// QR
+// ============================================================
 
 function showQR(name, qr) {
 
-    currentQR = qr;
+    currentQR =
+        qr;
 
 
     document
-        .getElementById("qrName")
+        .getElementById(
+            "qrName"
+        )
         .textContent =
         name;
 
 
     document
-        .getElementById("qrValue")
+        .getElementById(
+            "qrValue"
+        )
         .textContent =
         qr;
 
@@ -2642,23 +2774,31 @@ function showQR(name, qr) {
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     new QRCode(
         container,
         {
+
             text: qr,
+
             width: 240,
+
             height: 240,
+
             correctLevel:
                 QRCode.CorrectLevel.H
+
         }
     );
 
 
     document
-        .getElementById("qrModal")
+        .getElementById(
+            "qrModal"
+        )
         .classList.add("show");
 
 }
@@ -2667,7 +2807,9 @@ function showQR(name, qr) {
 function closeQR() {
 
     document
-        .getElementById("qrModal")
+        .getElementById(
+            "qrModal"
+        )
         .classList.remove("show");
 
 }
@@ -2677,8 +2819,12 @@ function downloadQR() {
 
     const canvas =
         document
-            .getElementById("qrCode")
-            .querySelector("canvas");
+            .getElementById(
+                "qrCode"
+            )
+            .querySelector(
+                "canvas"
+            );
 
 
     if (!canvas) {
@@ -2708,80 +2854,43 @@ function downloadQR() {
 
 
 // ============================================================
-// MEETINGS - TYPE
+// MEETINGS
 // ============================================================
 
-function meetingTypeChanged() {
+function updateMeetingForm() {
 
     const type =
         document
-            .getElementById("meetingType")
+            .getElementById(
+                "meetingType"
+            )
             .value;
 
 
-    const dayContainer =
+    const container =
         document.getElementById(
             "meetingDayContainer"
         );
 
 
-    const info =
-        document.getElementById(
-            "meetingDayInfo"
-        );
-
-
     if (type === "weekly") {
 
-        dayContainer.style.display =
+        container.style.display =
             "block";
 
-        info.textContent =
-            "الاجتماع الأسبوعي سيتكرر تلقائيًا كل أسبوع في اليوم والوقت المحددين.";
-
-        const dateInput =
-            document.getElementById(
-                "addMeetingDate"
-            );
-
-
-        if (dateInput && dateInput.value) {
-
-            const date =
-                new Date(
-                    dateInput.value +
-                    "T12:00:00"
-                );
-
-
-            if (!isNaN(date.getTime())) {
-
-                document
-                    .getElementById("meetingDay")
-                    .value =
-                    String(
-                        date.getDay()
-                    );
-
-            }
-
-        }
-
     }
+
     else {
 
-        dayContainer.style.display =
+        container.style.display =
             "none";
-
-        info.textContent =
-            "الاجتماع سيحدث مرة واحدة فقط في التاريخ والوقت المحددين.";
 
     }
 
 }
 
 
-function editMeetingTypeChanged() {
+function updateEditMeetingForm() {
 
     const type =
         document
@@ -2803,6 +2912,7 @@ function editMeetingTypeChanged() {
             "block";
 
     }
+
     else {
 
         container.style.display =
@@ -2811,58 +2921,6 @@ function editMeetingTypeChanged() {
     }
 
 }
-
-
-// ============================================================
-// DATE -> DAY
-// ============================================================
-
-document
-    .getElementById("addMeetingDate")
-    .addEventListener(
-        "change",
-        function() {
-
-            const type =
-                document
-                    .getElementById(
-                        "meetingType"
-                    )
-                    .value;
-
-
-            if (type !== "weekly") {
-                return;
-            }
-
-
-            if (!this.value) {
-                return;
-            }
-
-
-            const date =
-                new Date(
-                    this.value +
-                    "T12:00:00"
-                );
-
-
-            if (!isNaN(date.getTime())) {
-
-                document
-                    .getElementById(
-                        "meetingDay"
-                    )
-                    .value =
-                    String(
-                        date.getDay()
-                    );
-
-            }
-
-        }
-    );
 
 
 // ============================================================
@@ -2875,7 +2933,9 @@ async function loadMeetings() {
 
         const data =
             await apiGet({
+
                 action: "meetings"
+
             });
 
 
@@ -2896,11 +2956,14 @@ async function loadMeetings() {
 
 
         document
-            .getElementById("meetingsCount")
+            .getElementById(
+                "meetingsCount"
+            )
             .textContent =
             meetings.length;
 
     }
+
     catch(error) {
 
         console.error(error);
@@ -2916,7 +2979,7 @@ async function loadMeetings() {
 
 
 // ============================================================
-// RENDER MEETINGS - UPDATED
+// RENDER MEETINGS
 // ============================================================
 
 function renderMeetings() {
@@ -2927,349 +2990,310 @@ function renderMeetings() {
         );
 
 
-    const search =
-        document
-            .getElementById(
-                "meetingsSearch"
-            )
-            .value
-            .toLowerCase();
+    table.innerHTML =
+        "";
 
 
-    table.innerHTML = "";
+    meetings.forEach(
+        meeting => {
 
 
-    const filtered =
-        meetings.filter(function(meeting) {
-
-            return (
-
-                String(meeting.name || "")
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                String(meeting.id || "")
-                    .toLowerCase()
-                    .includes(search)
-
-            );
-
-        });
-
-
-    if (!filtered.length) {
-
-        table.innerHTML =
-            '<tr><td colspan="9" class="empty">لا توجد اجتماعات</td></tr>';
-
-        return;
-
-    }
-
-
-    filtered.forEach(function(meeting) {
-
-        const row =
-            document.createElement("tr");
-
-
-        const active =
-            isMeetingActive(
-                meeting.status
-            );
-
-
-        const type =
-            String(
-                meeting.type || ""
-            ).toLowerCase();
-
-
-        const dayName =
-            getArabicDayName(
-                meeting.day
-            );
-
-
-        /*
-         * الموعد القادم المتاح فعلياً
-         * بعد تخطي أي موعد ملغي
-         */
-        const nextAvailableDate =
-            meeting.nextAvailableDateISO ||
-            meeting.nextDateISO ||
-            meeting.nextAvailableDate ||
-            meeting.nextDate ||
-            "";
-
-
-        /*
-         * تاريخ الموعد الملغي
-         *
-         * backend يجب أن يرجع:
-         * nextCancelledDateISO
-         */
-        const cancelledDate =
-            meeting.nextCancelledDateISO ||
-            meeting.cancelledDateISO ||
-            "";
-
-
-        /*
-         * هل يوجد موعد ملغي يحتاج استرجاع؟
-         */
-        const hasCancelled =
-            !!cancelledDate;
-
-
-        let nextHTML = "—";
-
-
-        /*
-         * عرض الموعد القادم المتاح
-         */
-        if (nextAvailableDate) {
-
-            nextHTML =
-                escapeHTML(
-                    formatDisplayDate(
-                        nextAvailableDate
-                    )
+            const row =
+                document.createElement(
+                    "tr"
                 );
 
-        }
-
-
-        /*
-         * لو يوجد موعد ملغي
-         * نظهره أيضاً تحت الموعد القادم
-         */
-        if (hasCancelled) {
-
-            nextHTML +=
-
-                '<br>' +
-
-                '<span class="badge badge-cancelled">' +
-
-                '❌ ملغي: ' +
-
-                escapeHTML(
-                    formatDisplayDate(
-                        cancelledDate
-                    )
-                ) +
-
-                '</span>';
-
-        }
-
-
-        /*
-         * أزرار الإجراءات
-         */
-        let occurrenceButtons = "";
-
-
-        if (active) {
 
             /*
-             * لو فيه موعد ملغي:
-             * نظهر زر الاسترجاع
+             * الموعد المتاح القادم
              */
-            if (hasCancelled) {
 
-                occurrenceButtons += `
-
-                    <button
-                        class="action restore"
-                        onclick="restoreOccurrence(
-                            '${escapeJS(meeting.id)}',
-                            '${escapeJS(cancelledDate)}'
-                        )">
-
-                        🔄 استعادة الموعد
-
-                    </button>
-
-                `;
-
-            }
+            const nextAvailableDate =
+                meeting.nextAvailableDateISO ||
+                meeting.nextDateISO ||
+                meeting.nextAvailableDate ||
+                meeting.nextDate ||
+                "";
 
 
             /*
-             * زر إلغاء الموعد القادم
-             *
-             * نستخدم الموعد المتاح وليس الموعد الملغي
+             * الموعد الملغي
              */
+
+            const cancelledDate =
+                meeting.nextCancelledDateISO ||
+                meeting.cancelledDateISO ||
+                meeting.nextCancelledDate ||
+                meeting.cancelledDate ||
+                "";
+
+
+            const hasCancelled =
+                !!cancelledDate;
+
+
+            let nextHTML =
+                "";
+
+
             if (nextAvailableDate) {
 
-                occurrenceButtons += `
+                nextHTML = `
 
-                    <button
-                        class="action cancel"
-                        onclick="openCancelMeeting(
-                            '${escapeJS(meeting.id)}',
-                            '${escapeJS(nextAvailableDate)}',
-                            '${escapeJS(meeting.name)}'
-                        )">
+                    <span class="meeting-next">
 
-                        ❌ إلغاء الموعد القادم
+                        🟢 ${formatDisplayDate(
+                            nextAvailableDate
+                        )}
 
-                    </button>
+                    </span>
 
                 `;
 
             }
 
-        }
+            else {
+
+                nextHTML = `
+
+                    <span class="badge badge-gray">
+
+                        لا يوجد
+
+                    </span>
+
+                `;
+
+            }
 
 
-        row.innerHTML = `
+            /*
+             * لو في موعد ملغي
+             */
 
-            <td>
-                ${escapeHTML(meeting.id)}
-            </td>
+            if (hasCancelled) {
 
+                nextHTML += `
 
-            <td>
+                    <br>
 
-                <strong>
-                    ${escapeHTML(meeting.name)}
-                </strong>
+                    <span class="meeting-cancelled">
 
-            </td>
+                        ❌ ملغي:
+                        ${formatDisplayDate(
+                            cancelledDate
+                        )}
 
+                    </span>
 
-            <td>
+                `;
 
-                ${
-                    type === "weekly"
-
-                    ? '<span class="badge badge-weekly">أسبوعي</span>'
-
-                    : '<span class="badge badge-once">مرة واحدة</span>'
-                }
-
-            </td>
+            }
 
 
-            <td>
+            const active =
+                meeting.active === true ||
+                meeting.activeValue === "yes";
 
-                ${escapeHTML(
-                    formatDisplayDate(
-                        meeting.dateStart ||
-                        meeting.date ||
+
+            const typeText =
+                meeting.type === "weekly"
+                    ? "أسبوعي"
+                    : "مرة واحدة";
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHTML(
+                        meeting.id
+                    )}
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        ${escapeHTML(
+                            meeting.name
+                        )}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    <span class="badge badge-gray">
+
+                        ${typeText}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        meeting.dayName || ""
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        meeting.formattedTime ||
+                        meeting.time ||
                         ""
-                    )
-                )}
+                    )}
 
-            </td>
-
-
-            <td>
-
-                ${
-                    type === "weekly"
-
-                    ? escapeHTML(dayName)
-
-                    : "—"
-                }
-
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                ${escapeHTML(
-                    formatDisplayTime(
-                        meeting.time
-                    )
-                )}
+                    ${nextHTML}
 
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                ${
-                    active
+                    ${
+                        active
 
-                    ? '<span class="badge badge-active">🟢 مفعل</span>'
+                            ? `
 
-                    : '<span class="badge badge-inactive">🔴 معطل</span>'
-                }
+                                <span class="badge badge-green">
 
-            </td>
+                                    🟢 فعال
 
+                                </span>
 
-            <td>
-                ${nextHTML}
-            </td>
+                              `
 
+                            : `
 
-            <td>
+                                <span class="badge badge-red">
 
-                <div class="actions">
+                                    🔴 متوقف
 
+                                </span>
 
-                    <button
-                        class="action edit"
-                        onclick="openMeetingEdit(
-                            '${escapeJS(meeting.id)}'
-                        )">
+                              `
+                    }
 
-                        ✏️ تعديل
-
-                    </button>
+                </td>
 
 
-                    <button
-                        class="action ${
-                            active
-                            ? "disable"
-                            : "enable"
-                        }"
-                        onclick="toggleMeeting(
-                            '${escapeJS(meeting.id)}'
-                        )">
+                <td>
+
+                    <div class="actions">
+
+
+                        <button
+                            class="action edit"
+                            onclick="openMeetingEdit(
+                                '${escapeJS(meeting.id)}'
+                            )">
+
+                            ✏️ تعديل
+
+                        </button>
+
 
                         ${
-                            active
-                            ? "🔴 تعطيل"
-                            : "🟢 تفعيل"
+                            hasCancelled
+
+                            ?
+
+                            `
+
+                            <button
+                                class="action restore"
+                                onclick="restoreMeetingOccurrence(
+                                    '${escapeJS(meeting.id)}',
+                                    '${escapeJS(cancelledDate)}'
+                                )">
+
+                                ↩️ استرجاع
+
+                            </button>
+
+                            `
+
+                            :
+
+                            nextAvailableDate
+
+                            ?
+
+                            `
+
+                            <button
+                                class="action cancel"
+                                onclick="openCancelMeeting(
+                                    '${escapeJS(meeting.id)}',
+                                    '${escapeJS(nextAvailableDate)}'
+                                )">
+
+                                ❌ كنسلة الموعد القادم
+
+                            </button>
+
+                            `
+
+                            :
+
+                            ""
+
                         }
 
-                    </button>
+
+                        <button
+                            class="action ${
+                                active
+                                    ? "stop"
+                                    : "enable"
+                            }"
+                            onclick="toggleMeeting(
+                                '${escapeJS(meeting.id)}'
+                            )">
+
+                            ${
+                                active
+                                    ? "⏸️ إيقاف"
+                                    : "▶️ تفعيل"
+                            }
+
+                        </button>
 
 
-                    ${occurrenceButtons}
+                        <button
+                            class="action delete"
+                            onclick="deleteMeeting(
+                                '${escapeJS(meeting.id)}'
+                            )">
+
+                            🗑️ حذف
+
+                        </button>
 
 
-                    <button
-                        class="action delete"
-                        onclick="deleteMeeting(
-                            '${escapeJS(meeting.id)}'
-                        )">
+                    </div>
 
-                        🗑️ حذف
+                </td>
 
-                    </button>
+            `;
 
 
-                </div>
+            table.appendChild(row);
 
-            </td>
-
-        `;
-
-
-        table.appendChild(row);
-
-    });
+        }
+    );
 
 }
 
@@ -3282,89 +3306,59 @@ async function addMeeting() {
 
     const name =
         document
-            .getElementById("meetingName")
+            .getElementById(
+                "meetingName"
+            )
             .value
             .trim();
 
 
     const type =
         document
-            .getElementById("meetingType")
+            .getElementById(
+                "meetingType"
+            )
             .value;
 
 
-    const dateInput =
-        document.getElementById(
-            "addMeetingDate"
-        );
-
-
     const dateStart =
-        dateInput
-            ? dateInput.value
-            : "";
+        document
+            .getElementById(
+                "meetingDate"
+            )
+            .value;
 
 
     const day =
         document
-            .getElementById("meetingDay")
+            .getElementById(
+                "meetingDay"
+            )
             .value;
 
 
     const time =
         document
-            .getElementById("meetingTime")
+            .getElementById(
+                "meetingTime"
+            )
             .value;
 
 
-    if (!name) {
-
-        showMessage(
-            "meetingMessage",
-            "اكتب اسم الاجتماع",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if (!dateStart) {
-
-        showMessage(
-            "meetingMessage",
-            "اختر تاريخ البداية",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if (!time) {
-
-        showMessage(
-            "meetingMessage",
-            "اختر وقت الاجتماع",
-            "error"
-        );
-
-        return;
-
-    }
-
-
     if (
-        type === "weekly" &&
-        (day === "" || day === null)
+        !name ||
+        !dateStart ||
+        !time
     ) {
 
         showMessage(
+
             "meetingMessage",
-            "اختر يوم الاجتماع الأسبوعي",
+
+            "اكتب اسم الاجتماع واختر التاريخ والوقت",
+
             "error"
+
         );
 
         return;
@@ -3372,19 +3366,7 @@ async function addMeeting() {
     }
 
 
-    const button =
-        document.getElementById(
-            "addMeetingButton"
-        );
-
-
     try {
-
-        button.disabled = true;
-
-        button.textContent =
-            "⏳ جاري إضافة الاجتماع...";
-
 
         const data =
             await apiGet({
@@ -3397,10 +3379,7 @@ async function addMeeting() {
 
                 dateStart: dateStart,
 
-                day:
-                    type === "weekly"
-                    ? day
-                    : "",
+                day: day,
 
                 time: time
 
@@ -3429,23 +3408,30 @@ async function addMeeting() {
 
 
         document
-            .getElementById("meetingName")
+            .getElementById(
+                "meetingName"
+            )
             .value = "";
 
 
         document
-            .getElementById("addMeetingDate")
+            .getElementById(
+                "meetingDate"
+            )
             .value = "";
 
 
         document
-            .getElementById("meetingTime")
+            .getElementById(
+                "meetingTime"
+            )
             .value = "";
 
 
         await loadMeetings();
 
     }
+
     catch(error) {
 
         showMessage(
@@ -3460,34 +3446,24 @@ async function addMeeting() {
         );
 
     }
-    finally {
-
-        button.disabled = false;
-
-        button.textContent =
-            "➕ إضافة الاجتماع";
-
-    }
 
 }
 
 
+// ============================================================
+// EDIT MEETING
+// ============================================================
+
 function openMeetingEdit(id) {
 
     const meeting =
-        meetings.find(function(m) {
-
-            return m.id === id;
-
-        });
+        meetings.find(
+            m => m.id === id
+        );
 
 
     if (!meeting) {
-
-        alert("الاجتماع غير موجود");
-
         return;
-
     }
 
 
@@ -3520,11 +3496,9 @@ function openMeetingEdit(id) {
             "editMeetingDate"
         )
         .value =
-        normalizeDateForInput(
-            meeting.dateStart ||
-            meeting.date ||
-            ""
-        );
+        meeting.startDate ||
+        meeting.date ||
+        "";
 
 
     document
@@ -3532,9 +3506,10 @@ function openMeetingEdit(id) {
             "editMeetingDay"
         )
         .value =
-        String(
-            meeting.day ?? ""
-        );
+        meeting.day !== null &&
+        meeting.day !== undefined
+            ? meeting.day
+            : 0;
 
 
     document
@@ -3543,33 +3518,40 @@ function openMeetingEdit(id) {
         )
         .value =
         normalizeTimeForInput(
-            meeting.time ||
-            ""
+            meeting.time
         );
 
 
-    editMeetingTypeChanged();
+    updateEditMeetingForm();
 
 
     document
         .getElementById(
             "editMeetingModal"
         )
-        .classList.add("show");
+        .classList.add(
+            "show"
+        );
 
 }
 
 
-function closeEditMeeting() {
+function closeMeetingEdit() {
 
     document
         .getElementById(
             "editMeetingModal"
         )
-        .classList.remove("show");
+        .classList.remove(
+            "show"
+        );
 
 }
 
+
+// ============================================================
+// SAVE MEETING EDIT
+// ============================================================
 
 async function saveMeetingEdit() {
 
@@ -3622,38 +3604,20 @@ async function saveMeetingEdit() {
             .value;
 
 
-    if (!name) {
+    if (
+        !name ||
+        !dateStart ||
+        !time
+    ) {
 
         showMessage(
+
             "editMeetingMessage",
-            "اكتب اسم الاجتماع",
+
+            "اكتب كل بيانات الاجتماع",
+
             "error"
-        );
 
-        return;
-
-    }
-
-
-    if (!dateStart) {
-
-        showMessage(
-            "editMeetingMessage",
-            "اختر تاريخ البداية",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if (!time) {
-
-        showMessage(
-            "editMeetingMessage",
-            "اختر الوقت",
-            "error"
         );
 
         return;
@@ -3688,10 +3652,7 @@ async function saveMeetingEdit() {
 
                 dateStart: dateStart,
 
-                day:
-                    type === "weekly"
-                    ? day
-                    : "",
+                day: day,
 
                 time: time
 
@@ -3707,28 +3668,33 @@ async function saveMeetingEdit() {
         }
 
 
-        closeEditMeeting();
+        closeMeetingEdit();
+
 
         await loadMeetings();
 
 
-        showMessage(
-            "meetingMessage",
-            "✅ تم تعديل الاجتماع",
-            "success"
+        alert(
+            "✅ تم تعديل الاجتماع"
         );
 
     }
+
     catch(error) {
 
         showMessage(
+
             "editMeetingMessage",
+
             "❌ " +
             error.message,
+
             "error"
+
         );
 
     }
+
     finally {
 
         button.disabled = false;
@@ -3741,173 +3707,25 @@ async function saveMeetingEdit() {
 }
 
 
-async function toggleMeeting(id) {
-
-    const meeting =
-        meetings.find(function(m) {
-
-            return m.id === id;
-
-        });
-
-
-    if (!meeting) {
-        return;
-    }
-
-
-    const active =
-        isMeetingActive(
-            meeting.status
-        );
-
-
-    const actionText =
-        active
-        ? "تعطيل"
-        : "تفعيل";
-
-
-    if (
-        !confirm(
-            "هل تريد " +
-            actionText +
-            " الاجتماع:\n\n" +
-            meeting.name +
-            "؟"
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "toggleMeeting",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        await loadMeetings();
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-}
-
-
-async function deleteMeeting(id) {
-
-    const meeting =
-        meetings.find(function(m) {
-
-            return m.id === id;
-
-        });
-
-
-    if (!meeting) {
-
-        alert(
-            "الاجتماع غير موجود"
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !confirm(
-
-            "⚠️ تأكيد حذف الاجتماع\n\n" +
-
-            "الاسم: " +
-            meeting.name +
-            "\n" +
-
-            "ID: " +
-            meeting.id +
-            "\n\n" +
-
-            "سيتم حذف الاجتماع من قائمة الاجتماعات.\n" +
-            "سجل الحضور القديم لن يتم حذفه.\n\n" +
-
-            "هل أنت متأكد؟"
-
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            await apiGet({
-
-                action: "deleteMeeting",
-
-                id: id
-
-            });
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message
-            );
-
-        }
-
-
-        alert(
-            "✅ تم حذف الاجتماع"
-        );
-
-
-        await loadMeetings();
-
-    }
-    catch(error) {
-
-        alert(
-            "❌ فشل حذف الاجتماع\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
+// ============================================================
+// CANCEL MEETING
+// ============================================================
 
 function openCancelMeeting(
     id,
-    date,
-    name
+    date
 ) {
+
+    const meeting =
+        meetings.find(
+            m => m.id === id
+        );
+
+
+    if (!meeting) {
+        return;
+    }
+
 
     document
         .getElementById(
@@ -3931,22 +3749,40 @@ function openCancelMeeting(
         )
         .innerHTML =
 
-        "<strong>الاجتماع:</strong> " +
-        escapeHTML(name) +
+        "<strong>" +
+        escapeHTML(
+            meeting.name
+        ) +
+        "</strong>" +
 
         "<br><br>" +
 
-        "<strong>التاريخ:</strong> " +
+        "الموعد: " +
+
+        "<strong>" +
+        formatDisplayDate(date) +
+        "</strong>" +
+
+        "<br>" +
+
+        "الوقت: " +
+
+        "<strong>" +
         escapeHTML(
-            formatDisplayDate(date)
-        );
+            meeting.formattedTime ||
+            meeting.time ||
+            ""
+        ) +
+        "</strong>";
 
 
     document
         .getElementById(
             "cancelMeetingModal"
         )
-        .classList.add("show");
+        .classList.add(
+            "show"
+        );
 
 }
 
@@ -3957,12 +3793,18 @@ function closeCancelMeeting() {
         .getElementById(
             "cancelMeetingModal"
         )
-        .classList.remove("show");
+        .classList.remove(
+            "show"
+        );
 
 }
 
 
-async function confirmCancelOccurrence() {
+// ============================================================
+// CONFIRM CANCEL
+// ============================================================
+
+async function confirmCancelMeeting() {
 
     const id =
         document
@@ -3985,7 +3827,8 @@ async function confirmCancelOccurrence() {
         const data =
             await apiGet({
 
-                action: "cancelOccurrence",
+                action:
+                    "cancelOccurrence",
 
                 id: id,
 
@@ -4005,18 +3848,20 @@ async function confirmCancelOccurrence() {
 
         closeCancelMeeting();
 
+
         await loadMeetings();
 
 
         alert(
-            "✅ تم إلغاء الموعد المحدد فقط"
+            "✅ تم إلغاء الموعد"
         );
 
     }
+
     catch(error) {
 
         alert(
-            "❌ " +
+            "❌ فشل إلغاء الموعد\n\n" +
             error.message
         );
 
@@ -4025,21 +3870,25 @@ async function confirmCancelOccurrence() {
 }
 
 
-async function restoreOccurrence(
+// ============================================================
+// RESTORE MEETING
+// ============================================================
+
+async function restoreMeetingOccurrence(
     id,
     date
 ) {
 
     if (
         !confirm(
-
-            "هل تريد إعادة تفعيل هذا الموعد؟\n\n" +
-
+            "هل تريد استرجاع الموعد الملغي؟\n\n" +
+            "التاريخ: " +
             formatDisplayDate(date)
-
         )
     ) {
+
         return;
+
     }
 
 
@@ -4048,7 +3897,8 @@ async function restoreOccurrence(
         const data =
             await apiGet({
 
-                action: "restoreOccurrence",
+                action:
+                    "restoreOccurrence",
 
                 id: id,
 
@@ -4070,10 +3920,93 @@ async function restoreOccurrence(
 
 
         alert(
-            "✅ تم استعادة الموعد"
+            "✅ تم استرجاع الموعد بنجاح"
         );
 
     }
+
+    catch(error) {
+
+        alert(
+            "❌ فشل استرجاع الموعد\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// TOGGLE MEETING
+// ============================================================
+
+async function toggleMeeting(id) {
+
+    const meeting =
+        meetings.find(
+            m => m.id === id
+        );
+
+
+    if (!meeting) {
+        return;
+    }
+
+
+    const active =
+        meeting.active === true ||
+        meeting.activeValue === "yes";
+
+
+    const actionText =
+        active
+            ? "إيقاف"
+            : "تفعيل";
+
+
+    if (
+        !confirm(
+            "هل تريد " +
+            actionText +
+            " الاجتماع بالكامل؟\n\n" +
+
+            "ملاحظة: هذا يوقف/يفعل الاجتماع " +
+            "وليس موعدًا واحدًا فقط."
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "toggleMeeting",
+
+                id: id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        await loadMeetings();
+
+    }
+
     catch(error) {
 
         alert(
@@ -4086,6 +4019,86 @@ async function restoreOccurrence(
 }
 
 
+// ============================================================
+// DELETE MEETING
+// ============================================================
+
+async function deleteMeeting(id) {
+
+    const meeting =
+        meetings.find(
+            m => m.id === id
+        );
+
+
+    if (!meeting) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "⚠️ هل أنت متأكد من حذف الاجتماع؟\n\n" +
+            "الاسم: " +
+            meeting.name +
+            "\n" +
+            "ID: " +
+            meeting.id
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action:
+                    "deleteMeeting",
+
+                id: id
+
+            });
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+
+        }
+
+
+        await loadMeetings();
+
+
+        alert(
+            "✅ تم حذف الاجتماع"
+        );
+
+    }
+
+    catch(error) {
+
+        alert(
+            "❌ فشل حذف الاجتماع\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// ATTENDANCE
+// ============================================================
+
 async function loadAttendance() {
 
     try {
@@ -4093,7 +4106,8 @@ async function loadAttendance() {
         const data =
             await apiGet({
 
-                action: "attendanceList"
+                action:
+                    "attendanceList"
 
             });
 
@@ -4122,6 +4136,7 @@ async function loadAttendance() {
             attendance.length;
 
     }
+
     catch(error) {
 
         console.error(error);
@@ -4135,6 +4150,10 @@ async function loadAttendance() {
 
 }
 
+
+// ============================================================
+// RENDER ATTENDANCE
+// ============================================================
 
 function renderAttendance() {
 
@@ -4153,283 +4172,92 @@ function renderAttendance() {
             .toLowerCase();
 
 
-    table.innerHTML = "";
+    table.innerHTML =
+        "";
 
 
-    const filtered =
-        attendance.filter(function(item) {
+    attendance
+        .filter(
+            item =>
 
-            return (
-
-                String(item.id || "")
+                String(item.id)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                String(item.name || "")
+                String(item.name)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                String(item.meeting || "")
+                String(item.meeting)
                     .toLowerCase()
                     .includes(search)
 
                 ||
 
-                String(item.date || "")
+                String(item.date)
                     .toLowerCase()
                     .includes(search)
 
-            );
-
-        });
-
-
-    if (!filtered.length) {
-
-        table.innerHTML =
-            '<tr><td colspan="5" class="empty">لا توجد سجلات حضور</td></tr>';
-
-        return;
-
-    }
-
-
-    filtered.forEach(function(item) {
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>
-                ${escapeHTML(item.id)}
-            </td>
-
-            <td>
-                ${escapeHTML(item.name)}
-            </td>
-
-            <td>
-                ${escapeHTML(item.meeting)}
-            </td>
-
-            <td>
-                ${escapeHTML(item.date)}
-            </td>
-
-            <td>
-                ${escapeHTML(item.time)}
-            </td>
-
-        `;
-
-
-        table.appendChild(row);
-
-    });
-
-}
-
-
-function isMeetingActive(status) {
-
-    const value =
-        String(
-            status || ""
         )
-        .trim()
-        .toLowerCase();
+        .forEach(
+            item => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
 
 
-    return (
-        value === "yes" ||
-        value === "active" ||
-        value === "true" ||
-        value === "1"
-    );
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(
+                            item.id
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            item.name
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            item.meeting
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            item.date
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            item.time
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
 
 }
 
 
-function getArabicDayName(day) {
-
-    const days = [
-        "الأحد",
-        "الاثنين",
-        "الثلاثاء",
-        "الأربعاء",
-        "الخميس",
-        "الجمعة",
-        "السبت"
-    ];
-
-
-    const number =
-        Number(day);
-
-
-    if (
-        number >= 0 &&
-        number <= 6
-    ) {
-
-        return days[number];
-
-    }
-
-
-    return "—";
-
-}
-
-
-function normalizeDateForInput(value) {
-
-    if (!value) {
-        return "";
-    }
-
-
-    const text =
-        String(value);
-
-
-    if (
-        /^\d{4}-\d{2}-\d{2}$/.test(text)
-    ) {
-
-        return text;
-
-    }
-
-
-    const match =
-        text.match(
-            /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
-        );
-
-
-    if (match) {
-
-        return (
-            match[3] +
-            "-" +
-            String(match[2]).padStart(2, "0") +
-            "-" +
-            String(match[1]).padStart(2, "0")
-        );
-
-    }
-
-
-    return "";
-
-}
-
-
-function normalizeTimeForInput(value) {
-
-    if (!value) {
-        return "";
-    }
-
-
-    const text =
-        String(value);
-
-
-    const match =
-        text.match(
-            /^(\d{1,2}):(\d{2})/
-        );
-
-
-    if (!match) {
-        return "";
-    }
-
-
-    return (
-        String(match[1]).padStart(2, "0") +
-        ":" +
-        match[2]
-    );
-
-}
-
-
-function formatDisplayDate(value) {
-
-    if (!value) {
-        return "—";
-    }
-
-
-    const text =
-        String(value);
-
-
-    if (
-        /^\d{4}-\d{2}-\d{2}$/.test(text)
-    ) {
-
-        const parts =
-            text.split("-");
-
-
-        return (
-            parts[2] +
-            "/" +
-            parts[1] +
-            "/" +
-            parts[0]
-        );
-
-    }
-
-
-    return text;
-
-}
-
-
-function formatDisplayTime(value) {
-
-    if (!value) {
-        return "—";
-    }
-
-
-    const text =
-        String(value);
-
-
-    const match =
-        text.match(
-            /^(\d{1,2}):(\d{2})/
-        );
-
-
-    if (match) {
-
-        return (
-            String(match[1]).padStart(2, "0") +
-            ":" +
-            match[2]
-        );
-
-    }
-
-
-    return text;
-
-}
-
+// ============================================================
+// MESSAGE
+// ============================================================
 
 function showMessage(
     id,
@@ -4452,36 +4280,163 @@ function showMessage(
 }
 
 
-function escapeHTML(text) {
+// ============================================================
+// FORMAT DISPLAY DATE
+// ============================================================
 
-    return String(text || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function formatDisplayDate(date) {
+
+    if (!date) {
+        return "";
+    }
+
+
+    const text =
+        String(date);
+
+
+    const match =
+        text.match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if (!match) {
+        return text;
+    }
+
+
+    return (
+        match[3] +
+        "/" +
+        match[2] +
+        "/" +
+        match[1]
+    );
 
 }
 
+
+// ============================================================
+// NORMALIZE TIME
+// ============================================================
+
+function normalizeTimeForInput(time) {
+
+    if (!time) {
+        return "";
+    }
+
+
+    const text =
+        String(time)
+            .trim();
+
+
+    const match =
+        text.match(
+            /^(\d{1,2}):(\d{2})/
+        );
+
+
+    if (!match) {
+        return "";
+    }
+
+
+    return (
+        String(
+            parseInt(
+                match[1],
+                10
+            )
+        ).padStart(2,"0") +
+
+        ":" +
+
+        match[2]
+    );
+
+}
+
+
+// ============================================================
+// ESCAPE HTML
+// ============================================================
+
+function escapeHTML(text) {
+
+    return String(text || "")
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+// ============================================================
+// ESCAPE JS
+// ============================================================
 
 function escapeJS(text) {
 
     return String(text || "")
 
-        .replace(/\\/g, "\\\\")
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
 
-        .replace(/'/g, "\\'")
+        .replace(
+            /'/g,
+            "\\'"
+        )
 
-        .replace(/\n/g, "\\n")
+        .replace(
+            /\n/g,
+            "\\n"
+        )
 
-        .replace(/\r/g, "\\r");
+        .replace(
+            /\r/g,
+            "\\r"
+        );
 
 }
 
 
+// ============================================================
+// INIT
+// ============================================================
+
 async function init() {
 
-    meetingTypeChanged();
+    updateMeetingForm();
+
+    updateEditMeetingForm();
+
 
     await Promise.all([
 
@@ -4500,6 +4455,7 @@ init();
 
 </script>
 
+
 </body>
+
 </html>
-```
