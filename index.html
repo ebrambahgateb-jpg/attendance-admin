@@ -659,12 +659,10 @@ button:disabled {
 // CONFIGURATION
 // ==================================================
 
-// Apps Script الجديد
 const API_URL =
 "https://script.google.com/macros/s/AKfycbxN6kZVZYQD-gS0n8ovnQQZh7IW9KpFKiI2mrx6uYpVww0wFyJ-Wfw_NnX4YDedLg/exec";
 
 
-// Google OAuth Client ID
 const GOOGLE_CLIENT_ID =
 "869477346331-hbdiou239jbo6ldu8q47u6jel6gb7019.apps.googleusercontent.com";
 
@@ -1019,40 +1017,198 @@ function selectRole(
         role;
 
 
-    document
-    .getElementById(
-        "roleScreen"
-    )
-    .classList.add(
-        "hidden"
+    // ==================================================
+    // OWNER
+    // يفتح لوحة الإدارة
+    // ==================================================
+
+    if (
+        role === "Owner"
+    ) {
+
+        window.location.href =
+            "admin.html";
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // ADMIN
+    // يفتح لوحة الإدارة
+    // ==================================================
+
+    if (
+        role === "Admin"
+    ) {
+
+        window.location.href =
+            "admin.html";
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // SCANNER
+    // يدخل نظام تسجيل الحضور
+    // ==================================================
+
+    if (
+        role === "Scanner"
+    ) {
+
+        document
+        .getElementById(
+            "roleScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+        document
+        .getElementById(
+            "loginScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+        document
+        .getElementById(
+            "app"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+        showResult(
+            "⏳ جاري تحميل نظام تسجيل الحضور...",
+            "loading"
+        );
+
+
+        init();
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // USER
+    // يدخل كمستخدم فقط
+    // ==================================================
+
+    if (
+        role === "User"
+    ) {
+
+        document
+        .getElementById(
+            "roleScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+        document
+        .getElementById(
+            "loginScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+        document
+        .getElementById(
+            "app"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+        showResult(
+
+            "👤 <b>تم تسجيل الدخول كمستخدم</b>" +
+
+            "<br><br>" +
+
+            "هذه الصفحة مخصصة لعرض بيانات المستخدم فقط." +
+
+            "<br><br>" +
+
+            "سيتم إضافة صفحة المستخدم لاحقًا.",
+
+            "loading"
+
+        );
+
+
+        // إخفاء اختيار الاجتماع
+        document
+        .getElementById(
+            "meeting"
+        )
+        .closest(".card")
+        .classList.add(
+            "hidden"
+        );
+
+
+        // إخفاء الإحصائيات
+        document
+        .getElementById(
+            "presentCount"
+        )
+        .closest(".card")
+        .classList.add(
+            "hidden"
+        );
+
+
+        // إخفاء الكاميرا
+        document
+        .getElementById(
+            "reader"
+        )
+        .closest(".card")
+        .classList.add(
+            "hidden"
+        );
+
+
+        // إخفاء آخر تسجيل
+        document
+        .getElementById(
+            "lastPerson"
+        )
+        .closest(".card")
+        .classList.add(
+            "hidden"
+        );
+
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // ROLE UNKNOWN
+    // ==================================================
+
+    alert(
+        "هذه الصلاحية غير معروفة."
     );
-
-
-    document
-    .getElementById(
-        "loginScreen"
-    )
-    .classList.add(
-        "hidden"
-    );
-
-
-    document
-    .getElementById(
-        "app"
-    )
-    .classList.remove(
-        "hidden"
-    );
-
-
-    showResult(
-        "⏳ جاري تحميل النظام...",
-        "loading"
-    );
-
-
-    init();
 
 }
 
@@ -1077,6 +1233,47 @@ function logout() {
     peopleData = [];
 
     selectedMeeting = "";
+
+
+    // إظهار العناصر مرة أخرى في حالة تسجيل دخول جديد
+    const meetingCard =
+        document
+        .getElementById("meeting")
+        .closest(".card");
+
+    if (meetingCard) {
+        meetingCard.classList.remove("hidden");
+    }
+
+
+    const statsCard =
+        document
+        .getElementById("presentCount")
+        .closest(".card");
+
+    if (statsCard) {
+        statsCard.classList.remove("hidden");
+    }
+
+
+    const scannerCard =
+        document
+        .getElementById("reader")
+        .closest(".card");
+
+    if (scannerCard) {
+        scannerCard.classList.remove("hidden");
+    }
+
+
+    const lastCard =
+        document
+        .getElementById("lastPerson")
+        .closest(".card");
+
+    if (lastCard) {
+        lastCard.classList.remove("hidden");
+    }
 
 
     document
@@ -1953,6 +2150,7 @@ async function handleQRCode(
             showResult(
 
                 "❌ " +
+
                 escapeHTML(
                     data.message ||
                     "حدث خطأ"
@@ -1977,7 +2175,9 @@ async function handleQRCode(
         showResult(
 
             "❌ حدث خطأ أثناء الاتصال بقاعدة البيانات" +
+
             "<br><br>" +
+
             escapeHTML(
                 error.message
             ),
