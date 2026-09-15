@@ -1174,8 +1174,14 @@ async function handleGoogleLogin(response) {
         if (!result.ok) throw new Error(result.message || "فشل تسجيل الدخول");
         if (!result.authorized) throw new Error("هذا الحساب غير مصرح له باستخدام لوحة الإدارة.");
 
-        const adminRoles = (result.roles || []).filter(r => r === "Owner" || r === "Admin");
-        if (!adminRoles.length) throw new Error("هذا الحساب لا يملك صلاحية Owner أو Admin.");
+        const adminRoles = (result.roles || [])
+            .map(r => String(r))
+            .filter(r => r.toLowerCase() === "owner" || r.toLowerCase() === "admin")
+            .map(r => r.toLowerCase() === "owner" ? "Owner" : "Admin");
+
+        if (!adminRoles.length) {
+            throw new Error("هذا الحساب لا يملك صلاحية Owner أو Admin.");
+        }
 
         currentAccount = result;
         document.getElementById("adminUserEmail").textContent = "👤 " + result.email;
@@ -1208,6 +1214,16 @@ function showRoleSelection(roles) {
 }
 
 function selectRole(role) {
+    if (!currentAccount || !idToken) {
+        alert("يجب تسجيل الدخول أولاً");
+        return;
+    }
+
+    if (!["Owner", "Admin"].includes(role)) {
+        alert("هذه الصفحة مخصصة لصلاحيات الإدارة فقط");
+        return;
+    }
+
     selectedRole = role;
     document.getElementById("loginScreen").classList.add("hidden");
     document.getElementById("roleScreen").classList.add("hidden");
@@ -1703,7 +1719,7 @@ async function addPerson() {
 
             const upload =
                 await uploadPhotoInChunks(
-                    createdId,
+                    data.id,
                     compressed
                 );
 
@@ -3086,10 +3102,6 @@ async function init() {
 
 }
 
-
-init();
-
-    
 </script>
 
 </body>
